@@ -4,16 +4,17 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/gin-gonic/gin"
 	"github.com/tnyeanderson/ipxe-hub/config"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
 	"github.com/tnyeanderson/ipxe-hub/db/queries"
 	"github.com/tnyeanderson/ipxe-hub/utils"
 )
 
-func BootHandler(rw http.ResponseWriter, r *http.Request) {
-	mac, err := utils.SanitizeMac(r.URL.Query().Get("mac"))
+func BootHandler(c *gin.Context) {
+	mac, err := utils.SanitizeMac(c.Query("mac"))
 	if err != nil {
-		http.Error(rw, "Invalid MAC address", 400)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MAC address"})
 		return
 	}
 
@@ -23,25 +24,22 @@ func BootHandler(rw http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		print("Adding device: " + mac)
 		device = models.Device{}
-		device.Mac.String = mac
-		device.Mac.Valid = true
-		success, err := queries.AddDevice(&device)
-		if err != nil || !success {
-			http.Error(rw, "Failed to add device", 400)
+		device.Mac = mac
+		_, err := queries.AddDevice(device)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 	} else {
 		device = *d
 	}
 
-	if !device.Script.Slug.Valid {
-		http.Error(rw, "Script not associated with device", 400)
+	if device.Script.Slug == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Script not associated with device"})
 		return
 	}
 
-	scriptPath := filepath.Join(config.BaseScriptsPath, device.Script.Slug.String)
-	print(scriptPath)
+	scriptPath := filepath.Join(config.BaseScriptsPath, device.Script.Slug)
 
-	http.ServeFile(rw, r, scriptPath)
-
+	c.File(scriptPath)
 }

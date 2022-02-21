@@ -1,6 +1,5 @@
 # Project
-files/
-ipxe-hub.db
+data/
 .vscode/
 __debug_bin
 

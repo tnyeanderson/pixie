@@ -1,11 +1,11 @@
 package models
 
 import (
-	"github.com/tnyeanderson/ipxe-hub/types"
+	"github.com/jinzhu/gorm"
 )
 
 type Script struct {
-	Id   types.NullInt64  `json:"id"`
-	Name types.NullString `json:"name"`
-	Slug types.NullString `json:"slug"`
+	gorm.Model
+	Name string
+	Slug string `gorm:"unique;not null"`
 }

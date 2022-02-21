@@ -1,27 +1,28 @@
 package db
 
 import (
-	"database/sql"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/tnyeanderson/ipxe-hub/config"
+	"github.com/tnyeanderson/ipxe-hub/db/models"
 )
 
-var _DB *sql.DB
+var DB *gorm.DB
 
-func ConnectDatabase() error {
-	db, err := sql.Open("sqlite3", "./ipxe-hub.db")
+func ConnectDatabase() {
+	database, err := gorm.Open("sqlite3", config.DatabasePath)
+
 	if err != nil {
-		return err
+		panic("Failed to connect to database!")
 	}
 
-	_DB = db
-	return nil
+	database.AutoMigrate(&models.Device{})
+	database.AutoMigrate(&models.Script{})
+
+	DB = database
 }
 
-func Get() *sql.DB {
-	if _DB == nil {
-		ConnectDatabase()
-	}
-
-	return _DB
+func Get() *gorm.DB {
+	return DB
 }

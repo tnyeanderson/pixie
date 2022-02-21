@@ -1,11 +1,14 @@
 package models
 
-import "github.com/tnyeanderson/ipxe-hub/types"
+import "github.com/jinzhu/gorm"
+
+// NOTE: SQLite doesn't support adding foreign keys after the fact. Add it in manually instead
 
 type Device struct {
-	Id        types.NullInt64  `json:"id"`
-	Mac       types.NullString `json:"mac"`
-	Name      types.NullString `json:"name"`
-	GroupName types.NullString `json:"groupname"`
-	Script    Script           `json:"script"`
+	gorm.Model
+	Mac       string `gorm:"unique;not null"`
+	Name      string
+	GroupName string
+	ScriptID  uint `gorm:"type:INT UNSIGNED REFERENCES scripts(id) ON DELETE RESTRICT ON UPDATE RESTRICT"`
+	Script    Script
 }
