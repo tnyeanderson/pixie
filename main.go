@@ -32,13 +32,16 @@ func main() {
 	r.POST(config.ApiBasePath+"/scripts/update/:id", api.UpdateScriptHandler)
 	r.DELETE(config.ApiBasePath+"/scripts/delete/:id", api.DeleteScriptHandler)
 
+	// File uploads
+	r.PUT(config.ApiBasePath+"/upload/image", api.UploadImageHandler)
+	r.PUT(config.ApiBasePath+"/upload/script", api.UploadScriptHandler)
+
 	// Boot script handler
 	r.GET("/boot.ipxe", handlers.BootHandler)
 
 	// File server
 	r.Static("/files", config.BaseFilesPath)
 
-	print("Listening")
 	r.Run(":8880")
 
 }

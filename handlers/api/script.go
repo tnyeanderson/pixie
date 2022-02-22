@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
 	"github.com/tnyeanderson/ipxe-hub/db/queries"
+	"github.com/tnyeanderson/ipxe-hub/utils"
 )
 
 func GetAllScriptsHandler(c *gin.Context) {
@@ -22,6 +23,11 @@ func AddScriptHandler(c *gin.Context) {
 	// Validate input
 	var script models.Script
 	if err := c.ShouldBindJSON(&script); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if _, err := utils.ValidatePath(script.Path); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -47,6 +53,11 @@ func UpdateScriptHandler(c *gin.Context) {
 
 	var script models.Script
 	if err := c.ShouldBindJSON(&script); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if _, err := utils.ValidatePath(script.Path); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

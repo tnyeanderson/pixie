@@ -34,12 +34,12 @@ func BootHandler(c *gin.Context) {
 		device = *d
 	}
 
-	if device.Script.Slug == "" {
+	if device.Script.Path == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Script not associated with device"})
 		return
 	}
 
-	scriptPath := filepath.Join(config.BaseScriptsPath, device.Script.Slug)
+	scriptPath := filepath.Join(config.BaseScriptsPath, device.Script.Path)
 
 	c.File(scriptPath)
 }

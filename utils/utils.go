@@ -57,3 +57,31 @@ func ParseJson(target interface{}, rw http.ResponseWriter, r *http.Request) (int
 
 	return target, nil
 }
+
+func ValidateSlug(slug string) (bool, error) {
+	check, err := regexp.Compile(`^[0-9A-Za-z-_\s\.]+$`)
+	if err != nil {
+		return false, err
+	}
+
+	if !check.Match([]byte(slug)) || TraversesParent(slug) {
+		return false, errors.New("invalid slug")
+	}
+	return true, nil
+}
+
+func ValidatePath(path string) (bool, error) {
+	check, err := regexp.Compile(`^[/0-9A-Za-z-_\s\.]+$`)
+	if err != nil {
+		return false, err
+	}
+
+	if !check.Match([]byte(path)) || TraversesParent(path) {
+		return false, errors.New("invalid path")
+	}
+	return true, nil
+}
+
+func TraversesParent(path string) bool {
+	return strings.Contains(path, "..")
+}
