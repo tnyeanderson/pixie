@@ -12,4 +12,8 @@ export class ApiService {
   getScripts() {
     return this.httpClient.get(`${this.baseUrl}/scripts`)
   }
+
+  getDevices() {
+    return this.httpClient.get(`${this.baseUrl}/devices`)
+  }
 }

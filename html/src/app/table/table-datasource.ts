@@ -1,9 +1,8 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { merge, Observable, of as observableOf, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge, Subject } from 'rxjs';
-import { ApiService } from '../services/api.service';
 
 // TODO: Replace this with your own data model type
 export interface TableScriptItem {
@@ -22,19 +21,15 @@ export interface TableScriptItem {
  * (including sorting, pagination, and filtering).
  */
 export class TableDataSource extends DataSource<TableScriptItem> {
-  data: TableScriptItem[] = [];
+  data: any[] = [];
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
   updated = new Subject();
 
 
 
-  constructor(private apiService: ApiService) {
+  constructor() {
     super();
-    this.apiService.getScripts().subscribe(data => {
-      this.data = data as TableScriptItem[]
-      this.updated.next(true)
-    })
   }
 
   /**
@@ -86,11 +81,14 @@ export class TableDataSource extends DataSource<TableScriptItem> {
 
     return data.sort((a, b) => {
       const isAsc = this.sort?.direction === 'asc';
-      switch (this.sort?.active) {
-        case 'Name': return compare(a.Name, b.Name, isAsc);
-        case 'ID': return compare(+a.ID, +b.ID, isAsc);
-        default: return 0;
-      }
+      // FIXME: Sort won't work like this...
+      return 0
+      // if (this.sort?.active !== undefined) {
+      //   const active =  this.sort.active;
+      //   return compare(a[active], b[active], isAsc);
+      // } else {
+      //   return 0;
+      // }
     });
   }
 }
