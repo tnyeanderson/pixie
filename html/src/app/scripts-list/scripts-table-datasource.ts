@@ -12,6 +12,10 @@ export class ScriptsTableDataSource extends TableDataSource {
 
   constructor(private apiService: ApiService) {
     super();
+    this.load()
+  }
+
+  load() {
     this.apiService.getScripts().subscribe(data => {
       this.data = data as ScriptItem[]
       this.updated.next(true)
