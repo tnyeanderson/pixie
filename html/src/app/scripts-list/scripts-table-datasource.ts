@@ -1,4 +1,4 @@
-import { ScriptItem } from 'src/types';
+import { ScriptItem } from '../../types';
 import { ApiService } from '../services/api.service';
 import { TableDataSource } from '../table/table-datasource';
 
@@ -14,7 +14,6 @@ export class ScriptsTableDataSource extends TableDataSource {
     super();
     this.apiService.getScripts().subscribe(data => {
       this.data = data as ScriptItem[]
-      console.log('hey')
       this.updated.next(true)
     })
   }

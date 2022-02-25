@@ -43,7 +43,6 @@ export class TableDataSource extends DataSource<TableScriptItem> {
       // stream for the data-table to consume.
       return merge(observableOf(this.data), this.paginator.page, this.sort.sortChange, this.updated)
         .pipe(map(() => {
-          console.log('woot')
           return this.getPagedData(this.getSortedData([...this.data ]));
         }));
     } else {

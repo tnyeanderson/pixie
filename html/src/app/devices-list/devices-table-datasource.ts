@@ -14,7 +14,6 @@ export class DevicesTableDataSource extends TableDataSource {
     super();
     this.apiService.getDevices().subscribe(data => {
       this.data = data as DeviceItem[]
-      console.log('hey')
       this.updated.next(true)
     })
   }
