@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { AddScriptComponent } from '../add-script/add-script.component';
+import { ScriptItem } from 'src/types';
+import { AddScriptComponent } from '../forms/add-script/add-script.component';
+import { EditScriptComponent } from '../forms/edit-script/edit-script.component';
+import { Field, FormFields } from '../forms/fields';
 import { ApiService } from '../services/api.service';
 import { ScriptsTableDataSource } from './scripts-table-datasource';
 
@@ -12,11 +15,15 @@ import { ScriptsTableDataSource } from './scripts-table-datasource';
 export class ScriptsListComponent implements OnInit {
   dataSource: ScriptsTableDataSource
   displayedColumns = ['ID', 'Name', 'Path']
-  allColumns: string[]
+  allColumns: Field[]
 
   constructor(private apiService: ApiService, public dialog: MatDialog) {
-    this.allColumns = ApiService.viewScriptFields
+    this.allColumns = FormFields.viewScriptFields
     this.dataSource = new ScriptsTableDataSource(apiService)
+  }
+
+  editScript = (script: ScriptItem) => {
+    this.openEditScriptDialog(script)
   }
 
   addScript() {
@@ -24,8 +31,16 @@ export class ScriptsListComponent implements OnInit {
     this.openAddScriptDialog()
   }
 
+  openEditScriptDialog(data: ScriptItem) {
+    const dialogRef = this.dialog.open(EditScriptComponent, { width: '80%', data });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.dataSource.load()
+    });
+  }
+
   openAddScriptDialog() {
-    const dialogRef = this.dialog.open(AddScriptComponent, {width: '80%'});
+    const dialogRef = this.dialog.open(AddScriptComponent, { width: '80%' });
 
     dialogRef.afterClosed().subscribe(result => {
       this.dataSource.load()

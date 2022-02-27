@@ -1,3 +1,19 @@
+.table-container {
+  padding-bottom: 5em;
+}
+
 .full-width-table {
   width: 100%;
+}
+
+.actions {
+  text-align: right;
+
+  &>* {
+    display: inline-block;
+  }
+
+  .edit-button {
+    color: #999
+  }
 }

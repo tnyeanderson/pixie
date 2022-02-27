@@ -6,6 +6,7 @@ import (
 
 type Script struct {
 	gorm.Model
-	Name string
-	Path string `gorm:"unique;not null"`
+	Name      string
+	Path      string `gorm:"unique;not null"`
+	IsDefault bool
 }

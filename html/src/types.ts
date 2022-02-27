@@ -8,6 +8,7 @@ export class GormModel {
 export class ScriptItem extends GormModel {
   Name = ''
   Path = ''
+  IsDefault = false
 }
 
 export class DeviceItem extends GormModel {

@@ -1,0 +1,18 @@
+<div class="form-container">
+    <form #f="ngForm" (ngSubmit)="submit(f)">
+        <div class="form-field" *ngFor="let field of fields">
+            <mat-form-field *ngIf="field.isString()" appearance="fill">
+                <mat-label>{{ field.getDisplayName() }}</mat-label>
+                <input name="{{field.name}}" matInput [(ngModel)]="model[field.name]">
+            </mat-form-field>
+            <mat-checkbox [checked]="false" *ngIf="field.isBoolean()" name="{{field.name}}" [(ngModel)]="model[field.name]">{{ field.getDisplayName() }}</mat-checkbox>
+        </div>
+
+        <ng-content></ng-content>
+        
+        <div class="form-buttons">
+            <button mat-button (click)="close()">Cancel</button>
+            <button mat-button color="primary" type="submit">{{ action }}</button>
+        </div>
+    </form>
+</div>

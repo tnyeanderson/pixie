@@ -2,6 +2,7 @@ import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
+import { DeviceItem, ScriptItem } from 'src/types';
 import { TableDataSource, TableScriptItem } from './table-datasource';
 
 @Component({
@@ -16,13 +17,25 @@ export class TableComponent implements AfterViewInit {
   @Input() dataSource: TableDataSource = new TableDataSource();
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  @Input() displayedColumns: string[] = [];
+  @Input() edit: Function = () => { }
+  @Input() sourceColumns: string[] = []
+  displayedColumns: string[] = []
 
-  constructor() { }
+  getDisplayedColumns() {
+    return [...this.sourceColumns, 'edit']
+  }
+
+  editItem(row: any) {
+    console.log('table', row)
+    this.edit(row)
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
-  }
+    setTimeout(() => {
+      this.displayedColumns = this.getDisplayedColumns()
+    }, 0)
+}
 }
