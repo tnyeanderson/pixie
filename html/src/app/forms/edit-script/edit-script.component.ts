@@ -25,6 +25,10 @@ export class EditScriptComponent implements OnInit {
     }
   }
 
+  delete = (id: number) => {
+    this.apiService.deleteScript(id).subscribe()
+  }
+
   ngOnInit(): void {
   }
 

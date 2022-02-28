@@ -33,9 +33,9 @@ export class ScriptsListComponent implements OnInit {
   openEditScriptDialog(data: ScriptItem) {
     const dialogRef = this.dialog.open(EditScriptComponent, { width: '80%', data });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.dialog.afterAllClosed.subscribe(result => {
       this.dataSource.load()
-    });
+    })
   }
 
   openAddScriptDialog() {

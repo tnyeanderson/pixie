@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { ScriptItem } from 'src/types';
 
 @Injectable({
@@ -44,6 +44,10 @@ export class ApiService {
 
   editScript(id: number, script: ScriptItem) {
     return this.httpClient.post(`${this.baseUrl}/scripts/update/${id}`, script).pipe(catchError(this.handleError))
+  }
+
+  deleteScript(id: number) {
+    return this.httpClient.delete(`${this.baseUrl}/scripts/delete/${id}`).pipe(catchError(this.handleError))
   }
 
   getDevices() {

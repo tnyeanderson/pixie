@@ -2,7 +2,6 @@ import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { DeviceItem, ScriptItem } from 'src/types';
 import { TableDataSource, TableScriptItem } from './table-datasource';
 
 @Component({
