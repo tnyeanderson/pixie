@@ -9,9 +9,7 @@ import (
 
 func GetDevices() ([]models.Device, error) {
 	var devices []models.Device
-	// joins := "left join scripts on scripts.id = devices.script_id"
-	// result := db.Get().Table("devices").Select("*").Joins(joins).Scan(&devices)
-	result := db.Get().Preload("Script").Find(&devices)
+	result := db.Get().Joins("Script").Find(&devices)
 
 	if result == nil {
 		return nil, errors.New("error fetching devices")

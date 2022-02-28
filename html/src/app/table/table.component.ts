@@ -26,7 +26,6 @@ export class TableComponent implements AfterViewInit {
   }
 
   editItem(row: any) {
-    console.log('table', row)
     this.edit(row)
   }
 

@@ -30,7 +30,7 @@ func AddScript(script models.Script) (*models.Script, error) {
 
 func UpdateScript(id uint, updated models.Script) (*models.Script, error) {
 	var script models.Script
-	result := db.Get().Model(&script).Where("id = ?", id).Updates(updated)
+	result := db.Get().Model(script).Select("Name", "Path", "IsDefault").Where("id = ?", id).Updates(updated)
 
 	if result.Error != nil {
 		return nil, result.Error

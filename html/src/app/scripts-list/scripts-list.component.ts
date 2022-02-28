@@ -27,7 +27,6 @@ export class ScriptsListComponent implements OnInit {
   }
 
   addScript() {
-    console.log('Adding')
     this.openAddScriptDialog()
   }
 

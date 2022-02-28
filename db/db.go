@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 
 	"github.com/tnyeanderson/ipxe-hub/config"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
@@ -11,7 +11,7 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	database, err := gorm.Open("sqlite3", config.DatabasePath)
+	database, err := gorm.Open(sqlite.Open(config.DatabasePath))
 
 	if err != nil {
 		panic("Failed to connect to database!")

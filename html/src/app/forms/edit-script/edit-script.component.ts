@@ -13,14 +13,11 @@ import { FormFields } from '../fields';
 export class EditScriptComponent implements OnInit {
   fields = FormFields.scriptFields
 
-  constructor(public dialogRef: MatDialogRef<EditScriptComponent>, @Inject(MAT_DIALOG_DATA) public data: ScriptItem, private apiService: ApiService) {
-    console.log(data)
-  }
+  constructor(public dialogRef: MatDialogRef<EditScriptComponent>, @Inject(MAT_DIALOG_DATA) public data: ScriptItem, private apiService: ApiService) { }
 
   close = () => { }
 
   submit = (f: NgForm) => {
-    console.log(f)
     if (this.data.ID) {
       this.apiService.editScript(this.data.ID, f.form.value).subscribe(r => {
         this.dialogRef.close()
