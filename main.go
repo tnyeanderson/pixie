@@ -28,6 +28,7 @@ func main() {
 	r.POST(config.ApiBasePath+"/devices/update/:id", api.UpdateDeviceHandler)
 	r.DELETE(config.ApiBasePath+"/devices/delete/:id", api.DeleteDeviceHandler)
 	r.GET(config.ApiBasePath+"/scripts", api.GetAllScriptsHandler)
+	r.GET(config.ApiBasePath+"/scripts/default", api.GetDefaultScriptHandler)
 	r.POST(config.ApiBasePath+"/scripts/add", api.AddScriptHandler)
 	r.POST(config.ApiBasePath+"/scripts/update/:id", api.UpdateScriptHandler)
 	r.DELETE(config.ApiBasePath+"/scripts/delete/:id", api.DeleteScriptHandler)

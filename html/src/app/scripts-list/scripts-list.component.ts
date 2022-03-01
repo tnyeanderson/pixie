@@ -26,7 +26,7 @@ export class ScriptsListComponent implements OnInit {
     this.openEditScriptDialog(script)
   }
 
-  addScript() {
+  addScript = () => {
     this.openAddScriptDialog()
   }
 

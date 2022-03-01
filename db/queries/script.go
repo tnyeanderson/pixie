@@ -18,6 +18,17 @@ func GetScripts() ([]models.Script, error) {
 	return scripts, nil
 }
 
+func GetDefaultScript() (*models.Script, error) {
+	var script models.Script
+	result := db.Get().Model(&models.Script{}).Where("is_default = ?", true).First(&script)
+
+	if result == nil || script.ID == 0 {
+		return nil, errors.New("error fetching default script")
+	}
+
+	return &script, nil
+}
+
 func AddScript(script models.Script) (*models.Script, error) {
 	result := db.Get().Create(&script)
 

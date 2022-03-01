@@ -16,6 +16,7 @@ export class TableComponent implements AfterViewInit {
   @Input() dataSource: TableDataSource = new TableDataSource();
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
+  @Input() add: Function = () => { }
   @Input() edit: Function = () => { }
   @Input() sourceColumns: string[] = []
   displayedColumns: string[] = []

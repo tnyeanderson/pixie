@@ -1,9 +1,3 @@
 <h1 id="page-title">Scripts</h1>
 
-<app-table [sourceColumns]="displayedColumns" [dataSource]="dataSource" [edit]="editScript"></app-table>
-
-<div class="add-button-container">
-    <button mat-fab color="accent" (click)="addScript()" aria-label="Add a script">
-        <mat-icon>add</mat-icon>
-    </button>
-</div>
+<app-table [sourceColumns]="displayedColumns" [dataSource]="dataSource" [edit]="editScript" [add]="addScript"></app-table>

@@ -6,6 +6,15 @@
   width: 100%;
 }
 
+.mat-no-data-row {
+  text-align: center;
+
+  .message {
+    display: inline-block;
+    padding: 5em 2em;
+  }
+}
+
 .actions {
   text-align: right;
 
@@ -16,4 +25,10 @@
   .edit-button {
     color: #999
   }
+}
+
+.add-button-container {
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
 }

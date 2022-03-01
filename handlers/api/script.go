@@ -19,6 +19,15 @@ func GetAllScriptsHandler(c *gin.Context) {
 	}
 }
 
+func GetDefaultScriptHandler(c *gin.Context) {
+	script, err := queries.GetDefaultScript()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	} else {
+		c.JSON(http.StatusOK, script)
+	}
+}
+
 func AddScriptHandler(c *gin.Context) {
 	// Validate input
 	var script models.Script
