@@ -1,0 +1,5 @@
+#!ipxe
+
+echo "No script associated with device. Use the shell below.
+
+shell

@@ -35,7 +35,7 @@ func BootHandler(c *gin.Context) {
 	}
 
 	if device.Script.Path == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Script not associated with device"})
+		c.File(config.FallbackScriptPath)
 		return
 	}
 

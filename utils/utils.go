@@ -22,7 +22,16 @@ func SanitizeMac(mac string) (string, error) {
 	if !check.Match([]byte(sanitized)) {
 		return "", errors.New("invalid mac address")
 	}
-	return sanitized, nil
+
+	return FormatMac(sanitized), nil
+}
+
+func FormatMac(mac string) string {
+	var out []string
+	for i := 0; i < 12; i += 2 {
+		out = append(out, mac[i:i+2])
+	}
+	return strings.Join(out, ":")
 }
 
 func WriteJson(rw http.ResponseWriter, b interface{}) {
