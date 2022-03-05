@@ -8,6 +8,7 @@ var BaseFilesPath = "data/files"
 var BaseScriptsPath = BaseFilesPath + "/scripts"
 var BaseImagesPath = BaseFilesPath + "/images"
 var FallbackScriptPath = "defaults/shell.ipxe"
+var WebRootPath = "web/dist/html"
 
 var DatabasePath = "data/ipxe-hub.db"
 
