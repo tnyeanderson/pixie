@@ -13,7 +13,11 @@ import { FormFields } from '../fields';
 export class EditScriptComponent implements OnInit {
   fields = FormFields.scriptFields
 
-  constructor(public dialogRef: MatDialogRef<EditScriptComponent>, @Inject(MAT_DIALOG_DATA) public data: ScriptItem, private apiService: ApiService) { }
+  constructor(
+    public dialogRef: MatDialogRef<EditScriptComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ScriptItem,
+    private apiService: ApiService
+  ) { }
 
   close = () => { }
 

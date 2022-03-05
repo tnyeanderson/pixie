@@ -1,5 +1,5 @@
 import { DeviceItem } from 'src/types';
-import { ApiService } from '../services/api.service';
+import { ApiService } from '../../services/api.service';
 import { TableDataSource } from '../table/table-datasource';
 
 
@@ -12,6 +12,10 @@ export class DevicesTableDataSource extends TableDataSource {
 
   constructor(private apiService: ApiService) {
     super();
+    this.load()
+  }
+
+  load() {
     this.apiService.getDevices().subscribe(data => {
       this.data = data as DeviceItem[]
       this.updated.next(true)

@@ -1,0 +1,11 @@
+<app-base-form [fields]="fields" [onSubmit]="submit" [onClose]="close" [onDelete]="delete" [initialData]="data">
+    <div class="form-field">
+        <mat-form-field appearance="fill">
+            <mat-label>Script</mat-label>
+            <mat-select [(ngModel)]="scriptId">
+                <mat-option *ngFor="let script of scripts" [value]="script.ID">{{script.Name}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</app-base-form>
+

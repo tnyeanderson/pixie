@@ -1,9 +1,9 @@
 <div class="table-container">
   <div class="mat-elevation-z8">
     <table mat-table class="full-width-table" matSort aria-label="Elements">
-      <ng-container *ngFor="let col of sourceColumns" matColumnDef="{{col}}">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{col}}</th>
-        <td mat-cell *matCellDef="let row">{{row[col]}}</td>
+      <ng-container *ngFor="let col of columns" matColumnDef="{{col.name}}">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{col.getDisplayName()}}</th>
+        <td mat-cell *matCellDef="let row">{{ col.getValue(row) }}</td>
       </ng-container>
 
       <ng-container matColumnDef="edit">

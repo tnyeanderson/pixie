@@ -20,16 +20,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DevicesListComponent } from './devices-list/devices-list.component';
+import { DevicesListComponent } from './lists/devices-list/devices-list.component';
 import { AddScriptComponent } from './forms/add-script/add-script.component';
 import { BaseFormComponent } from './forms/base-form/base-form.component';
 import { EditScriptComponent } from './forms/edit-script/edit-script.component';
 import { NavComponent } from './nav/nav.component';
-import { ScriptsListComponent } from './scripts-list/scripts-list.component';
+import { ScriptsListComponent } from './lists/scripts-list/scripts-list.component';
 import { ApiService } from './services/api.service';
 import { ConfirmService } from './services/confirm/confirm.service';
 import { ConfirmationDialogComponent } from './services/confirm/confirmation-dialog/confirmation-dialog.component';
-import { TableComponent } from './table/table.component';
+import { TableComponent } from './lists/table/table.component';
+import { AddDeviceComponent } from './forms/add-device/add-device.component';
+import { MatSelectModule } from '@angular/material/select';
+import { EditDeviceComponent } from './forms/edit-device/edit-device.component';
 
 
 @NgModule({
@@ -43,6 +46,8 @@ import { TableComponent } from './table/table.component';
     EditScriptComponent,
     BaseFormComponent,
     ConfirmationDialogComponent,
+    AddDeviceComponent,
+    EditDeviceComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +70,7 @@ import { TableComponent } from './table/table.component';
     MatDialogModule,
     MatChipsModule,
     MatSnackBarModule,
+    MatSelectModule,
   ],
   providers: [
     ApiService,

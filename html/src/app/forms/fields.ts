@@ -1,35 +1,48 @@
 export class Field {
-    name: string
-    type: string
-    displayName?: string
+  name: string
+  type: string
+  resolver: string[]
+  displayName?: string
+  defaultValue?: string | number
 
-    constructor(name: string, type: string, displayName?: string) {
-        this.name = name
-        this.type = type
-        this.displayName = displayName
-    }
+  constructor(name: string, type: string, displayName?: string, resolver?: string[], defaultValue?: string | number) {
+    this.name = name
+    this.type = type
+    this.displayName = displayName
+    this.resolver = resolver || []
+    this.defaultValue = defaultValue || ''
+  }
 
-    getDisplayName() {
-      return this.displayName || this.name
-    }
+  getValue(obj: any) {
+    let out = obj
+    let keys = (this.resolver.length > 0) ? this.resolver : [this.name]
+    keys.forEach(key => out = out[key])
+    return out || this.defaultValue
+  }
 
-    isBoolean() {
-        return this.type === 'boolean'
-    }
+  getDisplayName() {
+    return this.displayName || this.name
+  }
 
-    isNumber() {
-        return this.type === 'number'
-    }
+  isBoolean() {
+    return this.type === 'boolean'
+  }
 
-    isString() {
-        return this.type === 'string'
-    }
+  isNumber() {
+    return this.type === 'number'
+  }
+
+  isString() {
+    return this.type === 'string'
+  }
 }
 
 export class FormFields {
 
+  static idField = new Field('ID', 'number')
+
   static gormModelFields: Field[] = [
-    new Field('ID', 'number'),
+    this.idField,
     new Field('CreatedAt', 'string', 'Created'),
     new Field('UpdatedAt', 'string', 'Updated'),
     new Field('DeletedAt', 'string', 'Deleted'),
