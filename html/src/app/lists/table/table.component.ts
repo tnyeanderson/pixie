@@ -37,7 +37,6 @@ export class TableComponent implements AfterViewInit {
     this.table.dataSource = this.dataSource;
     setTimeout(() => {
       this.displayedColumns = this.getDisplayedColumns()
-      console.log(this.displayedColumns, this.dataSource.data)
     }, 0)
   }
 }

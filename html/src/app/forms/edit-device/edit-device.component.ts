@@ -45,7 +45,6 @@ export class EditDeviceComponent implements OnInit {
 
   ngOnInit(): void {
     this.scriptId = this.data.ScriptID
-    console.log(this.scriptId)
     this.apiService.getScripts().subscribe(data => {
       this.scripts = data as ScriptItem[]
     })
