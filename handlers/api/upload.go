@@ -13,9 +13,11 @@ import (
 )
 
 func createDirectories(path string) error {
+	fmt.Println("creating now: " + filepath.Dir(path))
 	if err := os.MkdirAll(filepath.Dir(path), config.DefaultDirMode); err != nil {
 		return err
 	}
+	print("no error")
 	return nil
 }
 
@@ -23,6 +25,8 @@ func saveFile(c *gin.Context, basepath string, subpath string) {
 	data, _ := c.GetRawData()
 
 	path := filepath.Join(basepath, subpath)
+
+	print(path)
 
 	err := createDirectories(path)
 

@@ -2,7 +2,8 @@
 data/
 .vscode/
 __debug_bin
-node_modules
+**/node_modules
+/ipxe-hub
 
 # Binaries for programs and plugins
 *.exe

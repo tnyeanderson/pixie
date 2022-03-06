@@ -12,6 +12,7 @@ import (
 )
 
 func BootHandler(c *gin.Context) {
+	print("boooooooting")
 	mac, err := utils.SanitizeMac(c.Query("mac"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MAC address"})

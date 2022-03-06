@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tnyeanderson/ipxe-hub/config"
@@ -9,29 +10,44 @@ import (
 	"github.com/tnyeanderson/ipxe-hub/handlers/api"
 )
 
-func Init() {
+func ListenHTTP() {
 	// Set up gin
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
+		location := url.URL{Path: "/app"}
+		c.Redirect(http.StatusFound, location.RequestURI())
 	})
 
 	// API
-	r.GET(config.ApiBasePath+"/devices", api.GetAllDevicesHandler)
-	r.GET(config.ApiBasePath+"/devices/mac/:mac", api.GetDeviceByMacHandler)
-	r.POST(config.ApiBasePath+"/devices/add", api.AddDeviceHandler)
-	r.POST(config.ApiBasePath+"/devices/update/:id", api.UpdateDeviceHandler)
-	r.DELETE(config.ApiBasePath+"/devices/delete/:id", api.DeleteDeviceHandler)
-	r.GET(config.ApiBasePath+"/scripts", api.GetAllScriptsHandler)
-	r.GET(config.ApiBasePath+"/scripts/default", api.GetDefaultScriptHandler)
-	r.POST(config.ApiBasePath+"/scripts/add", api.AddScriptHandler)
-	r.POST(config.ApiBasePath+"/scripts/update/:id", api.UpdateScriptHandler)
-	r.DELETE(config.ApiBasePath+"/scripts/delete/:id", api.DeleteScriptHandler)
+	v1 := r.Group(config.ApiBasePath)
+	{
+		devices := v1.Group("devices")
+		{
+			devices.GET("/", api.GetAllDevicesHandler)
+			devices.GET("/mac/:mac", api.GetDeviceByMacHandler)
+			devices.POST("/add", api.AddDeviceHandler)
+			devices.POST("/update/:id", api.UpdateDeviceHandler)
+			devices.DELETE("/delete/:id", api.DeleteDeviceHandler)
+		}
 
-	// File uploads
-	r.PUT(config.ApiBasePath+"/upload/image", api.UploadImageHandler)
-	r.PUT(config.ApiBasePath+"/upload/script", api.UploadScriptHandler)
+		scripts := v1.Group("scripts")
+		{
+			scripts.GET("/", api.GetAllScriptsHandler)
+			scripts.GET("/default", api.GetDefaultScriptHandler)
+			scripts.POST("/add", api.AddScriptHandler)
+			scripts.POST("/update/:id", api.UpdateScriptHandler)
+			scripts.DELETE("/delete/:id", api.DeleteScriptHandler)
+
+		}
+
+		upload := v1.Group("upload")
+		{
+			upload.PUT("/image", api.UploadImageHandler)
+			upload.PUT("/script", api.UploadScriptHandler)
+
+		}
+	}
 
 	// Boot script handler
 	r.GET("/boot.ipxe", handlers.BootHandler)
@@ -39,6 +55,7 @@ func Init() {
 	// File server
 	r.Static("/files", config.BaseFilesPath)
 
+	// Angular site
 	r.Static("/app", config.WebRootPath)
 
 	r.Run(":8880")

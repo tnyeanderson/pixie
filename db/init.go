@@ -1,5 +1,5 @@
 package db
 
-func Init() {
+func Initialize() {
 	ConnectDatabase()
 }
