@@ -1,4 +1,4 @@
-import { ImageItem, ScriptItem } from '../../../types';
+import { ImageItem } from '../../../types';
 import { ApiService } from '../../services/api.service';
 import { TableDataSource } from '../table/table-datasource';
 

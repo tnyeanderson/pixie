@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ScriptItem } from 'src/types';
 import { ApiService } from '../../services/api.service';

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
 import { DeviceItem, ScriptItem } from 'src/types';
-import { FormFields } from '../fields';
 
 @Component({
   selector: 'app-add-device',

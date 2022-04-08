@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FormInputCodeComponent } from './form-input-code.component';
+
 
 describe('FormInputCodeComponent', () => {
   let component: FormInputCodeComponent;
