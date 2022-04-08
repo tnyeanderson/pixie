@@ -1,0 +1,8 @@
+<div class="form-field">
+    <mat-form-field appearance="fill">
+        <mat-label>{{ label }}</mat-label>
+        <mat-select [(ngModel)]="model[name]">
+            <mat-option *ngFor="let option of options" [value]="option.ID">{{option.Name}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>

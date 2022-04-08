@@ -22,7 +22,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DevicesListComponent } from './lists/devices-list/devices-list.component';
 import { AddScriptComponent } from './forms/add-script/add-script.component';
-import { BaseFormComponent } from './forms/base-form/base-form.component';
+import { BaseFormComponent } from './forms/form-components/base-form/base-form.component';
 import { EditScriptComponent } from './forms/edit-script/edit-script.component';
 import { NavComponent } from './nav/nav.component';
 import { ScriptsListComponent } from './lists/scripts-list/scripts-list.component';
@@ -39,8 +39,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { FormInputTextComponent } from './forms/form-components/form-input-text/form-input-text.component';
 import { FormInputCheckboxComponent } from './forms/form-components/form-input-checkbox/form-input-checkbox.component';
 import { FormButtonsComponent } from './forms/form-components/form-buttons/form-buttons.component';
-import { BaseFormNewComponent } from './forms/form-components/base-form/base-form.component';
 import { FormInputFileComponent } from './forms/form-components/form-input-file/form-input-file.component';
+import { FormInputDropdownComponent } from './forms/form-components/form-input-dropdown/form-input-dropdown.component';
 
 
 @NgModule({
@@ -55,7 +55,6 @@ import { FormInputFileComponent } from './forms/form-components/form-input-file/
     AddScriptComponent,
     EditScriptComponent,
     BaseFormComponent,
-    BaseFormNewComponent,
     ConfirmationDialogComponent,
     AddDeviceComponent,
     EditDeviceComponent,
@@ -63,6 +62,7 @@ import { FormInputFileComponent } from './forms/form-components/form-input-file/
     FormInputCheckboxComponent,
     FormButtonsComponent,
     FormInputFileComponent,
+    FormInputDropdownComponent,
   ],
   imports: [
     BrowserModule,

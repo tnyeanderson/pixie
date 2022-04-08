@@ -11,26 +11,32 @@ import { FormFields } from '../fields';
   styleUrls: ['./edit-script.component.scss']
 })
 export class EditScriptComponent implements OnInit {
-  fields = FormFields.scriptFields
+  model: ScriptItem
 
   constructor(
     public dialogRef: MatDialogRef<EditScriptComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ScriptItem,
     private apiService: ApiService
-  ) { }
+  ) {
+    this.model = Object.assign(new ScriptItem(), data)
+  }
+
+  validate = () => (this.model.Name)
 
   close = () => { }
 
-  submit = (f: NgForm) => {
-    if (this.data.ID) {
-      this.apiService.editScript(this.data.ID, f.form.value).subscribe(r => {
+  submit = () => {
+    if (this.model.ID) {
+      this.apiService.editScript(this.model.ID, this.model).subscribe(r => {
         this.dialogRef.close()
       })
     }
   }
 
-  delete = (id: number) => {
-    this.apiService.deleteScript(id).subscribe()
+  delete = () => {
+    if (this.model.ID) {
+      this.apiService.deleteScript(this.model.ID).subscribe()
+    }
   }
 
   ngOnInit(): void {

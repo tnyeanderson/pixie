@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ScriptItem } from 'src/types';
 import { ApiService } from '../../services/api.service';
-import { FormFields } from '../fields';
 
 @Component({
   selector: 'app-add-script',
@@ -10,16 +10,18 @@ import { FormFields } from '../fields';
   styleUrls: ['./add-script.component.scss']
 })
 export class AddScriptComponent implements OnInit {
-  fields = FormFields.scriptFields
+  model: ScriptItem = new ScriptItem()
+  files: File[] = []
 
   constructor(public dialogRef: MatDialogRef<AddScriptComponent>, private apiService: ApiService) { }
 
+  validate = () => (this.model.Name)
+
   close = () => { }
 
-  submit = (f: NgForm) => {
-    console.log(f.form.value.scriptContent)
-    this.apiService.uploadScript(f.form.value.Path, f.form.value.scriptContent).subscribe(r => {
-      this.apiService.addScript(f.form.value).subscribe(r => {
+  submit = () => {
+    this.apiService.uploadScript(this.model.Path, this.files[0]).subscribe(r => {
+      this.apiService.addScript(this.model).subscribe(r => {
         this.dialogRef.close()
       })
 

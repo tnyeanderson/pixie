@@ -72,8 +72,8 @@ export class ApiService {
     return this.httpClient.post(`${this.baseUrl}/scripts/add`, script).pipe(catchError(this.handleError))
   }
 
-  uploadScript(path: string, scriptText: string) {
-    return this.httpClient.put(`${this.baseUrl}/upload/script?path=${path}`, scriptText).pipe(catchError(this.handleError))
+  uploadScript(path: string, script: File) {
+    return this.httpClient.put(`${this.baseUrl}/upload/script?path=${path}`, this.fileUploadBody(script)).pipe(catchError(this.handleError))
   }
 
   editScript(id: number, script: ScriptItem) {

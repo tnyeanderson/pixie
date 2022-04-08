@@ -11,40 +11,38 @@ import { FormFields } from '../fields';
   styleUrls: ['./edit-device.component.scss']
 })
 export class EditDeviceComponent implements OnInit {
-  fields = FormFields.deviceFields
+  model: DeviceItem
   scripts: ScriptItem[] = []
-  scriptId: any
-
 
   constructor(
     public dialogRef: MatDialogRef<EditDeviceComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DeviceItem,
     private apiService: ApiService
-  ) { }
+  ) {
+    this.model = Object.assign(new DeviceItem(), data)
+  }
+
+  validate = () => (this.model.Mac)
 
   close = () => { }
 
-  submit = (f: NgForm) => {
-    const body: DeviceItem = Object.assign(
-      new DeviceItem(),
-      f.form.value,
-      { ScriptID: this.scriptId }
-    )
-    if (this.data.ID) {
-      this.apiService.editDevice(this.data.ID, body).subscribe(r => {
+  submit = () => {
+    if (this.model.ID) {
+      this.apiService.editDevice(this.model.ID, this.model).subscribe(r => {
       this.dialogRef.close()
     })
     }
 
   }
 
-  delete = (id: number) => {
-    this.apiService.deleteDevice(id).subscribe()
+  delete = () => {
+    if (this.model.ID) {
+      this.apiService.deleteDevice(this.model.ID).subscribe()
+    }
   }
 
 
   ngOnInit(): void {
-    this.scriptId = this.data.ScriptID
     this.apiService.getScripts().subscribe(data => {
       this.scripts = data as ScriptItem[]
     })

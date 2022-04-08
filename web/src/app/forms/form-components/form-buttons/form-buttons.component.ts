@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ConfirmService } from 'src/app/services/confirm/confirm.service';
-import { BaseFormNewComponent } from '../base-form/base-form.component';
+import { BaseFormComponent } from '../base-form/base-form.component';
 
 @Component({
   selector: 'app-form-buttons',
@@ -17,11 +17,11 @@ export class FormButtonsComponent implements OnInit {
   @Input() onSubmit: Function = () => { }
   @Input() onDelete: Function = () => { }
 
-  constructor(public dialogRef: MatDialogRef<BaseFormNewComponent>, public confirm: ConfirmService) { }
+  constructor(public dialogRef: MatDialogRef<BaseFormComponent>, public confirm: ConfirmService) { }
 
-  delete(id: number) {
+  delete() {
     this.confirm.ask(() => {
-      this.onDelete(id)
+      this.onDelete(this.model.ID)
       this.close()
     }, 'Delete script?')
   }
@@ -33,6 +33,10 @@ export class FormButtonsComponent implements OnInit {
 
   submit() {
     this.onSubmit()
+  }
+
+  deleteAllowed() {
+    return this.showDelete && this.model.ID
   }
 
   ngOnInit(): void {

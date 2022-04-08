@@ -1,1 +1,5 @@
-<app-base-form [fields]="fields" [onSubmit]="submit" [onClose]="close" [onDelete]="delete" [initialData]="data"></app-base-form>
+<app-base-form [model]="model">
+    <app-form-input-text name="Name" [model]="model"></app-form-input-text>
+    <app-form-input-text name="Path" [model]="model"></app-form-input-text>
+    <app-form-buttons action="Save" [showDelete]="true" [validate]="validate" [onSubmit]="submit" [onClose]="close" [onDelete]="delete" [model]="model"> </app-form-buttons>
+</app-base-form>

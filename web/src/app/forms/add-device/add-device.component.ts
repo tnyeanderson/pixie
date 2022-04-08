@@ -11,23 +11,19 @@ import { FormFields } from '../fields';
   styleUrls: ['./add-device.component.scss']
 })
 export class AddDeviceComponent implements OnInit {
-  fields = FormFields.deviceFields
+  model: DeviceItem = new DeviceItem()
   scripts: ScriptItem[] = []
-  scriptId: any
 
   constructor(public dialogRef: MatDialogRef<AddDeviceComponent>, private apiService: ApiService) {
 
   }
 
+  validate = () => (this.model.Mac)
+
   close = () => { }
 
-  submit = (f: NgForm) => {
-    const body: DeviceItem = Object.assign(
-      new DeviceItem(),
-      f.form.value,
-      { ScriptID: this.scriptId }
-    )
-    this.apiService.addDevice(body).subscribe(r => {
+  submit = () => {
+    this.apiService.addDevice(this.model).subscribe(r => {
       this.dialogRef.close()
     })
   }
