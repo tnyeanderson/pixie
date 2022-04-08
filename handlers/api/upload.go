@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tnyeanderson/ipxe-hub/config"
@@ -22,20 +23,19 @@ func createDirectories(path string) error {
 }
 
 func saveFile(c *gin.Context, basepath string, subpath string) {
-	data, _ := c.GetRawData()
-
 	path := filepath.Join(basepath, subpath)
 
-	print(path)
-
 	err := createDirectories(path)
-
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = ioutil.WriteFile(path, data, config.DefaultFileMode)
+	if strings.HasPrefix(c.GetHeader("Content-Type"), "multipart/form-data") {
+		err = saveUploadedFile(c, path)
+	} else {
+		err = saveFileByText(c, path)
+	}
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -43,6 +43,34 @@ func saveFile(c *gin.Context, basepath string, subpath string) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": fmt.Sprintf("'%s' uploaded!", path)})
+}
+
+func saveUploadedFile(c *gin.Context, path string) error {
+	fmt.Println("Uploading file. Headers: ", c.GetHeader("Content-Type"))
+	file, err := c.FormFile("file")
+
+	if err != nil {
+		return err
+	}
+
+	if err := c.SaveUploadedFile(file, path); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func saveFileByText(c *gin.Context, path string) error {
+	fmt.Println("Uploading text. Headers: ", c.GetHeader("Content-Type"))
+	data, _ := c.GetRawData()
+
+	err := ioutil.WriteFile(path, data, config.DefaultFileMode)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func UploadImageHandler(c *gin.Context) {

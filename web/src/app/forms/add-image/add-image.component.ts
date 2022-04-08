@@ -27,8 +27,7 @@ export class AddImageComponent implements OnInit {
   }
 
   submit = () => {
-    // TODO: Should not send empty string
-    this.apiService.uploadImage(this.model.Path, '').subscribe(r => {
+    this.apiService.uploadImage(this.model.Path, this.files[0]).subscribe(r => {
       this.apiService.addImage(this.model).subscribe(r => {
         this.dialogRef.close()
       })

@@ -30,6 +30,12 @@ export class ApiService {
     return throwError(() => new Error(msg));
   }
 
+  private fileUploadBody(file: File) {
+    const formData = new FormData()
+    formData.append('file', file)
+    return formData
+  }
+
   getImages() {
     return this.httpClient.get(`${this.baseUrl}/images`).pipe(catchError(this.handleError))
   }
@@ -42,8 +48,8 @@ export class ApiService {
     return this.httpClient.post(`${this.baseUrl}/images/add`, script).pipe(catchError(this.handleError))
   }
 
-  uploadImage(path: string, imageText: string) {
-    return this.httpClient.put(`${this.baseUrl}/upload/image?path=${path}`, imageText).pipe(catchError(this.handleError))
+  uploadImage(path: string, image: File) {
+    return this.httpClient.put(`${this.baseUrl}/upload/image?path=${path}`, this.fileUploadBody(image)).pipe(catchError(this.handleError))
   }
 
   editImage(id: number, script: ImageItem) {
