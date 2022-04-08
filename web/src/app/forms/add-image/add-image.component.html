@@ -1,6 +1,6 @@
 <app-base-form-new [validate]="validate" [model]="model">
     <app-form-input-text name="Name" [model]="model"></app-form-input-text>
     <app-form-input-text name="Path" [model]="model"></app-form-input-text>
-    <app-form-input-file label="Upload an image" [multiple]="false" [files]="files"></app-form-input-file>
+    <app-form-input-file label="Upload an image" [files]="files"></app-form-input-file>
     <app-form-buttons action="Add" [onSubmit]="submit" [onClose]="close" [model]="model"></app-form-buttons>
 </app-base-form-new>

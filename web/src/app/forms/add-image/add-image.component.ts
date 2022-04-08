@@ -16,9 +16,7 @@ export class AddImageComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<AddImageComponent>, private apiService: ApiService) { }
 
-  close = () => {
-    console.log("WE ARE CLOSING", this.model, this.files)
-  }
+  close = () => { }
 
   validate = () => {
     console.log(this.model)

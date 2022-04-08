@@ -13,7 +13,11 @@ export class FormInputFileComponent implements OnInit {
   constructor() { }
 
   onSelect(event: any) {
-    this.files.push(...event.addedFiles);
+    if (this.multiple) {
+      this.files.push(...event.addedFiles);
+    } else {
+      this.files[0] = event.addedFiles[0]
+    }
   }
 
   onRemove(event: any) {
