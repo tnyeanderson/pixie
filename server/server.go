@@ -1,8 +1,10 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tnyeanderson/ipxe-hub/config"
@@ -67,6 +69,12 @@ func ListenHTTP() {
 
 	// Angular site
 	r.Static("/app", config.WebRootPath)
+	r.NoRoute(func(c *gin.Context) {
+		fmt.Println("Route not found for: %s", c.Request.RequestURI)
+		if strings.HasPrefix(c.Request.RequestURI, "/app") {
+			c.File(config.WebRootPath + "/index.html")
+		}
+	})
 
 	r.Run(":8880")
 
