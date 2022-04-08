@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Form, NgForm } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ConfirmService } from 'src/app/services/confirm/confirm.service';
 import { Field } from '../fields';
@@ -10,13 +10,15 @@ import { Field } from '../fields';
   styleUrls: ['./base-form.component.scss']
 })
 export class BaseFormComponent implements OnInit {
+  model: any = {};
+
   @Input() fields: Field[] = []
   @Input() onClose: Function = () => { }
   @Input() onSubmit: Function = () => { }
   @Input() onDelete: Function = () => { }
+  @Input() validate: Function = (f: Form): boolean => true
   @Input() action: string = 'Save'
   @Input() initialData: any = {}
-  model: any = {};
 
   constructor(public dialogRef: MatDialogRef<BaseFormComponent>, public confirm: ConfirmService) { }
 

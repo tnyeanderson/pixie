@@ -45,6 +45,12 @@ export class ScriptsListComponent implements OnInit {
     });
   }
 
+  syncWithFilesystem() {
+    this.apiService.syncScripts().subscribe(result => {
+      this.dataSource.load()
+    })
+  }
+
   ngOnInit(): void {
   }
 

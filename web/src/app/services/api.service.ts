@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, throwError } from 'rxjs';
-import { DeviceItem, ScriptItem } from 'src/types';
+import { DeviceItem, ImageItem, ScriptItem } from 'src/types';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +30,36 @@ export class ApiService {
     return throwError(() => new Error(msg));
   }
 
+  getImages() {
+    return this.httpClient.get(`${this.baseUrl}/images`).pipe(catchError(this.handleError))
+  }
+
+  syncImages() {
+    return this.httpClient.post(`${this.baseUrl}/images/sync`, {}).pipe(catchError(this.handleError))
+  }
+
+  addImage(script: ImageItem) {
+    return this.httpClient.post(`${this.baseUrl}/images/add`, script).pipe(catchError(this.handleError))
+  }
+
+  uploadImage(path: string, imageText: string) {
+    return this.httpClient.put(`${this.baseUrl}/upload/image?path=${path}`, imageText).pipe(catchError(this.handleError))
+  }
+
+  editImage(id: number, script: ImageItem) {
+    return this.httpClient.post(`${this.baseUrl}/images/update/${id}`, script).pipe(catchError(this.handleError))
+  }
+
+  deleteImage(id: number) {
+    return this.httpClient.delete(`${this.baseUrl}/images/delete/${id}`).pipe(catchError(this.handleError))
+  }
+
   getScripts() {
     return this.httpClient.get(`${this.baseUrl}/scripts`).pipe(catchError(this.handleError))
+  }
+
+  syncScripts() {
+    return this.httpClient.post(`${this.baseUrl}/scripts/sync`, {}).pipe(catchError(this.handleError))
   }
 
   addScript(script: ScriptItem) {

@@ -17,6 +17,7 @@ export class AddScriptComponent implements OnInit {
   close = () => { }
 
   submit = (f: NgForm) => {
+    console.log(f.form.value.scriptContent)
     this.apiService.uploadScript(f.form.value.Path, f.form.value.scriptContent).subscribe(r => {
       this.apiService.addScript(f.form.value).subscribe(r => {
         this.dialogRef.close()

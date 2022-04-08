@@ -31,6 +31,16 @@ func ListenHTTP() {
 			devices.DELETE("/delete/:id", api.DeleteDeviceHandler)
 		}
 
+		images := v1.Group("images")
+		{
+			images.GET("/", api.GetAllImagesHandler)
+			images.GET("/default", api.GetDefaultImageHandler)
+			images.POST("/add", api.AddImageHandler)
+			images.POST("/update/:id", api.UpdateImageHandler)
+			images.DELETE("/delete/:id", api.DeleteImageHandler)
+			images.POST("/sync", api.SyncImagesHandler)
+		}
+
 		scripts := v1.Group("scripts")
 		{
 			scripts.GET("/", api.GetAllScriptsHandler)
@@ -38,7 +48,7 @@ func ListenHTTP() {
 			scripts.POST("/add", api.AddScriptHandler)
 			scripts.POST("/update/:id", api.UpdateScriptHandler)
 			scripts.DELETE("/delete/:id", api.DeleteScriptHandler)
-
+			scripts.POST("/sync", api.SyncScriptsHandler)
 		}
 
 		upload := v1.Group("upload")

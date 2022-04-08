@@ -12,6 +12,8 @@ FROM golang AS build-go
 RUN mkdir -p /src
 WORKDIR /src
 COPY go.mod go.sum ./
+COPY hack ./hack
+RUN find /src
 RUN go mod download
 # This package takes a while to compile. Cache for speed
 RUN go install gorm.io/driver/sqlite

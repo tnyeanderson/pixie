@@ -7,7 +7,7 @@ import "gorm.io/gorm"
 type Device struct {
 	gorm.Model
 	Mac       string `gorm:"unique;not null"`
-	Name      string
+	Name      string `gorm:"unique"`
 	GroupName string
 	ScriptID  uint `gorm:"type:INT UNSIGNED REFERENCES scripts(id) ON DELETE RESTRICT ON UPDATE RESTRICT"`
 	Script    Script

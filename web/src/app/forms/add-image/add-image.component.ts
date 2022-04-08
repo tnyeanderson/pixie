@@ -1,0 +1,44 @@
+import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ImageItem } from 'src/types';
+import { ApiService } from '../../services/api.service';
+
+@Component({
+  selector: 'app-add-image',
+  templateUrl: './add-image.component.html',
+  styleUrls: ['./add-image.component.scss']
+})
+export class AddImageComponent implements OnInit {
+  model: ImageItem = new ImageItem()
+  files: File[] = [];
+
+
+  constructor(public dialogRef: MatDialogRef<AddImageComponent>, private apiService: ApiService) { }
+
+  close = () => {
+    console.log("WE ARE CLOSING", this.model, this.files)
+  }
+
+  validate = () => {
+    console.log(this.model)
+    if (this.model.Name) {
+      return false
+    }
+    return true
+  }
+
+  submit = () => {
+    // TODO: Should not send empty string
+    this.apiService.uploadImage(this.model.Path, '').subscribe(r => {
+      this.apiService.addImage(this.model).subscribe(r => {
+        this.dialogRef.close()
+      })
+
+    })
+  }
+
+  ngOnInit(): void {
+  }
+
+}

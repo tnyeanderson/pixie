@@ -5,6 +5,12 @@ export class Column extends Field { }
 export class ListColumns {
     static idColumn = new Column('ID', 'number')
 
+    static imagesColumns: Column[] = [
+        this.idColumn,
+        new Column('Name', 'string'),
+        new Column('Path', 'string'),
+    ]
+
     static scriptsColumns: Column[] = [
         this.idColumn,
         new Column('Name', 'string'),

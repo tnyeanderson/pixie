@@ -46,9 +46,9 @@ func saveFile(c *gin.Context, basepath string, subpath string) {
 }
 
 func UploadImageHandler(c *gin.Context) {
-	subpath := c.Query("path")
+	subpath, err := utils.ValidatePath(c.Query("path"))
 
-	if _, err := utils.ValidatePath(subpath); err != nil {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -57,9 +57,9 @@ func UploadImageHandler(c *gin.Context) {
 }
 
 func UploadScriptHandler(c *gin.Context) {
-	path := c.Query("path")
+	path, err := utils.ValidatePath(c.Query("path"))
 
-	if _, err := utils.ValidatePath(path); err != nil {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

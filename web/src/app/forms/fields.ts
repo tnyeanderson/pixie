@@ -48,9 +48,17 @@ export class FormFields {
     new Field('DeletedAt', 'string', 'Deleted'),
   ]
 
-  static scriptFields: Field[] = [
+  static fileFields: Field[] = [
     new Field('Name', 'string'),
     new Field('Path', 'string'),
+  ]
+
+  static imageFields: Field[] = [
+    ...this.fileFields
+  ]
+
+  static scriptFields: Field[] = [
+    ...this.fileFields,
     new Field('IsDefault', 'boolean', 'Set as default'),
   ]
 

@@ -5,9 +5,14 @@ export class GormModel {
   DeletedAt: string | undefined
 }
 
-export class ScriptItem extends GormModel {
+export class FileItem extends GormModel {
   Name = ''
   Path = ''
+}
+
+export class ImageItem extends FileItem { }
+
+export class ScriptItem extends FileItem {
   IsDefault = false
 }
 

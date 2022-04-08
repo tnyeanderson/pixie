@@ -1,0 +1,8 @@
+<div class="form-field">
+    <ngx-dropzone [multiple]="multiple" (change)="onSelect($event)">
+        <ngx-dropzone-label>{{ label }}</ngx-dropzone-label>
+        <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+            <ngx-dropzone-label>{{ f.name }}</ngx-dropzone-label>
+        </ngx-dropzone-preview>
+    </ngx-dropzone>
+</div>

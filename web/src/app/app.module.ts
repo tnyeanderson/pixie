@@ -33,6 +33,14 @@ import { TableComponent } from './lists/table/table.component';
 import { AddDeviceComponent } from './forms/add-device/add-device.component';
 import { MatSelectModule } from '@angular/material/select';
 import { EditDeviceComponent } from './forms/edit-device/edit-device.component';
+import { ImagesListComponent } from './lists/images-list/images-list.component';
+import { AddImageComponent } from './forms/add-image/add-image.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { FormInputTextComponent } from './forms/form-components/form-input-text/form-input-text.component';
+import { FormInputCheckboxComponent } from './forms/form-components/form-input-checkbox/form-input-checkbox.component';
+import { FormButtonsComponent } from './forms/form-components/form-buttons/form-buttons.component';
+import { BaseFormNewComponent } from './forms/form-components/base-form/base-form.component';
+import { FormInputFileComponent } from './forms/form-components/form-input-file/form-input-file.component';
 
 
 @NgModule({
@@ -40,14 +48,21 @@ import { EditDeviceComponent } from './forms/edit-device/edit-device.component';
     AppComponent,
     NavComponent,
     TableComponent,
+    ImagesListComponent,
     ScriptsListComponent,
     DevicesListComponent,
+    AddImageComponent,
     AddScriptComponent,
     EditScriptComponent,
     BaseFormComponent,
+    BaseFormNewComponent,
     ConfirmationDialogComponent,
     AddDeviceComponent,
     EditDeviceComponent,
+    FormInputTextComponent,
+    FormInputCheckboxComponent,
+    FormButtonsComponent,
+    FormInputFileComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +86,7 @@ import { EditDeviceComponent } from './forms/edit-device/edit-device.component';
     MatChipsModule,
     MatSnackBarModule,
     MatSelectModule,
+    NgxDropzoneModule,
   ],
   providers: [
     ApiService,
