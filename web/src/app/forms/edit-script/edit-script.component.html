@@ -1,5 +1,6 @@
 <app-base-form [model]="model">
     <app-form-input-text name="Name" [model]="model"></app-form-input-text>
     <app-form-input-text name="Path" [model]="model"></app-form-input-text>
+    <app-form-input-code name="Content" [model]="scriptContent"></app-form-input-code>
     <app-form-buttons action="Save" [showDelete]="true" [validate]="validate" [onSubmit]="submit" [onClose]="close" [onDelete]="delete" [model]="model"> </app-form-buttons>
 </app-base-form>

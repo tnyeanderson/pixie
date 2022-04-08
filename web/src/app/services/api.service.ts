@@ -8,10 +8,11 @@ import { DeviceItem, ImageItem, ScriptItem } from 'src/types';
   providedIn: 'root'
 })
 export class ApiService {
+  host = 'http://localhost:8880'
+  baseUrl = `${this.host}/api/v1`
+  filesBaseUrl = `${this.host}/files`
 
   constructor(private httpClient: HttpClient, private _snackBar: MatSnackBar) { }
-
-  baseUrl = 'http://localhost:8880/api/v1'
 
   private handleError = (error: HttpErrorResponse) => {
     let msg = 'An unexpected error occurred'
@@ -76,6 +77,10 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/upload/script?path=${path}`, this.fileUploadBody(script)).pipe(catchError(this.handleError))
   }
 
+  uploadScriptText(path: string, script: string) {
+    return this.httpClient.put(`${this.baseUrl}/upload/script?path=${path}`, script).pipe(catchError(this.handleError))
+  }
+
   editScript(id: number, script: ScriptItem) {
     return this.httpClient.post(`${this.baseUrl}/scripts/update/${id}`, script).pipe(catchError(this.handleError))
   }
@@ -98,6 +103,10 @@ export class ApiService {
 
   deleteDevice(id: number) {
     return this.httpClient.delete(`${this.baseUrl}/devices/delete/${id}`).pipe(catchError(this.handleError))
+  }
+
+  getFileContent(path: string) {
+    return this.httpClient.get(`${this.filesBaseUrl}/${path}`, {responseType: 'blob'}) //.pipe(catchError(this.handleError))
   }
 
 }

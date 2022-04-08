@@ -13,6 +13,10 @@ export class FormInputDropdownComponent implements OnInit {
 
   constructor() { }
 
+  getLabel() {
+    return this.label || this.name
+  }
+
   ngOnInit(): void {
   }
 

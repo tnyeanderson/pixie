@@ -41,6 +41,7 @@ import { FormInputCheckboxComponent } from './forms/form-components/form-input-c
 import { FormButtonsComponent } from './forms/form-components/form-buttons/form-buttons.component';
 import { FormInputFileComponent } from './forms/form-components/form-input-file/form-input-file.component';
 import { FormInputDropdownComponent } from './forms/form-components/form-input-dropdown/form-input-dropdown.component';
+import { FormInputCodeComponent } from './forms/form-components/form-input-code/form-input-code.component';
 
 
 @NgModule({
@@ -63,6 +64,7 @@ import { FormInputDropdownComponent } from './forms/form-components/form-input-d
     FormButtonsComponent,
     FormInputFileComponent,
     FormInputDropdownComponent,
+    FormInputCodeComponent,
   ],
   imports: [
     BrowserModule,
