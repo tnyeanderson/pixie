@@ -44,7 +44,7 @@ export class TableDataSource extends DataSource<TableScriptItem> {
       return merge(observableOf(this.data), this.paginator.page, this.sort.sortChange, this.updated)
         .pipe(map(() => {
           let data = this.data || []
-          return this.getPagedData(this.getSortedData([...data ]));
+          return this.getPagedData(this.getSortedData([...data]));
         }));
     } else {
       throw Error('Please set the paginator and sort on the data source before connecting.');
@@ -55,7 +55,7 @@ export class TableDataSource extends DataSource<TableScriptItem> {
    *  Called when the table is being destroyed. Use this function, to clean up
    * any open connections or free any held resources that were set up during connect.
    */
-  disconnect(): void {}
+  disconnect(): void { }
 
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
@@ -74,26 +74,26 @@ export class TableDataSource extends DataSource<TableScriptItem> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: TableScriptItem[]): TableScriptItem[] {
+  private getSortedData(data: any[]): any[] {
     if (!this.sort || !this.sort.active || this.sort.direction === '') {
+      // Don't sort
       return data;
     }
 
-    return data.sort((a, b) => {
-      const isAsc = this.sort?.direction === 'asc';
-      // FIXME: Sort won't work like this...
-      return 0
-      // if (this.sort?.active !== undefined) {
-      //   const active =  this.sort.active;
-      //   return compare(a[active], b[active], isAsc);
-      // } else {
-      //   return 0;
-      // }
+    const sortKey = this.sort.active
+    data.sort((a, b) => {
+      return compareKeys(sortKey, a, b)
     });
+    if (this.sort?.direction === 'desc') {
+      data.reverse()
+    }
+    return data
   }
 }
 
-/** Simple sort comparator for example ID/Name columns (for client-side sorting). */
-function compare(a: string | number, b: string | number, isAsc: boolean): number {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+function compareKeys(key: string, a: any, b: any) {
+  const aVal = String(a[key])
+  const bVal = String(b[key])
+
+  return aVal.localeCompare(bVal, undefined, { numeric: true })
 }
