@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
-import { ScriptItem } from 'src/types';
+import { ScriptItem, UploadInline } from 'src/types';
 
 @Component({
   selector: 'app-edit-script',
@@ -10,7 +11,7 @@ import { ScriptItem } from 'src/types';
 })
 export class EditScriptComponent implements OnInit {
   model: ScriptItem
-  scriptContent: any = { Content: '' }
+  scriptFile = new UploadInline()
 
   constructor(
     public dialogRef: MatDialogRef<EditScriptComponent>,
@@ -25,14 +26,23 @@ export class EditScriptComponent implements OnInit {
   close = () => { }
 
   submit = () => {
-    console.log('submitted', this.model, this.scriptContent)
     if (this.model.ID) {
       this.apiService.editScript(this.model.ID, this.model).subscribe(r => {
-        this.apiService.uploadScriptText(this.model.Path, this.scriptContent.Content).subscribe(r => {
+        this.uploadFileOrText().subscribe(r => {
           this.dialogRef.close()
         })
       })
     }
+  }
+
+  uploadFileOrText() {
+    if (this.scriptFile.isUpload() && this.scriptFile.hasContent()) {
+      return this.apiService.uploadScript(this.model.Path, this.scriptFile.getFile())
+    } else if (this.scriptFile.isInline() && this.scriptFile.hasContent()) {
+      return this.apiService.uploadScriptText(this.model.Path, this.scriptFile.getInline())
+    }
+
+    return of({ status: 'skipped file contents update' })
   }
 
   delete = () => {
@@ -42,9 +52,10 @@ export class EditScriptComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.scriptFile.format = this.scriptFile.formats.inline
     this.apiService.getFileContent(`scripts/${this.model.Path}`).subscribe((r: Blob) => {
       r.text().then(text => {
-        this.scriptContent.Content = text
+        this.scriptFile.setInlineContent(text)
       })
     })
   }

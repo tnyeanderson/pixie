@@ -1,6 +1,7 @@
 <app-base-form [model]="model">
     <app-form-input-text name="Name" [model]="model"></app-form-input-text>
     <app-form-input-text name="Path" [model]="model"></app-form-input-text>
-    <app-form-input-file label="Upload a script" [files]="files"></app-form-input-file>
-    <app-form-buttons action="Add" [validate]="validate" [onSubmit]="submit" [onClose]="close" [model]="model"></app-form-buttons>
+    <app-form-input-upload-inline [model]="scriptFile" [onFileAdded]="onFileAdded"></app-form-input-upload-inline>
+    <app-form-buttons action="Add" [validate]="validate" [onSubmit]="submit" [onClose]="close" [model]="model">
+    </app-form-buttons>
 </app-base-form>

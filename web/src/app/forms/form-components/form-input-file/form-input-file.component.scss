@@ -1,3 +1,9 @@
 .form-field {
     margin-bottom: 1em;
 }
+
+ngx-dropzone {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px dashed rgba(0, 0, 0, 0.87);
+    border-radius: 0;
+}
