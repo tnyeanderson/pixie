@@ -2,6 +2,7 @@ package queries
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/tnyeanderson/ipxe-hub/db"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
@@ -35,6 +36,12 @@ func AddDevice(device models.Device) (*models.Device, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+
+	fmt.Println("About to add log!!")
+	AddLogMessage(
+		fmt.Sprint("Added device: ID=", device.ID, ", Mac=", device.Mac),
+		fmt.Sprint(device),
+	)
 
 	return &device, nil
 }
