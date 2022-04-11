@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<div class="add-button-container">
+<div *ngIf="addable" class="add-button-container">
   <button mat-fab color="accent" (click)="add()" aria-label="Create">
     <mat-icon>add</mat-icon>
   </button>

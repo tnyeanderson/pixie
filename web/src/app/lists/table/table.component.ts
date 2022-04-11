@@ -16,6 +16,7 @@ export class TableComponent implements AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<TableScriptItem>;
   @Input() dataSource: TableDataSource = new TableDataSource();
   @Input() editable: boolean = false
+  @Input() addable: boolean = false
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   @Input() add: Function = () => { }
