@@ -9,8 +9,7 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./nav.component.scss']
 })
 export class NavComponent {
-  title = 'iPXE Hub';
-
+  title = 'Pixie';
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
