@@ -9,7 +9,7 @@ import (
 
 func GetLogs() ([]models.Log, error) {
 	var logs []models.Log
-	result := db.Get().Table("logs").Select("*").Scan(&logs)
+	result := db.Get().Table("logs").Select("*").Order("created_at DESC").Scan(&logs)
 
 	if result == nil {
 		return nil, errors.New("error fetching logs")

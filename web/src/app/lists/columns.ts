@@ -42,7 +42,6 @@ export class ListColumns {
     ]
 
     static logsColumns: Column[] = [
-        this.idColumn,
         new Column('CreatedAt', 'timestamp', 'Timestamp'),
         new Column('Summary', 'string'),
         new Column('Detail', 'longtext'),
