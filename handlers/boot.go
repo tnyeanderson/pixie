@@ -43,7 +43,7 @@ func BootHandler(c *gin.Context) {
 	}
 
 	queries.AddLogMessage(
-		fmt.Sprint("Device ", device.Mac, "booted script ", scriptPath),
+		fmt.Sprint("Device ", device.Mac, " booted script ", scriptPath),
 		fmt.Sprintf("%+v\n", device),
 	)
 
