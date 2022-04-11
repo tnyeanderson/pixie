@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tnyeanderson/ipxe-hub/config"
-	"github.com/tnyeanderson/ipxe-hub/handlers"
-	"github.com/tnyeanderson/ipxe-hub/handlers/api"
+	"github.com/tnyeanderson/pixie/config"
+	"github.com/tnyeanderson/pixie/handlers"
+	"github.com/tnyeanderson/pixie/handlers/api"
 )
 
 func ListenHTTP() {

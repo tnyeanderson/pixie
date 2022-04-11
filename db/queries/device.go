@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/tnyeanderson/ipxe-hub/db"
-	"github.com/tnyeanderson/ipxe-hub/db/models"
+	"github.com/tnyeanderson/pixie/db"
+	"github.com/tnyeanderson/pixie/db/models"
 )
 
 func GetDevices() ([]models.Device, error) {

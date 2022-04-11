@@ -3,7 +3,7 @@ data/
 .vscode/
 __debug_bin
 **/node_modules
-/ipxe-hub
+/pixie
 hack/
 
 # Binaries for programs and plugins

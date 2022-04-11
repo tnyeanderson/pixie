@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/tnyeanderson/ipxe-hub/db"
-	"github.com/tnyeanderson/ipxe-hub/db/models"
-	"github.com/tnyeanderson/ipxe-hub/utils"
+	"github.com/tnyeanderson/pixie/db"
+	"github.com/tnyeanderson/pixie/db/models"
+	"github.com/tnyeanderson/pixie/utils"
 )
 
 func GetImages() ([]models.Image, error) {

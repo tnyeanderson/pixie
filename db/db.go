@@ -4,8 +4,8 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/tnyeanderson/ipxe-hub/config"
-	"github.com/tnyeanderson/ipxe-hub/db/models"
+	"github.com/tnyeanderson/pixie/config"
+	"github.com/tnyeanderson/pixie/db/models"
 )
 
 var DB *gorm.DB

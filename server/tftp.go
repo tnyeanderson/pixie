@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/pin/tftp"
-	"github.com/tnyeanderson/ipxe-hub/config"
+	"github.com/tnyeanderson/pixie/config"
 )
 
 // readHandler is called when client starts file download from server

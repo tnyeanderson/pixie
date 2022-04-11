@@ -24,7 +24,7 @@ RUN go build
 FROM golang
 RUN mkdir -p /app
 WORKDIR /app
-COPY --from=build-go /src/ipxe-hub /app/pixie
+COPY --from=build-go /src/pixie /app/pixie
 COPY --from=build-angular /web/dist /app/web/dist
 
 ENTRYPOINT [ "/app/pixie" ]

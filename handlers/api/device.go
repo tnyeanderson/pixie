@@ -5,9 +5,9 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tnyeanderson/ipxe-hub/db/models"
-	"github.com/tnyeanderson/ipxe-hub/db/queries"
-	"github.com/tnyeanderson/ipxe-hub/utils"
+	"github.com/tnyeanderson/pixie/db/models"
+	"github.com/tnyeanderson/pixie/db/queries"
+	"github.com/tnyeanderson/pixie/utils"
 )
 
 func GetAllDevicesHandler(c *gin.Context) {
