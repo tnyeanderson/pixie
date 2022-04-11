@@ -53,8 +53,8 @@ export class ApiService {
     return this.httpClient.put(`${this.baseUrl}/upload/image?path=${path}`, this.fileUploadBody(image)).pipe(catchError(this.handleError))
   }
 
-  editImage(id: number, script: ImageItem) {
-    return this.httpClient.post(`${this.baseUrl}/images/update/${id}`, script).pipe(catchError(this.handleError))
+  editImage(id: number, image: ImageItem) {
+    return this.httpClient.post(`${this.baseUrl}/images/update/${id}`, image).pipe(catchError(this.handleError))
   }
 
   deleteImage(id: number) {

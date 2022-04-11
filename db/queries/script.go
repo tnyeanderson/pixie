@@ -2,6 +2,7 @@ package queries
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/tnyeanderson/ipxe-hub/db"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
@@ -53,6 +54,11 @@ func AddScript(script models.Script) (*models.Script, error) {
 		return nil, result.Error
 	}
 
+	AddLogMessage(
+		fmt.Sprint("Added script: ID=", script.ID, ", Path=", script.Path),
+		fmt.Sprintf("%+v\n", script),
+	)
+
 	return &script, nil
 }
 
@@ -63,6 +69,11 @@ func UpdateScript(id uint, updated models.Script) (*models.Script, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+
+	AddLogMessage(
+		fmt.Sprint("Updated script: ID=", id, ", Path=", updated.Path),
+		fmt.Sprintf("%+v\n", updated),
+	)
 
 	return &script, nil
 }
@@ -95,6 +106,11 @@ func DeleteScript(script models.Script) (*models.Script, error) {
 	if result.RowsAffected == 0 {
 		return nil, errors.New("no rows deleted")
 	}
+
+	AddLogMessage(
+		fmt.Sprint("Deleted script: ID=", script.ID, ", Path=", script.Path),
+		fmt.Sprintf("%+v\n", script),
+	)
 
 	return &script, nil
 }

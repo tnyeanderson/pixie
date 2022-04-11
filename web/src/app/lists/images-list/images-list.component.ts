@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddImageComponent } from 'src/app/forms/add-image/add-image.component';
+import { EditImageComponent } from 'src/app/forms/edit-image/edit-image.component';
 import { ImageItem } from 'src/types';
 import { ApiService } from '../../services/api.service';
 import { ListColumns } from '../columns';
@@ -28,11 +29,11 @@ export class ImagesListComponent implements OnInit {
   }
 
   openEditImageDialog(data: ImageItem) {
-    // const dialogRef = this.dialog.open(EditImageComponent, { width: '80%', data });
+    const dialogRef = this.dialog.open(EditImageComponent, { width: '80%', data });
 
-    // this.dialog.afterAllClosed.subscribe(result => {
-    //   this.dataSource.load()
-    // })
+    this.dialog.afterAllClosed.subscribe(result => {
+      this.dataSource.load()
+    })
   }
 
   openAddImageDialog() {

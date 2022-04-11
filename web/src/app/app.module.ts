@@ -47,6 +47,7 @@ import { ConfirmService } from './services/confirm/confirm.service';
 import { ConfirmationDialogComponent } from './services/confirm/confirmation-dialog/confirmation-dialog.component';
 import { LogsListComponent } from './lists/logs-list/logs-list.component';
 import { TextExpanderComponent } from './fragments/text-expander/text-expander.component';
+import { EditImageComponent } from './forms/edit-image/edit-image.component';
 
 
 @NgModule({
@@ -73,6 +74,7 @@ import { TextExpanderComponent } from './fragments/text-expander/text-expander.c
     FormInputUploadInlineComponent,
     LogsListComponent,
     TextExpanderComponent,
+    EditImageComponent,
   ],
   imports: [
     BrowserModule,

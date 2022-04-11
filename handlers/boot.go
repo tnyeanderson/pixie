@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -12,7 +13,6 @@ import (
 )
 
 func BootHandler(c *gin.Context) {
-	print("boooooooting")
 	mac, err := utils.SanitizeMac(c.Query("mac"))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MAC address"})
@@ -35,12 +35,17 @@ func BootHandler(c *gin.Context) {
 		device = *d
 	}
 
+	var scriptPath string
 	if device.Script.Path == "" {
-		c.File(config.FallbackScriptPath)
-		return
+		scriptPath = device.Script.Path
+	} else {
+		scriptPath = filepath.Join(config.BaseScriptsPath, device.Script.Path)
 	}
 
-	scriptPath := filepath.Join(config.BaseScriptsPath, device.Script.Path)
+	queries.AddLogMessage(
+		fmt.Sprint("Device ", device.Mac, "booted script ", scriptPath),
+		fmt.Sprintf("%+v\n", device),
+	)
 
 	c.File(scriptPath)
 }

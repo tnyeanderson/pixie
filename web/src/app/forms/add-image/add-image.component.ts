@@ -26,11 +26,12 @@ export class AddImageComponent implements OnInit {
   }
 
   submit = () => {
-    this.apiService.uploadImage(this.model.Path, this.files[0]).subscribe(r => {
-      this.apiService.addImage(this.model).subscribe(r => {
-        this.dialogRef.close()
-      })
-
+    this.apiService.addImage(this.model).subscribe(r => {
+      if (this.files[0]) {
+        this.apiService.uploadImage(this.model.Path, this.files[0]).subscribe(r => {
+          this.dialogRef.close()
+        })
+      }
     })
   }
 

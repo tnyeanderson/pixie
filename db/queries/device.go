@@ -39,7 +39,7 @@ func AddDevice(device models.Device) (*models.Device, error) {
 
 	AddLogMessage(
 		fmt.Sprint("Added device: ID=", device.ID, ", Mac=", device.Mac),
-		fmt.Sprint(device),
+		fmt.Sprintf("%+v\n", device),
 	)
 
 	return &device, nil
@@ -52,6 +52,11 @@ func UpdateDevice(id uint, updated models.Device) (*models.Device, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+
+	AddLogMessage(
+		fmt.Sprint("Updated device: ID=", id, ", Mac=", updated.Mac),
+		fmt.Sprintf("%+v\n", updated),
+	)
 
 	return &device, nil
 }
@@ -70,6 +75,11 @@ func DeleteDevice(id uint) (*models.Device, error) {
 	if result.RowsAffected == 0 {
 		return nil, errors.New("no rows deleted")
 	}
+
+	AddLogMessage(
+		fmt.Sprint("Deleted device: ID=", device.ID, ", Mac=", device.Mac),
+		fmt.Sprintf("%+v\n", device),
+	)
 
 	return &device, nil
 }

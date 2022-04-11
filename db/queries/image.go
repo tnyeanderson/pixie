@@ -2,6 +2,7 @@ package queries
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/tnyeanderson/ipxe-hub/db"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
@@ -53,6 +54,11 @@ func AddImage(image models.Image) (*models.Image, error) {
 		return nil, result.Error
 	}
 
+	AddLogMessage(
+		fmt.Sprint("Added image: ID=", image.ID, ", Path=", image.Path),
+		fmt.Sprintf("%+v\n", image),
+	)
+
 	return &image, nil
 }
 
@@ -63,6 +69,11 @@ func UpdateImage(id uint, updated models.Image) (*models.Image, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+
+	AddLogMessage(
+		fmt.Sprint("Updated image: ID=", id, ", Path=", updated.Path),
+		fmt.Sprintf("%+v\n", updated),
+	)
 
 	return &image, nil
 }
@@ -95,6 +106,11 @@ func DeleteImage(image models.Image) (*models.Image, error) {
 	if result.RowsAffected == 0 {
 		return nil, errors.New("no rows deleted")
 	}
+
+	AddLogMessage(
+		fmt.Sprint("Deleted image: ID=", image.ID, ", Path=", image.Path),
+		fmt.Sprintf("%+v\n", image),
+	)
 
 	return &image, nil
 }
