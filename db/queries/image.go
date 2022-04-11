@@ -2,7 +2,6 @@ package queries
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/tnyeanderson/ipxe-hub/db"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
@@ -84,8 +83,6 @@ func DeleteImageByPath(path string) (*models.Image, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
-
-	fmt.Println("Deleting image: ", image)
 
 	return DeleteImage(image)
 }

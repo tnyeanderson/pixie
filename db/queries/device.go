@@ -37,7 +37,6 @@ func AddDevice(device models.Device) (*models.Device, error) {
 		return nil, result.Error
 	}
 
-	fmt.Println("About to add log!!")
 	AddLogMessage(
 		fmt.Sprint("Added device: ID=", device.ID, ", Mac=", device.Mac),
 		fmt.Sprint(device),

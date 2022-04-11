@@ -106,7 +106,12 @@ export class ApiService {
   }
 
   getFileContent(path: string) {
+    // TODO: Why is error checking commented?
     return this.httpClient.get(`${this.filesBaseUrl}/${path}`, {responseType: 'blob'}) //.pipe(catchError(this.handleError))
+  }
+
+  getLogs() {
+    return this.httpClient.get(`${this.baseUrl}/logs`).pipe(catchError(this.handleError))
   }
 
 }

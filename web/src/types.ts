@@ -1,5 +1,3 @@
-import { Observable, of } from "rxjs"
-
 export class GormModel {
   ID: number | undefined
   CreatedAt: string | undefined
@@ -24,6 +22,11 @@ export class DeviceItem extends GormModel {
   GroupName = ''
   ScriptID = ''
   Script = new ScriptItem()
+}
+
+export class LogItem extends GormModel {
+  Summary = ''
+  Detail = ''
 }
 
 

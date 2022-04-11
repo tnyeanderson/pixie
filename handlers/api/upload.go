@@ -14,7 +14,6 @@ import (
 )
 
 func createDirectories(path string) error {
-	fmt.Println("creating now: " + filepath.Dir(path))
 	if err := os.MkdirAll(filepath.Dir(path), config.DefaultDirMode); err != nil {
 		return err
 	}

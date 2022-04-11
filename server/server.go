@@ -59,6 +59,11 @@ func ListenHTTP() {
 			upload.PUT("/script", api.UploadScriptHandler)
 
 		}
+
+		logs := v1.Group("logs")
+		{
+			logs.GET("/", api.GetLogsHandler)
+		}
 	}
 
 	// Boot script handler

@@ -17,16 +17,13 @@ func readHandler(filename string, rf io.ReaderFrom) error {
 	if !strings.HasPrefix(filename, config.BaseFilesPath) {
 		return errors.New("Path must begin with " + config.BaseFilesPath)
 	}
-	fmt.Println(os.Getwd())
 	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		return err
 	}
-	fmt.Println("WE MADE IT BOYS")
 	n, err := rf.ReadFrom(file)
 	if err != nil {
-		fmt.Println("WE MADE IT GIRLS")
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		return err
 	}

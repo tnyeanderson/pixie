@@ -45,6 +45,8 @@ import { NavComponent } from './nav/nav.component';
 import { ApiService } from './services/api.service';
 import { ConfirmService } from './services/confirm/confirm.service';
 import { ConfirmationDialogComponent } from './services/confirm/confirmation-dialog/confirmation-dialog.component';
+import { LogsListComponent } from './lists/logs-list/logs-list.component';
+import { TextExpanderComponent } from './fragments/text-expander/text-expander.component';
 
 
 @NgModule({
@@ -69,6 +71,8 @@ import { ConfirmationDialogComponent } from './services/confirm/confirmation-dia
     FormInputDropdownComponent,
     FormInputCodeComponent,
     FormInputUploadInlineComponent,
+    LogsListComponent,
+    TextExpanderComponent,
   ],
   imports: [
     BrowserModule,

@@ -2,7 +2,6 @@ package queries
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/tnyeanderson/ipxe-hub/db"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
@@ -10,7 +9,7 @@ import (
 
 func GetLogs() ([]models.Log, error) {
 	var logs []models.Log
-	result := db.Get().Joins("Log").Find(&logs)
+	result := db.Get().Table("logs").Select("*").Scan(&logs)
 
 	if result == nil {
 		return nil, errors.New("error fetching logs")
@@ -26,13 +25,10 @@ func AddLog(log models.Log) (*models.Log, error) {
 		return nil, result.Error
 	}
 
-	fmt.Println("Added log: ", log)
-
 	return &log, nil
 }
 
 func AddLogMessage(summary string, detail string) (*models.Log, error) {
 	log := models.Log{Summary: summary, Detail: detail}
-	fmt.Println("Adding log: ", log)
 	return AddLog(log)
 }
