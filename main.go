@@ -1,47 +1,47 @@
 package main
 
 import (
-	"net/http"
+	"os"
+	"sync"
 
-	"github.com/gin-gonic/gin"
 	"github.com/tnyeanderson/ipxe-hub/config"
 	"github.com/tnyeanderson/ipxe-hub/db"
-	"github.com/tnyeanderson/ipxe-hub/handlers"
-	"github.com/tnyeanderson/ipxe-hub/handlers/api"
+	"github.com/tnyeanderson/ipxe-hub/server"
 )
 
+func setupDirectories() {
+	dirs := []string{
+		config.BaseDataPath,
+		config.BaseFilesPath,
+		config.BaseImagesPath,
+		config.BaseScriptsPath,
+	}
+	for _, dir := range dirs {
+		_ = os.Mkdir(dir, config.DefaultDirMode)
+	}
+}
+
+func start() {
+	wg := new(sync.WaitGroup)
+	wg.Add(2)
+
+	go func() {
+		server.ListenHTTP()
+		wg.Done()
+	}()
+
+	go func() {
+		server.ListenTFTP()
+		wg.Done()
+	}()
+
+	wg.Wait()
+}
+
 func main() {
-	// Initialize
-	db.Init()
+	setupDirectories()
 
-	// Set up gin
-	r := gin.Default()
+	db.Initialize()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
-	})
-
-	// API
-	r.GET(config.ApiBasePath+"/devices", api.GetAllDevicesHandler)
-	r.GET(config.ApiBasePath+"/devices/mac/:mac", api.GetDeviceByMacHandler)
-	r.POST(config.ApiBasePath+"/devices/add", api.AddDeviceHandler)
-	r.POST(config.ApiBasePath+"/devices/update/:id", api.UpdateDeviceHandler)
-	r.DELETE(config.ApiBasePath+"/devices/delete/:id", api.DeleteDeviceHandler)
-	r.GET(config.ApiBasePath+"/scripts", api.GetAllScriptsHandler)
-	r.POST(config.ApiBasePath+"/scripts/add", api.AddScriptHandler)
-	r.POST(config.ApiBasePath+"/scripts/update/:id", api.UpdateScriptHandler)
-	r.DELETE(config.ApiBasePath+"/scripts/delete/:id", api.DeleteScriptHandler)
-
-	// File uploads
-	r.PUT(config.ApiBasePath+"/upload/image", api.UploadImageHandler)
-	r.PUT(config.ApiBasePath+"/upload/script", api.UploadScriptHandler)
-
-	// Boot script handler
-	r.GET("/boot.ipxe", handlers.BootHandler)
-
-	// File server
-	r.Static("/files", config.BaseFilesPath)
-
-	r.Run(":8880")
-
+	start()
 }

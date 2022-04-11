@@ -1,0 +1,50 @@
+<div class="table-container">
+  <div class="mat-elevation-z8">
+    <table mat-table class="full-width-table" matSort aria-label="Elements">
+      <ng-container *ngFor="let col of columns" matColumnDef="{{col.name}}">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{col.getDisplayName()}}</th>
+        <td mat-cell *matCellDef="let row">
+          <div class="app-cell-content">
+            <app-text-expander *ngIf="col.isLongText()">{{ col.getValue(row) }}</app-text-expander>
+            <ng-container *ngIf="!col.isLongText()">{{ col.getValue(row) }}</ng-container>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell class="actions" *matCellDef="let element">
+          <mat-chip-list selectable="false">
+            <mat-chip *ngIf="element.IsDefault" color="primary" disabled>default</mat-chip>
+          </mat-chip-list>
+          <div class="edit-button">
+            <button type="button" aria-label="Edit script" mat-icon-button (click)="editItem(element)">
+              <mat-icon aria-label="Edit button">edit</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr *matNoDataRow colspan="1000">
+        <td colspan="1000">
+          <div class="message-container">
+            <div class="message">No items found.</div>
+            <button mat-stroked-button (click)="add()" aria-label="Create">Create one</button>
+          </div>
+        </td>
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator #paginator [length]="dataSource?.data?.length" [pageIndex]="0" [pageSize]="10"
+      [pageSizeOptions]="[10, 50, 100, 500]" aria-label="Select page">
+    </mat-paginator>
+  </div>
+</div>
+
+<div *ngIf="addable" class="add-button-container">
+  <button mat-fab color="accent" (click)="add()" aria-label="Create">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

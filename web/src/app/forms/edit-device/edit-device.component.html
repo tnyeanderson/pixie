@@ -1,0 +1,6 @@
+<app-base-form [model]="model">
+    <app-form-input-text name="Name" [model]="model"></app-form-input-text>
+    <app-form-input-text name="Mac" [model]="model"></app-form-input-text>
+    <app-form-input-dropdown name="ScriptID" label="Script" [options]="scripts" [model]="model"></app-form-input-dropdown>
+    <app-form-buttons action="Save" [showDelete]="true" [validate]="validate" [onSubmit]="submit" [onClose]="close" [onDelete]="delete" [model]="model"></app-form-buttons>
+</app-base-form>

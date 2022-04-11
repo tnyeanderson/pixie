@@ -4,9 +4,12 @@ import "io/fs"
 
 var ApiBasePath = "/api/v1"
 
-var BaseFilesPath = "data/files"
+var BaseDataPath = "data"
+var BaseFilesPath = BaseDataPath + "/files"
 var BaseScriptsPath = BaseFilesPath + "/scripts"
 var BaseImagesPath = BaseFilesPath + "/images"
+var FallbackScriptPath = "defaults/shell.ipxe"
+var WebRootPath = "web/dist/html"
 
 var DatabasePath = "data/ipxe-hub.db"
 

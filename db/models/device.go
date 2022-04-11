@@ -1,6 +1,6 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 // NOTE: SQLite doesn't support adding foreign keys after the fact. Add it in manually instead
 

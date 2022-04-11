@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  ipxe-hub:
+    container_name: ipxe-hub
+    build: .
+    restart: always
+    ports:
+      - "8880:8880"
+      - "69:69/udp"
+      #- "65500-65600:65500-65600/udp"
+    volumes:
+      - ./data:/app/data
+

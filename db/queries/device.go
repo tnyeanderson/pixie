@@ -2,6 +2,7 @@ package queries
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/tnyeanderson/ipxe-hub/db"
 	"github.com/tnyeanderson/ipxe-hub/db/models"
@@ -9,9 +10,7 @@ import (
 
 func GetDevices() ([]models.Device, error) {
 	var devices []models.Device
-	// joins := "left join scripts on scripts.id = devices.script_id"
-	// result := db.Get().Table("devices").Select("*").Joins(joins).Scan(&devices)
-	result := db.Get().Preload("Script").Find(&devices)
+	result := db.Get().Joins("Script").Find(&devices)
 
 	if result == nil {
 		return nil, errors.New("error fetching devices")
@@ -22,9 +21,9 @@ func GetDevices() ([]models.Device, error) {
 
 func GetDeviceByMac(mac string) (*models.Device, error) {
 	var device models.Device
-	result := db.Get().Preload("Script").First(&device, "mac = ?", mac)
+	result := db.Get().Joins("Script").First(&device, "mac = ?", mac)
 
-	if result.Error != nil {
+	if result.Error != nil || device.ID == 0 {
 		return nil, result.Error
 	}
 
@@ -38,6 +37,11 @@ func AddDevice(device models.Device) (*models.Device, error) {
 		return nil, result.Error
 	}
 
+	AddLogMessage(
+		fmt.Sprint("Added device: ID=", device.ID, ", Mac=", device.Mac),
+		fmt.Sprintf("%+v\n", device),
+	)
+
 	return &device, nil
 }
 
@@ -48,6 +52,11 @@ func UpdateDevice(id uint, updated models.Device) (*models.Device, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+
+	AddLogMessage(
+		fmt.Sprint("Updated device: ID=", id, ", Mac=", updated.Mac),
+		fmt.Sprintf("%+v\n", updated),
+	)
 
 	return &device, nil
 }
@@ -66,6 +75,11 @@ func DeleteDevice(id uint) (*models.Device, error) {
 	if result.RowsAffected == 0 {
 		return nil, errors.New("no rows deleted")
 	}
+
+	AddLogMessage(
+		fmt.Sprint("Deleted device: ID=", device.ID, ", Mac=", device.Mac),
+		fmt.Sprintf("%+v\n", device),
+	)
 
 	return &device, nil
 }

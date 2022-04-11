@@ -1,0 +1,43 @@
+.table-container {
+  padding-bottom: 5em;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.mat-no-data-row {
+  text-align: center;
+
+  .message {
+    display: inline-block;
+    padding: 5em 2em;
+  }
+}
+
+.actions {
+  text-align: right;
+
+  &>* {
+    display: inline-block;
+  }
+
+  .edit-button {
+    color: #999
+  }
+}
+
+.add-button-container {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+}
+
+.app-cell-content {
+  padding-right: 1em;
+}
+
+app-text-expander {
+  display: block;
+  margin: 0.25em;
+}

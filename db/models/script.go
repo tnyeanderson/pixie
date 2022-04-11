@@ -1,11 +1,12 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type Script struct {
 	gorm.Model
-	Name string
-	Path string `gorm:"unique;not null"`
+	Name      string `gorm:"unique"`
+	Path      string `gorm:"unique;not null"`
+	IsDefault bool
 }

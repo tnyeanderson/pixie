@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -34,12 +35,17 @@ func BootHandler(c *gin.Context) {
 		device = *d
 	}
 
+	var scriptPath string
 	if device.Script.Path == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Script not associated with device"})
-		return
+		scriptPath = config.FallbackScriptPath
+	} else {
+		scriptPath = filepath.Join(config.BaseScriptsPath, device.Script.Path)
 	}
 
-	scriptPath := filepath.Join(config.BaseScriptsPath, device.Script.Path)
+	queries.AddLogMessage(
+		fmt.Sprint("Device ", device.Mac, " booted script ", scriptPath),
+		fmt.Sprintf("%+v\n", device),
+	)
 
 	c.File(scriptPath)
 }
