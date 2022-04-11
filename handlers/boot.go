@@ -37,7 +37,7 @@ func BootHandler(c *gin.Context) {
 
 	var scriptPath string
 	if device.Script.Path == "" {
-		scriptPath = device.Script.Path
+		scriptPath = config.FallbackScriptPath
 	} else {
 		scriptPath = filepath.Join(config.BaseScriptsPath, device.Script.Path)
 	}
