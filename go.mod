@@ -1,4 +1,4 @@
-module github.com/tnyeanderson/ipxe-hub
+module github.com/tnyeanderson/pixie
 
 go 1.17
 

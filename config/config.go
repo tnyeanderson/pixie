@@ -11,7 +11,7 @@ var BaseImagesPath = BaseFilesPath + "/images"
 var FallbackScriptPath = "defaults/shell.ipxe"
 var WebRootPath = "web/dist/html"
 
-var DatabasePath = "data/ipxe-hub.db"
+var DatabasePath = "data/pixie.db"
 
 var DefaultFileMode = fs.FileMode(0660)
 var DefaultDirMode = fs.FileMode(0770)

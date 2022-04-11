@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  ipxe-hub:
-    container_name: ipxe-hub
+  pixie:
+    container_name: pixie
     build: .
     restart: always
     ports:

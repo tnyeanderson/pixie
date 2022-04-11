@@ -4,9 +4,9 @@ import (
 	"os"
 	"sync"
 
-	"github.com/tnyeanderson/ipxe-hub/config"
-	"github.com/tnyeanderson/ipxe-hub/db"
-	"github.com/tnyeanderson/ipxe-hub/server"
+	"github.com/tnyeanderson/pixie/config"
+	"github.com/tnyeanderson/pixie/db"
+	"github.com/tnyeanderson/pixie/server"
 )
 
 func setupDirectories() {

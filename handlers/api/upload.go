@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tnyeanderson/ipxe-hub/config"
-	"github.com/tnyeanderson/ipxe-hub/utils"
+	"github.com/tnyeanderson/pixie/config"
+	"github.com/tnyeanderson/pixie/utils"
 )
 
 func createDirectories(path string) error {
