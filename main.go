@@ -3,6 +3,7 @@ package main
 import (
 	"io/fs"
 	"os"
+	"path/filepath"
 	"sync"
 
 	"github.com/tnyeanderson/pixie/config"
@@ -12,6 +13,7 @@ import (
 
 func setupDirectories() {
 	dirs := []string{
+		filepath.Dir(config.Pixie.Paths.Database),
 		config.Pixie.Paths.FileServer,
 		config.Pixie.Paths.Images,
 		config.Pixie.Paths.Scripts,
