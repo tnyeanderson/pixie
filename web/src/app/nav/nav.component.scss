@@ -15,3 +15,14 @@
   top: 0;
   z-index: 1;
 }
+
+.site-title {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 1em;
+
+  .site-logo {
+    filter: invert(1);
+    margin-top: -3px;
+  }
+}
