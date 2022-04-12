@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/fs"
 	"os"
 	"sync"
 
@@ -11,13 +12,12 @@ import (
 
 func setupDirectories() {
 	dirs := []string{
-		config.BaseDataPath,
-		config.BaseFilesPath,
-		config.BaseImagesPath,
-		config.BaseScriptsPath,
+		config.Pixie.Paths.FileServer,
+		config.Pixie.Paths.Images,
+		config.Pixie.Paths.Scripts,
 	}
 	for _, dir := range dirs {
-		_ = os.Mkdir(dir, config.DefaultDirMode)
+		_ = os.Mkdir(dir, fs.FileMode(config.Pixie.AccessModes.DirDefault))
 	}
 }
 

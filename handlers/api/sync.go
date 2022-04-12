@@ -12,7 +12,7 @@ import (
 )
 
 func SyncScriptsHandler(c *gin.Context) {
-	files, err := utils.GetFilesRecursive(config.BaseScriptsPath)
+	files, err := utils.GetFilesRecursive(config.Pixie.Paths.Scripts)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -64,7 +64,7 @@ func SyncScriptsHandler(c *gin.Context) {
 }
 
 func SyncImagesHandler(c *gin.Context) {
-	files, err := utils.GetFilesRecursive(config.BaseImagesPath)
+	files, err := utils.GetFilesRecursive(config.Pixie.Paths.Images)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

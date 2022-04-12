@@ -14,8 +14,8 @@ import (
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
 	print("TFTP get: " + filename)
-	if !strings.HasPrefix(filename, config.BaseFilesPath) {
-		return errors.New("Path must begin with " + config.BaseFilesPath)
+	if !strings.HasPrefix(filename, config.Pixie.Paths.FileServer) {
+		return errors.New("Path must begin with " + config.Pixie.Paths.FileServer)
 	}
 	file, err := os.Open(filename)
 	if err != nil {
@@ -33,8 +33,8 @@ func readHandler(filename string, rf io.ReaderFrom) error {
 
 // writeHandler is called when client starts file upload to server
 func writeHandler(filename string, wt io.WriterTo) error {
-	if !strings.HasPrefix(filename, config.BaseFilesPath) {
-		return errors.New("Path must begin with " + config.BaseFilesPath)
+	if !strings.HasPrefix(filename, config.Pixie.Paths.FileServer) {
+		return errors.New("Path must begin with " + config.Pixie.Paths.FileServer)
 	}
 	file, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0644)
 	if err != nil {

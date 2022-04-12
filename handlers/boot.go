@@ -37,9 +37,9 @@ func BootHandler(c *gin.Context) {
 
 	var scriptPath string
 	if device.Script.Path == "" {
-		scriptPath = config.FallbackScriptPath
+		scriptPath = config.Pixie.Paths.FallbackScript
 	} else {
-		scriptPath = filepath.Join(config.BaseScriptsPath, device.Script.Path)
+		scriptPath = filepath.Join(config.Pixie.Paths.Scripts, device.Script.Path)
 	}
 
 	queries.AddLogMessage(

@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -104,7 +105,7 @@ func DeleteScriptHandler(c *gin.Context) {
 	}
 
 	// We don't care about errors here
-	os.Remove(config.BaseScriptsPath + "/" + script.Path)
+	os.Remove(filepath.Join(config.Pixie.Paths.Scripts, script.Path))
 
 	c.JSON(http.StatusOK, gin.H{"data": *script})
 }

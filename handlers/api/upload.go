@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -14,7 +15,7 @@ import (
 )
 
 func createDirectories(path string) error {
-	if err := os.MkdirAll(filepath.Dir(path), config.DefaultDirMode); err != nil {
+	if err := os.MkdirAll(filepath.Dir(path), fs.FileMode(config.Pixie.AccessModes.DirDefault)); err != nil {
 		return err
 	}
 	print("no error")
@@ -63,7 +64,7 @@ func saveFileByText(c *gin.Context, path string) error {
 	fmt.Println("Uploading text. Headers: ", c.GetHeader("Content-Type"))
 	data, _ := c.GetRawData()
 
-	err := ioutil.WriteFile(path, data, config.DefaultFileMode)
+	err := ioutil.WriteFile(path, data, fs.FileMode(config.Pixie.AccessModes.FileDefault))
 
 	if err != nil {
 		return err
@@ -80,7 +81,7 @@ func UploadImageHandler(c *gin.Context) {
 		return
 	}
 
-	saveFile(c, config.BaseImagesPath, subpath)
+	saveFile(c, config.Pixie.Paths.Images, subpath)
 }
 
 func UploadScriptHandler(c *gin.Context) {
@@ -91,5 +92,5 @@ func UploadScriptHandler(c *gin.Context) {
 		return
 	}
 
-	saveFile(c, config.BaseScriptsPath, path)
+	saveFile(c, config.Pixie.Paths.Scripts, path)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +23,7 @@ func ListenHTTP() {
 	})
 
 	// API
-	v1 := r.Group(config.ApiBasePath)
+	v1 := r.Group(config.Pixie.Paths.Api)
 	{
 		devices := v1.Group("devices")
 		{
@@ -70,14 +71,14 @@ func ListenHTTP() {
 	r.GET("/boot.ipxe", handlers.BootHandler)
 
 	// File server
-	r.Static("/files", config.BaseFilesPath)
+	r.Static("/files", config.Pixie.Paths.FileServer)
 
 	// Angular site
-	r.Static("/app", config.WebRootPath)
+	r.Static("/app", config.Pixie.Paths.WebRoot)
 	r.NoRoute(func(c *gin.Context) {
 		fmt.Println("Route not found for: %s", c.Request.RequestURI)
 		if strings.HasPrefix(c.Request.RequestURI, "/app") {
-			c.File(config.WebRootPath + "/index.html")
+			c.File(filepath.Join(config.Pixie.Paths.WebRoot, "index.html"))
 		}
 	})
 

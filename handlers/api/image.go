@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -104,7 +105,7 @@ func DeleteImageHandler(c *gin.Context) {
 	}
 
 	// We don't care about errors here
-	os.Remove(config.BaseImagesPath + "/" + image.Path)
+	os.Remove(filepath.Join(config.Pixie.Paths.Images, image.Path))
 
 	c.JSON(http.StatusOK, gin.H{"data": *image})
 }
