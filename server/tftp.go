@@ -52,10 +52,10 @@ func writeHandler(filename string, wt io.WriterTo) error {
 
 func ListenTFTP() {
 	s := tftp.NewServer(readHandler, writeHandler)
-	if err := s.SetPortRange(65500, 65515); err != nil {
-		fmt.Fprintf(os.Stdout, "%v\n", err)
-		os.Exit(1)
-	}
+	// if err := s.SetPortRange(65500, 65515); err != nil {
+	// 	fmt.Fprintf(os.Stdout, "%v\n", err)
+	// 	os.Exit(1)
+	// }
 	err := s.ListenAndServe(":69") // blocks until s.Shutdown() is called
 	if err != nil {
 		fmt.Fprintf(os.Stdout, "server: %v\n", err)

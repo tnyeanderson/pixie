@@ -2,11 +2,12 @@ module github.com/tnyeanderson/pixie
 
 go 1.17
 
-replace github.com/pin/tftp => ./hack/tftp
+//replace github.com/pin/tftp => ./hack/tftp
 
 require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/pin/tftp v2.1.0+incompatible
+	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/sqlite v1.3.1
 	gorm.io/gorm v1.23.1
 )
@@ -27,9 +28,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	golang.org/x/crypto v0.0.0-20220214200702-86341886e292 // indirect
-	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
