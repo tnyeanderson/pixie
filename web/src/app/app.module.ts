@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -48,6 +49,8 @@ import { ConfirmationDialogComponent } from './services/confirm/confirmation-dia
 import { LogsListComponent } from './lists/logs-list/logs-list.component';
 import { TextExpanderComponent } from './fragments/text-expander/text-expander.component';
 import { EditImageComponent } from './forms/edit-image/edit-image.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { StatsCounterComponent } from './fragments/stats-counter/stats-counter.component';
 
 
 @NgModule({
@@ -75,6 +78,8 @@ import { EditImageComponent } from './forms/edit-image/edit-image.component';
     LogsListComponent,
     TextExpanderComponent,
     EditImageComponent,
+    DashboardComponent,
+    StatsCounterComponent,
   ],
   imports: [
     BrowserModule,
@@ -87,6 +92,7 @@ import { EditImageComponent } from './forms/edit-image/edit-image.component';
     LayoutModule,
     MatButtonModule,
     MatButtonToggleModule,
+    MatCardModule,
     MatSidenavModule,
     MatListModule,
     MatTableModule,
