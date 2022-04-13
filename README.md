@@ -6,8 +6,12 @@ Web interface for managing PXE booted clients
 ## THIS BRANCH IS HERE TO SOLVE A WEIRD DISPLAY ISSUE
 
 To reproduce the issue:
-```
-docker-compose build && docker-compose up -d
+```bash
+git clone git@github.com:tnyeanderson/pixie.git
+cd pixie
+git checkout weird-display-issue
+docker-compose build
+docker-compose up -d
 ```
 
 Then navigate to `localhost:8880` to see the issue.
