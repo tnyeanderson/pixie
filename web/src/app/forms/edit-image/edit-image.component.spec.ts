@@ -2,7 +2,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ApiServiceStub, MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
+import { ApiService } from 'src/app/services/api.service';
+import { MockApiService } from 'src/app/services/api.service.mock';
+import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { EditImageComponent } from './edit-image.component';
 
 
@@ -12,7 +14,11 @@ describe('EditImageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [{ provide: MatDialogRef, useValue: MatDialogRefStub }, { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB }],
+      providers: [
+        { provide: ApiService, useValue: new MockApiService() },
+        { provide: MatDialogRef, useValue: MatDialogRefStub },
+        { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB }
+      ],
       imports: [HttpClientModule, MatDialogModule, MatSnackBarModule],
       declarations: [EditImageComponent]
     })
@@ -42,8 +48,8 @@ describe('EditImageComponent', () => {
   it('submit() when files.length==0 should only call apiService.editImage()', () => {
     component.model.ID = 3
     component.model.Name = 'name 1'
-    spyOn(component['apiService'], 'editImage').and.callFake(ApiServiceStub.editImage)
-    spyOn(component['apiService'], 'uploadImage').and.callFake(ApiServiceStub.uploadImage)
+    spyOn(component['apiService'], 'editImage').and.callThrough()
+    spyOn(component['apiService'], 'uploadImage').and.callThrough()
     spyOn(component.dialogRef, 'close')
     component.submit()
     expect(component['apiService'].editImage).toHaveBeenCalledWith(3, component.model)
@@ -56,8 +62,8 @@ describe('EditImageComponent', () => {
     component.model.ID = 3
     component.model.Name = 'name 1'
     component.model.Path = 'path1'
-    spyOn(component['apiService'], 'editImage').and.callFake(ApiServiceStub.editImage)
-    spyOn(component['apiService'], 'uploadImage').and.callFake(ApiServiceStub.uploadImage)
+    spyOn(component['apiService'], 'editImage').and.callThrough()
+    spyOn(component['apiService'], 'uploadImage').and.callThrough()
     spyOn(component.dialogRef, 'close')
     component.submit()
     expect(component['apiService'].editImage).toHaveBeenCalledWith(3, component.model)

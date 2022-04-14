@@ -97,12 +97,12 @@ func DeleteDeviceHandler(c *gin.Context) {
 
 	id := uint(id64)
 
-	script, err := queries.DeleteDevice(id)
+	device, err := queries.DeleteDevice(id)
 
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": *script})
+	c.JSON(http.StatusOK, gin.H{"data": *device})
 }

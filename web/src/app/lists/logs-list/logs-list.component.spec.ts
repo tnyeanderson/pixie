@@ -1,6 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ApiService } from 'src/app/services/api.service';
+import { MockApiService } from 'src/app/services/api.service.mock';
 
 import { LogsListComponent } from './logs-list.component';
 
@@ -10,6 +12,9 @@ describe('LogsListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [
+        { provide: ApiService, useValue: new MockApiService() },
+      ],
       imports: [HttpClientModule, MatSnackBarModule],
       declarations: [LogsListComponent]
     })
