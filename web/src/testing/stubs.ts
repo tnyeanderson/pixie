@@ -59,7 +59,7 @@ export const ApiServiceStub = {
 
     uploadImage: (path: string, image: File) => of({status: `'${path}' uploaded!`}),
 
-    editImage: (id: number, image: ImageItem) => { },
+    editImage: (id: number, image: ImageItem) => of(image),
 
     deleteImage: (id: number) => { },
 

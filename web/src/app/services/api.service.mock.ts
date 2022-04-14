@@ -30,7 +30,7 @@ export class MockApiService {
 
     uploadImage(path: string, image: File) { return of({status: `'${path}' uploaded!`}) }
 
-    editImage(id: number, image: ImageItem) { }
+    editImage(id: number, image: ImageItem) { return of(image) }
 
     deleteImage(id: number) { }
 

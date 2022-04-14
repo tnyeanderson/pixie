@@ -21,15 +21,8 @@ export class EditImageComponent implements OnInit {
     this.model = Object.assign(new ImageItem(), data)
   }
 
-  close = () => { }
 
-  validate = () => {
-    console.log(this.model)
-    if (this.model.Name) {
-      return false
-    }
-    return true
-  }
+  validate = () => !!this.model.Name
 
   submit = () => {
     if (this.model.ID) {

@@ -23,6 +23,8 @@ export class AddImageComponent implements OnInit {
         this.apiService.uploadImage(this.model.Path, this.files[0]).subscribe(r => {
           this.dialogRef.close()
         })
+      } else {
+        this.dialogRef.close()
       }
     })
   }
