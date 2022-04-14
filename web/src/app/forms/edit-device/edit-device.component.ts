@@ -20,9 +20,7 @@ export class EditDeviceComponent implements OnInit {
     this.model = Object.assign(new DeviceItem(), data)
   }
 
-  validate = () => (this.model.Mac)
-
-  close = () => { }
+  validate = () => !!this.model.Mac
 
   submit = () => {
     if (this.model.ID) {

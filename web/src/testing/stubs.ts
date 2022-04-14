@@ -85,9 +85,13 @@ export const ApiServiceStub = {
 
     addDevice: (device: DeviceItem) => of(device),
 
-    editDevice: (id: number, device: DeviceItem) => { },
+    editDevice: (id: number, device: DeviceItem) => of(device),
 
-    deleteDevice: (id: number) => { },
+    deleteDevice: (id: number) => {
+        const device = new DeviceItem()
+        device.ID = id
+        return of(device)
+    },
 
     getFileContent: (path: string) => { },
 

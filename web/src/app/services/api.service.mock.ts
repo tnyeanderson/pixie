@@ -52,9 +52,13 @@ export class MockApiService {
 
     addDevice(device: DeviceItem) { return of(device) }
 
-    editDevice(id: number, device: DeviceItem) { }
+    editDevice(id: number, device: DeviceItem) { return device }
 
-    deleteDevice(id: number) { }
+    deleteDevice(id: number) {
+        const device = new DeviceItem()
+        device.ID = id
+        return of(device)
+    }
 
     getFileContent(path: string) { }
 
