@@ -26,9 +26,9 @@ export class MockApiService {
 
     syncImages() { }
 
-    addImage(script: ImageItem) { }
+    addImage(image: ImageItem) { return of(image) }
 
-    uploadImage(path: string, image: File) { }
+    uploadImage(path: string, image: File) { return of({status: `'${path}' uploaded!`}) }
 
     editImage(id: number, image: ImageItem) { }
 

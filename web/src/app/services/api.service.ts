@@ -45,8 +45,8 @@ export class ApiService {
     return this.httpClient.post(`${this.baseUrl}/images/sync`, {}).pipe(catchError(this.handleError))
   }
 
-  addImage(script: ImageItem) {
-    return this.httpClient.post(`${this.baseUrl}/images/add`, script).pipe(catchError(this.handleError))
+  addImage(image: ImageItem) {
+    return this.httpClient.post(`${this.baseUrl}/images/add`, image).pipe(catchError(this.handleError))
   }
 
   uploadImage(path: string, image: File) {

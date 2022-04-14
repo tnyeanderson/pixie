@@ -55,9 +55,9 @@ export const ApiServiceStub = {
 
     syncImages: () => { },
 
-    addImage: (script: ImageItem) => { },
+    addImage: (image: ImageItem) => of(image),
 
-    uploadImage: (path: string, image: File) => { },
+    uploadImage: (path: string, image: File) => of({status: `'${path}' uploaded!`}),
 
     editImage: (id: number, image: ImageItem) => { },
 
