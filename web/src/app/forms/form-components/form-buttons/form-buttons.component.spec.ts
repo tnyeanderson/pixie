@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmServiceStub, MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/app/stubs';
+import { ConfirmServiceStub, MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { FormButtonsComponent } from './form-buttons.component';
 
 

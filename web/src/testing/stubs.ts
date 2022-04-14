@@ -1,5 +1,5 @@
 import { of } from "rxjs"
-import { DeviceItem, ImageItem, ScriptItem } from "src/types"
+import { DeviceItem, ImageItem, LogItem, ScriptItem } from "src/types"
 
 export const MatDialogRefStub = {
     close: () => { }
@@ -37,6 +37,16 @@ export const ApiServiceResponsesStub = {
         m1.Mac = 'testmac'
         m1.ID = 3
         return m1
+    },
+
+    getLogsResponse: () => {
+        const log1 = new LogItem()
+        log1.ID = 3
+        log1.Summary = 'hello'
+        const log2 = new LogItem()
+        log2.ID = 35
+        log2.Summary = 'hello 2'
+        return [log1, log2]
     }
 }
 
@@ -81,7 +91,9 @@ export const ApiServiceStub = {
 
     getFileContent: (path: string) => { },
 
-    getLogs: () => { },
+    getLogs: () => {
+        return of(ApiServiceResponsesStub.getLogsResponse())
+    },
 }
 
 export const ConfirmServiceStub = {

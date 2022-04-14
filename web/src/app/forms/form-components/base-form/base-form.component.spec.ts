@@ -25,4 +25,8 @@ describe('BaseFormComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('validate() should return true by default', () => {
+    expect(component.validate()).toBeTrue();
+  });
 });
