@@ -9,8 +9,8 @@ export class FormInputFileComponent implements OnInit {
   @Input() files: File[] = [];
   @Input() label: string = 'Upload file'
   @Input() multiple: boolean = false
-  @Input() fileAdded: Function = () => {}
-  @Input() fileRemoved: Function = () => {}
+  @Input() fileAdded: Function = (event: any) => {}
+  @Input() fileRemoved: Function = (event: any) => {}
 
   constructor() { }
 
