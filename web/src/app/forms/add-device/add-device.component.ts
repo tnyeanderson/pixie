@@ -16,9 +16,7 @@ export class AddDeviceComponent implements OnInit {
 
   }
 
-  validate = () => (this.model.Mac)
-
-  close = () => { }
+  validate = () => !!this.model.Mac
 
   submit = () => {
     this.apiService.addDevice(this.model).subscribe(r => {
