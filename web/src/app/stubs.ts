@@ -83,3 +83,9 @@ export const ApiServiceStub = {
 
     getLogs: () => { },
 }
+
+export const ConfirmServiceStub = {
+    ask: (callback: Function, prompt?: string) => {
+        callback()
+    }
+}

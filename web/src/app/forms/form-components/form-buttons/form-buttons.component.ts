@@ -36,7 +36,7 @@ export class FormButtonsComponent implements OnInit {
   }
 
   deleteAllowed() {
-    return this.showDelete && this.model.ID
+    return this.showDelete && !!this.model.ID
   }
 
   ngOnInit(): void {
