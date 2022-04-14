@@ -39,9 +39,9 @@ export class ScriptsListComponent implements OnInit {
   openAddScriptDialog() {
     const dialogRef = this.dialog.open(AddScriptComponent, { width: '80%' });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.dialog.afterAllClosed.subscribe(result => {
       this.dataSource.load()
-    });
+    })
   }
 
   syncWithFilesystem() {

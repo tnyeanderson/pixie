@@ -39,9 +39,9 @@ export class ImagesListComponent implements OnInit {
   openAddImageDialog() {
     const dialogRef = this.dialog.open(AddImageComponent, { width: '80%' });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.dialog.afterAllClosed.subscribe(result => {
       this.dataSource.load()
-    });
+    })
   }
 
   syncWithFilesystem() {
