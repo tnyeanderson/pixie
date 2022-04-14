@@ -18,7 +18,6 @@ func createDirectories(path string) error {
 	if err := os.MkdirAll(filepath.Dir(path), fs.FileMode(config.Pixie.AccessModes.DirDefault)); err != nil {
 		return err
 	}
-	print("no error")
 	return nil
 }
 
@@ -46,7 +45,6 @@ func saveFile(c *gin.Context, basepath string, subpath string) {
 }
 
 func saveUploadedFile(c *gin.Context, path string) error {
-	fmt.Println("Uploading file. Headers: ", c.GetHeader("Content-Type"))
 	file, err := c.FormFile("file")
 
 	if err != nil {

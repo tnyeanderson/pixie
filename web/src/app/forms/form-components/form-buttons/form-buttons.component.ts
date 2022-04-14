@@ -13,26 +13,26 @@ export class FormButtonsComponent implements OnInit {
   @Input() action: string  = 'Save'
   @Input() showDelete: boolean = false
   @Input() validate: Function = () => true
-  @Input() onClose: Function = () => { }
-  @Input() onSubmit: Function = () => { }
-  @Input() onDelete: Function = () => { }
+  @Input() close: Function = () => { }
+  @Input() submit: Function = () => { }
+  @Input() delete: Function = () => { }
 
   constructor(public dialogRef: MatDialogRef<BaseFormComponent>, public confirm: ConfirmService) { }
 
-  delete() {
+  doDelete() {
     this.confirm.ask(() => {
-      this.onDelete(this.model.ID)
+      this.delete(this.model.ID)
       this.close()
     }, 'Delete script?')
   }
 
-  close() {
+  doClose() {
     this.dialogRef.close()
-    this.onClose()
+    this.close()
   }
 
-  submit() {
-    this.onSubmit()
+  doSubmit() {
+    this.submit()
   }
 
   deleteAllowed() {

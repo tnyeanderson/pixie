@@ -15,7 +15,7 @@ export class AddScriptComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<AddScriptComponent>, private apiService: ApiService) { }
 
-  onFileAdded = (event: any) => {
+  fileAdded = (event: any) => {
     const file: File = event.addedFiles[0]
     this.model.Name = this.model.Name || file.name
     this.model.Path = this.model.Path || file.name

@@ -8,8 +8,8 @@ import { UploadInline } from 'src/types';
 })
 export class FormInputUploadInlineComponent implements OnInit {
   @Input() model: UploadInline = new UploadInline()
-  @Input() onFileAdded: Function = () => {}
-  @Input() onFileRemoved: Function = () => {}
+  @Input() fileAdded: Function = () => {}
+  @Input() fileRemoved: Function = () => {}
 
   constructor() { }
 

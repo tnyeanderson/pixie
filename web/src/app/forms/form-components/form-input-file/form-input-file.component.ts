@@ -9,8 +9,8 @@ export class FormInputFileComponent implements OnInit {
   @Input() files: File[] = [];
   @Input() label: string = 'Upload file'
   @Input() multiple: boolean = false
-  @Input() onFileAdded: Function = () => {}
-  @Input() onFileRemoved: Function = () => {}
+  @Input() fileAdded: Function = () => {}
+  @Input() fileRemoved: Function = () => {}
 
   constructor() { }
 
@@ -20,12 +20,12 @@ export class FormInputFileComponent implements OnInit {
     } else {
       this.files[0] = event.addedFiles[0]
     }
-    this.onFileAdded(event)
+    this.fileAdded(event)
   }
 
   onRemove(event: any) {
     this.files.splice(this.files.indexOf(event), 1);
-    this.onFileRemoved(event)
+    this.fileRemoved(event)
   }
 
   ngOnInit(): void {

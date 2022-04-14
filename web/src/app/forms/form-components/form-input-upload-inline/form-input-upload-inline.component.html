@@ -1,6 +1,6 @@
 <mat-tab-group [(selectedIndex)]="model.format">
     <mat-tab label="Upload File">
-        <app-form-input-file label="Upload a script" [onFileAdded]="onFileAdded" [onFileRemoved]="onFileRemoved" [files]="model.files"></app-form-input-file>
+        <app-form-input-file label="Upload a script" [fileAdded]="fileAdded" [fileRemoved]="fileRemoved" [files]="model.files"></app-form-input-file>
     </mat-tab>
     <mat-tab label="Edit Inline">
         <app-form-input-code name="Content" [model]="model.scriptContent"></app-form-input-code>
