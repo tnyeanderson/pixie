@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./form-input-checkbox.component.scss']
 })
 export class FormInputCheckboxComponent implements OnInit {
-  @Input() model: any
+  @Input() model: any = {}
   @Input() label: string = ''
   @Input() name: string = ''
 

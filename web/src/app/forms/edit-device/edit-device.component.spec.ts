@@ -1,4 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { EditDeviceComponent } from './edit-device.component';
 
 
@@ -8,9 +11,11 @@ describe('EditDeviceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditDeviceComponent ]
+      providers: [{ provide: MatDialogRef, useValue: {} }, { provide: MAT_DIALOG_DATA, useValue: {} }],
+      imports: [HttpClientModule, MatDialogModule, MatSnackBarModule],
+      declarations: [EditDeviceComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

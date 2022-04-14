@@ -12,6 +12,7 @@ module.exports = function (config) {
       require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma'),
       require('karma-firefox-launcher'),
+      require('karma-spec-reporter'),
     ],
     client: {
       jasmine: {
@@ -33,12 +34,19 @@ module.exports = function (config) {
         { type: 'text-summary' }
       ]
     },
-    reporters: ['progress', 'kjhtml'],
+    specReporter: {
+      maxLogLines: 5,         // limit number of lines logged per test
+      suppressFailed: false,  // do not print information about failed tests
+      suppressPassed: true,  // do not print information about passed tests
+      suppressSkipped: true,  // do not print information about skipped tests
+      showSpecTiming: false // print the time elapsed for each spec
+    },
+    reporters: ['spec', 'progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Firefox'],
+    browsers: ['ChromeHeadless'],
     singleRun: false,
     restartOnFileChange: true
   });

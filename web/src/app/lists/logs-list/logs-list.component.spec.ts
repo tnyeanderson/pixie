@@ -1,4 +1,6 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { LogsListComponent } from './logs-list.component';
 
@@ -8,9 +10,10 @@ describe('LogsListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LogsListComponent ]
+      imports: [HttpClientModule, MatSnackBarModule],
+      declarations: [LogsListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

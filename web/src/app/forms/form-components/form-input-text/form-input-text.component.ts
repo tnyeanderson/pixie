@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./form-input-text.component.scss']
 })
 export class FormInputTextComponent implements OnInit {
-  @Input() model: any
+  @Input() model: any = {}
   @Input() label: string = ''
   @Input() name: string = ''
 
