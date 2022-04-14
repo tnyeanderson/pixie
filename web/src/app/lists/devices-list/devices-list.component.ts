@@ -31,6 +31,7 @@ export class DevicesListComponent implements OnInit {
   openEditDeviceDialog(data: DeviceItem) {
     const dialogRef = this.dialog.open(EditDeviceComponent, { width: '80%', data });
 
+    // TODO: Should this be dialogRef.afterClosed ?
     this.dialog.afterAllClosed.subscribe(result => {
       this.dataSource.load()
     })
@@ -39,7 +40,8 @@ export class DevicesListComponent implements OnInit {
   openAddDeviceDialog() {
     const dialogRef = this.dialog.open(AddDeviceComponent, { width: '80%' });
 
-    dialogRef.afterClosed().subscribe(result => {
+    // TODO: Should this be dialogRef.afterClosed ?
+    this.dialog.afterAllClosed.subscribe(result => {
       this.dataSource.load()
     });
   }

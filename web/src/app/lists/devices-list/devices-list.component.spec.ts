@@ -2,6 +2,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { AddDeviceComponent } from 'src/app/forms/add-device/add-device.component';
+import { EditDeviceComponent } from 'src/app/forms/edit-device/edit-device.component';
+import { ApiServiceResponsesStub } from 'src/testing/stubs';
 import { DevicesListComponent } from './devices-list.component';
 
 
@@ -25,5 +29,34 @@ describe('DevicesListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('editDevice() should open the edit dialog', () => {
+    const d1 = ApiServiceResponsesStub.getDevicesResponse()[0]
+    spyOn(component, 'openEditDeviceDialog')
+    component.editDevice(d1)
+    expect(component.openEditDeviceDialog).toHaveBeenCalledWith(d1)
+  });
+
+  it('addDevice() should open the add dialog', () => {
+    spyOn(component, 'openAddDeviceDialog')
+    component.addDevice()
+    expect(component.openAddDeviceDialog).toHaveBeenCalled()
+  });
+
+  it('openEditDeviceDialog() should create a dialog', () => {
+    // TODO: test that dialog.afterAllClosed is set up
+    const d1 = ApiServiceResponsesStub.getDevicesResponse()[0]
+    spyOn(component.dialog, 'open')
+    component.openEditDeviceDialog(d1)
+    expect(component.dialog.open).toHaveBeenCalledWith(EditDeviceComponent, {width: '80%', data: d1})
+  });
+  
+  it('openAddDeviceDialog() should create a dialog', () => {
+    // TODO: test that dialog.afterAllClosed is set up
+    const d1 = ApiServiceResponsesStub.getDevicesResponse()[0]
+    spyOn(component.dialog, 'open')
+    component.openAddDeviceDialog()
+    expect(component.dialog.open).toHaveBeenCalledWith(AddDeviceComponent, {width: '80%'}) 
   });
 });
