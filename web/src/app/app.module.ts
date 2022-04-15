@@ -36,8 +36,10 @@ import { DevicesListComponent } from './lists/devices-list/devices-list.componen
 import { ImagesListComponent } from './lists/images-list/images-list.component';
 import { LogsListComponent } from './lists/logs-list/logs-list.component';
 import { ScriptsListComponent } from './lists/scripts-list/scripts-list.component';
-import { TableComponent } from './lists/table/table.component';
+import { TableComponent } from './lists/tablify/table/table.component';
+import { TablifyModule } from './lists/tablify/tablify.module';
 import { NavComponent } from './nav/nav.component';
+import { NavModule } from './nav/nav.module';
 import { ApiService } from './services/api.service';
 import { ConfirmService } from './services/confirm/confirm.service';
 import { ConfirmationDialogComponent } from './services/confirm/confirmation-dialog/confirmation-dialog.component';
@@ -46,8 +48,6 @@ import { ConfirmationDialogComponent } from './services/confirm/confirmation-dia
 @NgModule({
   declarations: [
     AppComponent,
-    NavComponent,
-    TableComponent,
     ImagesListComponent,
     ScriptsListComponent,
     DevicesListComponent,
@@ -58,7 +58,6 @@ import { ConfirmationDialogComponent } from './services/confirm/confirmation-dia
     AddDeviceComponent,
     EditDeviceComponent,
     LogsListComponent,
-    TextExpanderComponent,
     EditImageComponent,
   ],
   imports: [
@@ -69,15 +68,12 @@ import { ConfirmationDialogComponent } from './services/confirm/confirmation-dia
     MatToolbarModule,
     MatIconModule,
     LayoutModule,
-    MatSidenavModule,
     MatListModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatSortModule,
     MatDialogModule,
-    MatChipsModule,
     MatSnackBarModule,
     FormifyModule,
+    TablifyModule,
+    NavModule,
   ],
   providers: [
     ApiService,

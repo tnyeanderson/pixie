@@ -2,10 +2,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AddDeviceComponent } from 'src/app/forms/add-device/add-device.component';
 import { EditDeviceComponent } from 'src/app/forms/edit-device/edit-device.component';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_DEVICES } from 'src/app/services/api.service.mock';
+import { TableComponent } from '../tablify/table/table.component';
+import { TablifyModule } from '../tablify/tablify.module';
 import { DevicesListComponent } from './devices-list.component';
 
 
@@ -18,8 +22,16 @@ describe('DevicesListComponent', () => {
       providers: [
         { provide: ApiService, useValue: new MockApiService() },
       ],
-      imports: [HttpClientModule, MatSnackBarModule, MatDialogModule],
-      declarations: [DevicesListComponent]
+      imports: [
+        HttpClientModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        TablifyModule,
+        NoopAnimationsModule,
+      ],
+      declarations: [
+        DevicesListComponent,
+      ]
     })
       .compileComponents();
   });

@@ -52,9 +52,7 @@ export class EditScriptComponent implements OnInit {
   ngOnInit(): void {
     this.scriptFile.format = this.scriptFile.formats.inline
     this.apiService.getFileContent(`scripts/${this.model.Path}`).subscribe((r: Blob) => {
-      console.log(r)
       r.text().then(text => {
-        console.log(text)
         this.scriptFile.setInlineContent(text)
       })
     })

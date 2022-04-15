@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FormifyModule } from '../../formify.module';
 import { FormInputDropdownComponent } from './form-input-dropdown.component';
 
 
@@ -8,7 +10,11 @@ describe('FormInputDropdownComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FormInputDropdownComponent ]
+      declarations: [ FormInputDropdownComponent ],
+      imports: [
+        FormifyModule,
+        NoopAnimationsModule,
+      ]
     })
     .compileComponents();
   });

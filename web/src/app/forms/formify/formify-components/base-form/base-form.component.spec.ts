@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FormifyModule } from '../../formify.module';
 import { BaseFormComponent } from './base-form.component';
 
 
@@ -10,7 +12,11 @@ describe('BaseFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [{ provide: MatDialogRef, useValue: {} }, { provide: MAT_DIALOG_DATA, useValue: {} }],
-      imports: [MatDialogModule],
+      imports: [
+        MatDialogModule,
+        FormifyModule,
+        NoopAnimationsModule,
+      ],
       declarations: [BaseFormComponent]
     })
       .compileComponents();

@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FormifyModule } from '../../formify.module';
 import { FormInputUploadInlineComponent } from './form-input-upload-inline.component';
 
 
@@ -8,7 +10,11 @@ describe('FormInputUploadInlineComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FormInputUploadInlineComponent ]
+      declarations: [ FormInputUploadInlineComponent ],
+      imports: [
+        FormifyModule,
+        NoopAnimationsModule,
+      ]
     })
     .compileComponents();
   });

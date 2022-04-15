@@ -87,7 +87,6 @@ describe('EditScriptComponent', () => {
     spyOn(component.scriptFile, 'setInlineContent')
     component.ngOnInit()
     expect(component.scriptFile.format).toEqual(component.scriptFile.formats.inline)
-    console.log('SCRIPTFILE', component.scriptFile)
     expect(component['apiService'].getFileContent).toHaveBeenCalledWith(fullpath)
     // TODO: Find out what is happening here
     // expect(component.scriptFile.setInlineContent).toHaveBeenCalledWith(MOCK_BLOB_CONTENT)

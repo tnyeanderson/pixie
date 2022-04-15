@@ -7,6 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NavComponent } from './nav.component';
+import { NavModule } from './nav.module';
 
 
 describe('NavComponent', () => {
@@ -18,12 +19,7 @@ describe('NavComponent', () => {
       declarations: [NavComponent],
       imports: [
         NoopAnimationsModule,
-        LayoutModule,
-        MatButtonModule,
-        MatIconModule,
-        MatListModule,
-        MatSidenavModule,
-        MatToolbarModule,
+        NavModule,
       ]
     }).compileComponents();
   }));

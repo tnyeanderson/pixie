@@ -2,10 +2,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AddScriptComponent } from 'src/app/forms/add-script/add-script.component';
 import { EditScriptComponent } from 'src/app/forms/edit-script/edit-script.component';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_SCRIPTS } from 'src/app/services/api.service.mock';
+import { TableComponent } from '../tablify/table/table.component';
+import { TablifyModule } from '../tablify/tablify.module';
 import { ScriptsListComponent } from './scripts-list.component';
 
 
@@ -18,8 +22,16 @@ describe('ScriptsListComponent', () => {
       providers: [
         { provide: ApiService, useValue: new MockApiService() },
       ],
-      imports: [HttpClientModule, MatSnackBarModule, MatDialogModule],
-      declarations: [ScriptsListComponent]
+      imports: [
+        HttpClientModule,
+        MatSnackBarModule,
+        MatDialogModule,
+        TablifyModule,
+        NoopAnimationsModule,
+      ],
+      declarations: [
+        ScriptsListComponent,
+      ]
     })
       .compileComponents();
   });

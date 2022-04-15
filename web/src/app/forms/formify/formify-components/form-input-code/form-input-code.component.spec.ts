@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FormifyModule } from '../../formify.module';
 import { FormInputCodeComponent } from './form-input-code.component';
 
 
@@ -8,7 +10,11 @@ describe('FormInputCodeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FormInputCodeComponent ]
+      declarations: [ FormInputCodeComponent ],
+      imports: [
+        FormifyModule,
+        NoopAnimationsModule,
+      ]
     })
     .compileComponents();
   });
