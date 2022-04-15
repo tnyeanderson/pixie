@@ -6,7 +6,6 @@ import { of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_BLOB, MOCK_BLOB_CONTENT } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
-import { FormButtonsComponent } from '../form-components/form-buttons/form-buttons.component';
 import { EditScriptComponent } from './edit-script.component';
 
 
@@ -22,7 +21,7 @@ describe('EditScriptComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB },
       ],
       imports: [HttpClientModule, MatDialogModule, MatSnackBarModule],
-      declarations: [EditScriptComponent, FormButtonsComponent]
+      declarations: [EditScriptComponent]
     })
       .compileComponents();
   });
