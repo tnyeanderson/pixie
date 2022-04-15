@@ -53,7 +53,6 @@ import { UploadInline } from './formify-components/form-input-upload-inline/uplo
     FormInputDropdownComponent,
     FormInputCodeComponent,
     FormInputUploadInlineComponent,
-    UploadInline,
   ],
 })
 export class FormifyModule { }

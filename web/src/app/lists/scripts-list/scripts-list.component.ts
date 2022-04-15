@@ -4,7 +4,7 @@ import { ScriptItem } from 'src/types';
 import { AddScriptComponent } from '../../forms/add-script/add-script.component';
 import { EditScriptComponent } from '../../forms/edit-script/edit-script.component';
 import { ApiService } from '../../services/api.service';
-import { ListColumns } from '../columns';
+import { ListColumns } from '../tablify/columns';
 import { ScriptsTableDataSource } from './scripts-table-datasource';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
-import { ListColumns } from '../columns';
+import { ListColumns } from '../tablify/columns';
 import { LogsTableDataSource } from './logs-table-datasource';
 
 @Component({

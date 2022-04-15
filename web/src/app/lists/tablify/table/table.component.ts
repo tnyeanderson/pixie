@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { Column } from '../../columns';
+import { Column } from '../columns';
 import { TableDataSource, TableScriptItem } from './table-datasource';
 
 @Component({

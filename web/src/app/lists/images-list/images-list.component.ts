@@ -4,7 +4,7 @@ import { AddImageComponent } from 'src/app/forms/add-image/add-image.component';
 import { EditImageComponent } from 'src/app/forms/edit-image/edit-image.component';
 import { ImageItem } from 'src/types';
 import { ApiService } from '../../services/api.service';
-import { ListColumns } from '../columns';
+import { ListColumns } from '../tablify/columns';
 import { ImagesTableDataSource } from './images-table-datasource';
 
 @Component({
