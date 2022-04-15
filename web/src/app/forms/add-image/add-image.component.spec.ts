@@ -2,9 +2,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
+import { FormifyModule } from '../formify/formify.module';
 import { AddImageComponent } from './add-image.component';
 
 
@@ -19,7 +21,13 @@ describe('AddImageComponent', () => {
         { provide: MatDialogRef, useValue: MatDialogRefStub },
         { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB }
       ],
-      imports: [HttpClientModule, MatDialogModule, MatSnackBarModule],
+      imports: [
+        HttpClientModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        FormifyModule,
+        NoopAnimationsModule,
+      ],
       declarations: [AddImageComponent]
     })
       .compileComponents();

@@ -2,10 +2,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_BLOB, MOCK_BLOB_CONTENT } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
+import { FormifyModule } from '../formify/formify.module';
 import { EditScriptComponent } from './edit-script.component';
 
 
@@ -20,7 +22,13 @@ describe('EditScriptComponent', () => {
         { provide: MatDialogRef, useValue: MatDialogRefStub },
         { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB },
       ],
-      imports: [HttpClientModule, MatDialogModule, MatSnackBarModule],
+      imports: [
+        HttpClientModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        FormifyModule,
+        NoopAnimationsModule,
+      ],
       declarations: [EditScriptComponent]
     })
       .compileComponents();

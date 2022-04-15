@@ -2,10 +2,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_SCRIPTS } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { DeviceItem } from 'src/types';
+import { FormifyModule } from '../formify/formify.module';
 import { EditDeviceComponent } from './edit-device.component';
 
 
@@ -20,7 +22,13 @@ describe('EditDeviceComponent', () => {
         { provide: MatDialogRef, useValue: MatDialogRefStub },
         { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB }
       ],
-      imports: [HttpClientModule, MatDialogModule, MatSnackBarModule],
+      imports: [
+        HttpClientModule,
+        MatDialogModule,
+        MatSnackBarModule,
+        FormifyModule,
+        NoopAnimationsModule,
+      ],
       declarations: [EditDeviceComponent]
     })
       .compileComponents();
