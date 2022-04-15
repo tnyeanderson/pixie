@@ -21,9 +21,7 @@ export class EditScriptComponent implements OnInit {
     this.model = Object.assign(new ScriptItem(), data)
   }
 
-  validate = () => (this.model.Name)
-
-  close = () => { }
+  validate = () => !!this.model.Name
 
   submit = () => {
     if (this.model.ID) {
@@ -54,7 +52,9 @@ export class EditScriptComponent implements OnInit {
   ngOnInit(): void {
     this.scriptFile.format = this.scriptFile.formats.inline
     this.apiService.getFileContent(`scripts/${this.model.Path}`).subscribe((r: Blob) => {
+      console.log(r)
       r.text().then(text => {
+        console.log(text)
         this.scriptFile.setInlineContent(text)
       })
     })

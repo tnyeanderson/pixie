@@ -3,6 +3,10 @@ import { of, throwError } from "rxjs"
 import { DeviceItem, ImageItem, LogItem, ScriptItem } from "src/types"
 import { ApiService } from "./api.service"
 
+export const MOCK_BLOB_CONTENT = 'blobcontent'
+
+export const MOCK_BLOB = new Blob([MOCK_BLOB_CONTENT], { type: 'text/html' })
+
 export const MOCK_SCRIPTS = [
     {
         ID: 5,
@@ -122,11 +126,7 @@ export class MockApiService implements ApiService {
         return of({ data: device })
     }
 
-    getFileContent(path: string) {
-        const fileContents = new Blob()
-        return of(fileContents)
-    }
-
+    getFileContent(path: string) { return of(MOCK_BLOB) }
 
     getLogs() { return of(MOCK_LOGS) }
 
