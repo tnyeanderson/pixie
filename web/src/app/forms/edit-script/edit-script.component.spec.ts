@@ -5,7 +5,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
-import { MockApiService, MOCK_BLOB, MOCK_BLOB_CONTENT } from 'src/app/services/api.service.mock';
+import { MockApiService } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { FormifyModule } from '../formify/formify.module';
 import { EditScriptComponent } from './edit-script.component';
