@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { ScriptItem, UploadInline } from 'src/types';
+import { ScriptItem } from 'src/types';
 import { ApiService } from '../../services/api.service';
+import { UploadInline } from '../formify/formify-components/form-input-upload-inline/upload-inline';
 
 @Component({
   selector: 'app-add-script',
@@ -21,12 +22,9 @@ export class AddScriptComponent implements OnInit {
     this.model.Path = this.model.Path || file.name
   }
 
-  validate = () => (this.model.Name)
-
-  close = () => { }
+  validate = () => !!this.model.Name
 
   submit = () => {
-
     this.apiService.addScript(this.model).subscribe(r => {
       this.uploadFileOrText().subscribe(r => {
         this.dialogRef.close()
@@ -34,14 +32,24 @@ export class AddScriptComponent implements OnInit {
     })
   }
 
-  uploadFileOrText() {
-    if (this.scriptFile.isUpload() && this.scriptFile.hasContent()) {
+  uploaders = {
+    ifUpload: () => {
       return this.apiService.uploadScript(this.model.Path, this.scriptFile.getFile())
-    } else if (this.scriptFile.isInline() && this.scriptFile.hasContent()) {
+    },
+    ifInline: () => {
       return this.apiService.uploadScriptText(this.model.Path, this.scriptFile.getInline())
+    },
+    otherwise: () => {
+      return of({ status: 'skipped file contents update' })
     }
+  }
 
-    return of({status: 'skipped file contents update'})
+  uploadFileOrText() {
+    return this.scriptFile.do(
+      this.uploaders.ifUpload,
+      this.uploaders.ifInline,
+      this.uploaders.otherwise
+    )
   }
 
   ngOnInit(): void {

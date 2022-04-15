@@ -5,7 +5,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
-import { MockApiService } from 'src/app/services/api.service.mock';
+import { MockApiService, MOCK_FILE } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { FormifyModule } from '../formify/formify.module';
 import { EditScriptComponent } from './edit-script.component';
@@ -81,10 +81,49 @@ describe('EditScriptComponent', () => {
     expect(component['apiService'].deleteScript).toHaveBeenCalledWith(3)
   });
 
+  it('uploadFileOrText() should call scriptFile.do() with the proper callbacks', () => {
+    spyOn(component.scriptFile, 'do')
+    component.uploadFileOrText()
+    expect(component.scriptFile.do).toHaveBeenCalledWith(
+      component.uploaders.ifUpload,
+      component.uploaders.ifInline,
+      component.uploaders.otherwise,
+    )
+  })
+
+  it('uploaders.ifUpload() should call apiService.uploadScript()', () => {
+    const path = 'testpath'
+    const file = MOCK_FILE
+    component.scriptFile.files[0] = file
+    component.model.Path = path
+    spyOn(component.scriptFile, 'getFile').and.callThrough()
+    spyOn(component['apiService'], 'uploadScript').and.callThrough()
+    component.uploaders.ifUpload()
+    expect(component['apiService'].uploadScript).toHaveBeenCalledWith(path, file)
+  })
+
+  it('uploaders.ifInline() should call apiService.uploadScriptText()', () => {
+    const path = 'testpath'
+    const content = 'testcontent'
+    component.scriptFile.scriptContent.Content = content
+    component.model.Path = path
+    spyOn(component.scriptFile, 'getInline').and.callThrough()
+    spyOn(component['apiService'], 'uploadScriptText').and.callThrough()
+    component.uploaders.ifInline()
+    expect(component['apiService'].uploadScriptText).toHaveBeenCalledWith(path, content)
+  })
+
+  it('uploaders.otherwise() should return a skipped status', () => {
+    const status = { status: 'skipped file contents update' }
+    component.uploaders.otherwise().subscribe(r => {
+      expect(r).toEqual(status)
+    })
+  })
+
   it('ngOnInit() should set the format to inline and get the script content', () => {
     const fullpath = `scripts/${component.model.Path}`
     spyOn(component['apiService'], 'getFileContent').and.callThrough()
-    spyOn(component.scriptFile, 'setInlineContent')
+    spyOn(component.scriptFile, 'setInlineContent').and.callFake(() => {})
     component.ngOnInit()
     expect(component.scriptFile.format).toEqual(component.scriptFile.formats.inline)
     expect(component['apiService'].getFileContent).toHaveBeenCalledWith(fullpath)

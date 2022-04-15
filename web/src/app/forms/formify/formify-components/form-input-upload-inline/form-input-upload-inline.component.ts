@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UploadInline } from 'src/types';
+import { UploadInline } from './upload-inline';
 
 @Component({
   selector: 'app-form-input-upload-inline',

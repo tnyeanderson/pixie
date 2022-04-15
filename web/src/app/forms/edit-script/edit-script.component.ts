@@ -2,7 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { ApiService } from 'src/app/services/api.service';
-import { ScriptItem, UploadInline } from 'src/types';
+import { ScriptItem } from 'src/types';
+import { UploadInline } from '../formify/formify-components/form-input-upload-inline/upload-inline';
 
 @Component({
   selector: 'app-edit-script',
@@ -33,14 +34,24 @@ export class EditScriptComponent implements OnInit {
     }
   }
 
-  uploadFileOrText() {
-    if (this.scriptFile.isUpload() && this.scriptFile.hasContent()) {
+  uploaders = {
+    ifUpload: () => {
       return this.apiService.uploadScript(this.model.Path, this.scriptFile.getFile())
-    } else if (this.scriptFile.isInline() && this.scriptFile.hasContent()) {
+    },
+    ifInline: () => {
       return this.apiService.uploadScriptText(this.model.Path, this.scriptFile.getInline())
+    },
+    otherwise: () => {
+      return of({ status: 'skipped file contents update' })
     }
+  }
 
-    return of({ status: 'skipped file contents update' })
+  uploadFileOrText() {
+    return this.scriptFile.do(
+      this.uploaders.ifUpload,
+      this.uploaders.ifInline,
+      this.uploaders.otherwise,
+    )
   }
 
   delete = () => {
