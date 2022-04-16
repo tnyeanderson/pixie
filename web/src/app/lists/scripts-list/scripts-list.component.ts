@@ -17,6 +17,7 @@ export class ScriptsListComponent implements OnInit {
   columns = ListColumns.scriptsColumns
 
   constructor(private apiService: ApiService, public dialog: MatDialog) {
+    // TODO: Why?
     this.dataSource = new ScriptsTableDataSource(apiService)
   }
 

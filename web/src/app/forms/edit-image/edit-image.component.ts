@@ -18,6 +18,7 @@ export class EditImageComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: ImageItem,
     private apiService: ApiService
   ) {
+    // TODO: Why?
     this.model = Object.assign(new ImageItem(), data)
   }
 

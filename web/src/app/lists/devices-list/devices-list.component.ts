@@ -17,6 +17,7 @@ export class DevicesListComponent implements OnInit {
   columns = ListColumns.devicesColumns
 
   constructor(private apiService: ApiService, public dialog: MatDialog) {
+    // TODO: Why?
     this.dataSource = new DevicesTableDataSource(apiService)
   }
 

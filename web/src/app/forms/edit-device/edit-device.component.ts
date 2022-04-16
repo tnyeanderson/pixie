@@ -17,6 +17,7 @@ export class EditDeviceComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: DeviceItem,
     private apiService: ApiService
   ) {
+    // TODO: Why is this like this?
     this.model = Object.assign(new DeviceItem(), data)
   }
 

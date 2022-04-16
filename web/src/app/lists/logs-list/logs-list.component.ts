@@ -13,6 +13,7 @@ export class LogsListComponent implements OnInit {
   columns = ListColumns.logsColumns
 
   constructor(private apiService: ApiService) {
+    // TODO: Why?
     this.dataSource = new LogsTableDataSource(apiService)
   }
 

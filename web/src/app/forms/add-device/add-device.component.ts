@@ -12,9 +12,7 @@ export class AddDeviceComponent implements OnInit {
   model: DeviceItem = new DeviceItem()
   scripts: ScriptItem[] = []
 
-  constructor(public dialogRef: MatDialogRef<AddDeviceComponent>, private apiService: ApiService) {
-
-  }
+  constructor(public dialogRef: MatDialogRef<AddDeviceComponent>, private apiService: ApiService) { }
 
   validate = () => !!this.model.Mac
 

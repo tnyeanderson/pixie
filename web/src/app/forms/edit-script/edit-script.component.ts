@@ -19,6 +19,7 @@ export class EditScriptComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: ScriptItem,
     private apiService: ApiService
   ) {
+    // TODO: Why?
     this.model = Object.assign(new ScriptItem(), data)
   }
 
