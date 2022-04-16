@@ -7,7 +7,7 @@ import { AddDeviceComponent } from 'src/app/forms/add-device/add-device.componen
 import { EditDeviceComponent } from 'src/app/forms/edit-device/edit-device.component';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_DEVICES } from 'src/app/services/api.service.mock';
-import { TablifyModule } from '../tablify/tablify.module';
+import { TablifyModule } from '../../tablify/tablify.module';
 import { DevicesListComponent } from './devices-list.component';
 
 

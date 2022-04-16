@@ -1,4 +1,4 @@
-import { Field } from "../../forms/fields";
+import { Field } from "../forms/fields";
 
 export class Column extends Field {
     override getValue(obj: any) {

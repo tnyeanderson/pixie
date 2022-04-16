@@ -6,7 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
-import { FormifyModule } from '../formify/formify.module';
+import { FormifyModule } from '../../formify/formify.module';
 import { EditImageComponent } from './edit-image.component';
 
 

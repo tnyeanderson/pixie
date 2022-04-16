@@ -7,7 +7,7 @@ import { AddImageComponent } from 'src/app/forms/add-image/add-image.component';
 import { EditImageComponent } from 'src/app/forms/edit-image/edit-image.component';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_IMAGES } from 'src/app/services/api.service.mock';
-import { TablifyModule } from '../tablify/tablify.module';
+import { TablifyModule } from '../../tablify/tablify.module';
 import { ImagesListComponent } from './images-list.component';
 
 

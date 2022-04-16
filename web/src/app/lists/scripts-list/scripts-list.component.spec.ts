@@ -7,7 +7,7 @@ import { AddScriptComponent } from 'src/app/forms/add-script/add-script.componen
 import { EditScriptComponent } from 'src/app/forms/edit-script/edit-script.component';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_SCRIPTS } from 'src/app/services/api.service.mock';
-import { TablifyModule } from '../tablify/tablify.module';
+import { TablifyModule } from '../../tablify/tablify.module';
 import { ScriptsListComponent } from './scripts-list.component';
 
 

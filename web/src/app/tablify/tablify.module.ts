@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
-import { FormifyModule } from 'src/app/forms/formify/formify.module';
+import { FormifyModule } from 'src/app/formify/formify.module';
 import { TextExpanderModule } from 'src/app/fragments/text-expander/text-expander.module';
 import { TableComponent } from './table/table.component';
 

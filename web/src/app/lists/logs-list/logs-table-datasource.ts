@@ -1,6 +1,6 @@
 import { LogItem } from 'src/types';
 import { ApiService } from '../../services/api.service';
-import { TableDataSource } from '../tablify/table/table-datasource';
+import { TableDataSource } from '../../tablify/table/table-datasource';
 
 
 /**

@@ -4,7 +4,7 @@ import { EditDeviceComponent } from 'src/app/forms/edit-device/edit-device.compo
 import { DeviceItem } from 'src/types';
 import { AddDeviceComponent } from '../../forms/add-device/add-device.component';
 import { ApiService } from '../../services/api.service';
-import { ListColumns } from '../tablify/columns';
+import { ListColumns } from '../../tablify/columns';
 import { DevicesTableDataSource } from './devices-table-datasource';
 
 @Component({

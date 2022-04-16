@@ -4,7 +4,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService } from 'src/app/services/api.service.mock';
-import { TablifyModule } from '../tablify/tablify.module';
+import { TablifyModule } from '../../tablify/tablify.module';
 import { LogsListComponent } from './logs-list.component';
 
 

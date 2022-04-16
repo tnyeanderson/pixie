@@ -7,7 +7,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_SCRIPTS } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { DeviceItem } from 'src/types';
-import { FormifyModule } from '../formify/formify.module';
+import { FormifyModule } from '../../formify/formify.module';
 import { EditDeviceComponent } from './edit-device.component';
 
 

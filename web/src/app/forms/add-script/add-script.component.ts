@@ -3,7 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { ScriptItem } from 'src/types';
 import { ApiService } from '../../services/api.service';
-import { UploadInline } from '../formify/formify-components/form-input-upload-inline/upload-inline';
+import { UploadInline } from '../../formify/formify-components/form-input-upload-inline/upload-inline';
 
 @Component({
   selector: 'app-add-script',
