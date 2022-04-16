@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { AppRoutingModule } from '../app-routing.module';
 import { NavComponent } from './nav.component';
 
 
@@ -16,6 +17,7 @@ import { NavComponent } from './nav.component';
   ],
   imports: [
     CommonModule,
+    AppRoutingModule,
     LayoutModule,
     MatButtonModule,
     MatIconModule,
