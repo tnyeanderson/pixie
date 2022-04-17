@@ -14,6 +14,20 @@ describe('UploadInline class', () => {
     expect(obj).toBeTruthy();
   });
 
+  it('setModeInline should set format to formats.inline', () => {
+    obj.format = -1
+    expect(obj.format).not.toEqual(obj.formats.inline)
+    obj.setModeInline()
+    expect(obj.format).toEqual(obj.formats.inline)
+  })
+
+  it('setModeUpload should set format to formats.upload', () => {
+    obj.format = -1
+    expect(obj.format).not.toEqual(obj.formats.upload)
+    obj.setModeUpload()
+    expect(obj.format).toEqual(obj.formats.upload)
+  })
+
   it('isInline() should return true if this.format is inline', () => {
     // Should be upload by default
     expect(obj.isInline()).toBeFalse()
