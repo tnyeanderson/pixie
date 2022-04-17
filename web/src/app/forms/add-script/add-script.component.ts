@@ -4,17 +4,20 @@ import { of } from 'rxjs';
 import { ScriptItem } from 'src/types';
 import { ApiService } from '../../services/api.service';
 import { UploadInline } from '../../formify/formify-components/form-input-upload-inline/upload-inline';
+import { UploadInlineService } from 'src/app/formify/formify-services/upload-inline.service';
 
 @Component({
   selector: 'app-add-script',
   templateUrl: './add-script.component.html',
-  styleUrls: ['./add-script.component.scss']
+  styleUrls: ['./add-script.component.scss'],
 })
 export class AddScriptComponent implements OnInit {
   model: ScriptItem = new ScriptItem()
-  scriptFile: UploadInline = new UploadInline()
+  scriptFile: UploadInline
 
-  constructor(public dialogRef: MatDialogRef<AddScriptComponent>, private apiService: ApiService) { }
+  constructor(public dialogRef: MatDialogRef<AddScriptComponent>, private apiService: ApiService, private uploadInlineService: UploadInlineService) {
+    this.scriptFile = uploadInlineService.create()
+  }
 
   fileAdded = (event: any) => {
     const file: File = event.addedFiles[0]

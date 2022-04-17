@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormifyModule } from '../../formify.module';
 import { FormInputUploadInlineComponent } from './form-input-upload-inline.component';
+import { MockUploadInline } from './upload-inline.mock';
 
 
 describe('FormInputUploadInlineComponent', () => {
@@ -22,6 +23,7 @@ describe('FormInputUploadInlineComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FormInputUploadInlineComponent);
     component = fixture.componentInstance;
+    component.model = new MockUploadInline()
     fixture.detectChanges();
   });
 

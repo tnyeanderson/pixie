@@ -8,7 +8,6 @@ export class UploadInline {
     }
     scriptContent: any = { Content: '' }
     files: File[] = []
-    // format: Observable<string> = of(this.formats.upload)
     format = this.formats.upload
 
     isInline(): boolean {
@@ -32,16 +31,24 @@ export class UploadInline {
     }
 
     hasContent(): boolean {
-        return (this.isInline() && this.scriptContent.Content) || (this.isUpload() && this.files.length > 0)
+        return this.hasInlineContent() || this.hasFileContent()
+    }
+
+    hasInlineContent(): boolean {
+        return (this.isInline() && !!this.scriptContent.Content)
+    }
+
+    hasFileContent(): boolean {
+        return (this.isUpload() && this.files.length > 0)
     }
 
     do(ifUpload: Function, ifInline: Function, otherwise: Function): Observable<any> {
-        if (this.isUpload() && this.hasContent()) {
+        if (this.hasFileContent()) {
             return ifUpload()
-        } else if (this.isInline() && this.hasContent()) {
+        } else if (this.hasInlineContent()) {
             return ifInline()
+        } else {
+            return otherwise()
         }
-
-        return otherwise()
     }
 }

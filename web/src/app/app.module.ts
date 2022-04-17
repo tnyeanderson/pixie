@@ -26,6 +26,7 @@ import { NavModule } from './nav/nav.module';
 import { ApiService } from './services/api.service';
 import { ConfirmService } from './services/confirm/confirm.service';
 import { ConfirmationDialogComponent } from './services/confirm/confirmation-dialog/confirmation-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { ConfirmationDialogComponent } from './services/confirm/confirmation-dia
     HttpClientModule,
     NoopAnimationsModule,
     MatToolbarModule,
+    MatButtonModule,
     MatIconModule,
     LayoutModule,
     MatListModule,

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { of } from 'rxjs';
+import { UploadInlineService } from 'src/app/formify/formify-services/upload-inline.service';
 import { ApiService } from 'src/app/services/api.service';
 import { ScriptItem } from 'src/types';
 import { UploadInline } from '../../formify/formify-components/form-input-upload-inline/upload-inline';
@@ -12,13 +13,15 @@ import { UploadInline } from '../../formify/formify-components/form-input-upload
 })
 export class EditScriptComponent implements OnInit {
   model: ScriptItem
-  scriptFile = new UploadInline()
+  scriptFile: UploadInline
 
   constructor(
     public dialogRef: MatDialogRef<EditScriptComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ScriptItem,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private uploadInlineService: UploadInlineService
   ) {
+    this.scriptFile = uploadInlineService.create()
     // TODO: Why?
     this.model = Object.assign(new ScriptItem(), data)
   }

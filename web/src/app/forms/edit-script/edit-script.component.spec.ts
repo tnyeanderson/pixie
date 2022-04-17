@@ -4,6 +4,9 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
+import { MOCK_INLINE_CONTENT } from 'src/app/formify/formify-components/form-input-upload-inline/upload-inline.mock';
+import { UploadInlineService } from 'src/app/formify/formify-services/upload-inline.service';
+import { MockUploadInlineService } from 'src/app/formify/formify-services/upload-inline.service.mock';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_FILE } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
@@ -18,6 +21,7 @@ describe('EditScriptComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
+        { provide: UploadInlineService, useValue: new MockUploadInlineService() },
         { provide: ApiService, useValue: new MockApiService() },
         { provide: MatDialogRef, useValue: MatDialogRefStub },
         { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB },
@@ -104,7 +108,7 @@ describe('EditScriptComponent', () => {
 
   it('uploaders.ifInline() should call apiService.uploadScriptText()', () => {
     const path = 'testpath'
-    const content = 'testcontent'
+    const content = MOCK_INLINE_CONTENT
     component.scriptFile.scriptContent.Content = content
     component.model.Path = path
     spyOn(component.scriptFile, 'getInline').and.callThrough()
