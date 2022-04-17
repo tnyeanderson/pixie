@@ -22,11 +22,12 @@ export class AddDeviceComponent implements OnInit {
     })
   }
 
+  initializeScripts = (value: any) => {
+    this.scripts = value as ScriptItem[]
+  }
+
   ngOnInit(): void {
-    // TODO: Test this
-    this.apiService.getScripts().subscribe(data => {
-      this.scripts = data as ScriptItem[]
-    })
+    this.apiService.getScripts().subscribe(data => this.initializeScripts(data))
   }
 
 }
