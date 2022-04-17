@@ -17,7 +17,6 @@ export class FormInputDropdownComponent implements OnInit {
     return this.label || this.name
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

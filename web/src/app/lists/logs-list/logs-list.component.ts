@@ -17,7 +17,6 @@ export class LogsListComponent implements OnInit {
     this.dataSource = new LogsTableDataSource(apiService)
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

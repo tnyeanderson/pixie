@@ -39,7 +39,6 @@ export class FormButtonsComponent implements OnInit {
     return this.showDelete && !!this.model.ID
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

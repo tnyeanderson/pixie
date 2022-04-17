@@ -51,7 +51,6 @@ export class ImagesListComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

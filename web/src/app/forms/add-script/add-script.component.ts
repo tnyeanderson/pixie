@@ -55,7 +55,6 @@ export class AddScriptComponent implements OnInit {
     )
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

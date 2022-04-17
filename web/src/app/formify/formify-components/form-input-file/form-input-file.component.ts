@@ -28,7 +28,6 @@ export class FormInputFileComponent implements OnInit {
     this.fileRemoved(event)
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

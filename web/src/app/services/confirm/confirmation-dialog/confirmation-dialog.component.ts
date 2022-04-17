@@ -24,7 +24,6 @@ export class ConfirmationDialogComponent implements OnInit {
     this.data.callback()
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

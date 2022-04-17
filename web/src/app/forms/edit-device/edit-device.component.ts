@@ -40,6 +40,7 @@ export class EditDeviceComponent implements OnInit {
 
 
   ngOnInit(): void {
+    // TODO: test
     this.apiService.getScripts().subscribe(data => {
       this.scripts = data as ScriptItem[]
     })

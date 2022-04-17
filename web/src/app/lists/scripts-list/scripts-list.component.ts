@@ -51,7 +51,6 @@ export class ScriptsListComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

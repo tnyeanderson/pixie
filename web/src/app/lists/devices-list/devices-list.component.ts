@@ -47,7 +47,6 @@ export class DevicesListComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
 }

@@ -23,6 +23,7 @@ export class AddDeviceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // TODO: Test this
     this.apiService.getScripts().subscribe(data => {
       this.scripts = data as ScriptItem[]
     })

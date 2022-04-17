@@ -14,8 +14,6 @@ export class FormInputUploadInlineComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void { }
 
 }
