@@ -117,8 +117,8 @@ func GetFilesRecursive(basePath string) ([]string, error) {
 	return out, nil
 }
 
-func GetArrayDiff(src []string, target []string) ([]string, []string) {
-	// TODO: src and target must each be unique
+func GetUniqueArrayDiff(src []string, target []string) ([]string, []string) {
+	// NOTE: src and target must each be unique!
 
 	// Maps are an efficient way to check for intersection
 	tmpMap := make(map[string]int)

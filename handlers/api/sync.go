@@ -29,7 +29,7 @@ func SyncScriptsHandler(c *gin.Context) {
 		paths = append(paths, script.Path)
 	}
 
-	toAdd, toDelete := utils.GetArrayDiff(paths, files)
+	toAdd, toDelete := utils.GetUniqueArrayDiff(paths, files)
 
 	errors := []string{}
 
@@ -81,7 +81,7 @@ func SyncImagesHandler(c *gin.Context) {
 		paths = append(paths, image.Path)
 	}
 
-	toAdd, toDelete := utils.GetArrayDiff(paths, files)
+	toAdd, toDelete := utils.GetUniqueArrayDiff(paths, files)
 
 	errors := []string{}
 
