@@ -9,17 +9,14 @@ import { DeviceItem, ScriptItem } from 'src/types';
   styleUrls: ['./edit-device.component.scss']
 })
 export class EditDeviceComponent implements OnInit {
-  model: DeviceItem
+  model: DeviceItem = new DeviceItem()
   scripts: ScriptItem[] = []
 
   constructor(
     public dialogRef: MatDialogRef<EditDeviceComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DeviceItem,
+    @Inject(MAT_DIALOG_DATA) public initialData: DeviceItem,
     private apiService: ApiService
-  ) {
-    // TODO: Why is this like this?
-    this.model = Object.assign(new DeviceItem(), data)
-  }
+  ) { }
 
   validate = () => !!this.model.Mac
 
@@ -38,12 +35,12 @@ export class EditDeviceComponent implements OnInit {
     }
   }
 
+  initializeScripts = (value: any) => {
+    this.scripts = value as ScriptItem[]
+  }
 
   ngOnInit(): void {
-    // TODO: test
-    this.apiService.getScripts().subscribe(data => {
-      this.scripts = data as ScriptItem[]
-    })
+    this.apiService.getScripts().subscribe(data => this.initializeScripts(data))
   }
 
 }

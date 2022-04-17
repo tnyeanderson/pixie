@@ -82,12 +82,20 @@ describe('EditDeviceComponent', () => {
     expect(component['apiService'].deleteDevice).toHaveBeenCalledWith(3)
   });
 
+  it('initializeScripts() should set this.scripts', () => {
+    component.scripts = []
+    expect(component.scripts).not.toEqual(MOCK_SCRIPTS)
+    component.initializeScripts(MOCK_SCRIPTS)
+    expect(component.scripts).toEqual(MOCK_SCRIPTS)
+  })
+
   it('ngOnInit() should call apiService.getScripts() and set this.scripts', () => {
     spyOn(component['apiService'], 'getScripts').and.callThrough()
+    spyOn(component, 'initializeScripts')
     ngOnInitSpy.and.callThrough()
     component.ngOnInit()
     expect(component['apiService'].getScripts).toHaveBeenCalled()
-    expect(component.scripts).toEqual(MOCK_SCRIPTS)
+    expect(component.initializeScripts).toHaveBeenCalledWith(MOCK_SCRIPTS)
   })
 
 });
