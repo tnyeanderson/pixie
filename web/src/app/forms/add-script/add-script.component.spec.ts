@@ -122,10 +122,11 @@ describe('AddScriptComponent', () => {
     expect(component['apiService'].uploadScriptText).toHaveBeenCalledWith(path, content)
   })
 
-  it('uploaders.otherwise() should return a skipped status', () => {
+  it('uploaders.otherwise() should return a skipped status', (done) => {
     const status = { status: 'skipped file contents update' }
     component.uploaders.otherwise().subscribe(r => {
       expect(r).toEqual(status)
+      done()
     })
   })
 });

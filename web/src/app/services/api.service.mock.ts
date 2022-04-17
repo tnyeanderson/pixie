@@ -5,7 +5,7 @@ import { ApiService } from "./api.service"
 
 export const MOCK_BLOB_CONTENT = 'blobcontent'
 
-export const MOCK_BLOB = new Blob([MOCK_BLOB_CONTENT], { type: 'text/html' })
+export const MOCK_BLOB = new Blob([MOCK_BLOB_CONTENT])
 
 export const MOCK_FILE = new File([MOCK_BLOB_CONTENT], 'testFile.txt')
 

@@ -10,6 +10,14 @@ export class UploadInline {
     files: File[] = []
     format = this.formats.upload
 
+    setModeInline() {
+        this.format = this.formats.inline
+    }
+
+    setModeUpload() {
+        this.format = this.formats.upload
+    }
+
     isInline(): boolean {
         return this.format === this.formats.inline
     }

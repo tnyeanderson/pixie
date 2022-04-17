@@ -8,8 +8,8 @@ import { MOCK_INLINE_CONTENT } from 'src/app/formify/formify-components/form-inp
 import { UploadInlineService } from 'src/app/formify/formify-services/upload-inline.service';
 import { MockUploadInlineService } from 'src/app/formify/formify-services/upload-inline.service.mock';
 import { ApiService } from 'src/app/services/api.service';
-import { MockApiService, MOCK_BLOB_CONTENT, MOCK_FILE } from 'src/app/services/api.service.mock';
-import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
+import { MockApiService, MOCK_BLOB, MOCK_BLOB_CONTENT, MOCK_FILE } from 'src/app/services/api.service.mock';
+import { MatDialogRefStub, MAT_DIALOG_DATA_SCRIPT_STUB } from 'src/testing/stubs';
 import { FormifyModule } from '../../formify/formify.module';
 import { EditScriptComponent } from './edit-script.component';
 
@@ -25,7 +25,7 @@ describe('EditScriptComponent', () => {
         { provide: UploadInlineService, useValue: new MockUploadInlineService() },
         { provide: ApiService, useValue: new MockApiService() },
         { provide: MatDialogRef, useValue: MatDialogRefStub },
-        { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB },
+        { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_SCRIPT_STUB },
       ],
       imports: [
         HttpClientModule,
@@ -119,22 +119,37 @@ describe('EditScriptComponent', () => {
     expect(component['apiService'].uploadScriptText).toHaveBeenCalledWith(path, content)
   })
 
-  it('uploaders.otherwise() should return a skipped status', () => {
+  it('uploaders.otherwise() should return a skipped status', (done) => {
     const status = { status: 'skipped file contents update' }
     component.uploaders.otherwise().subscribe(r => {
       expect(r).toEqual(status)
+      done()
     })
   })
 
-  it('ngOnInit() should set the format to inline and get the script content', () => {
-    const fullpath = `scripts/${component.model.Path}`
-    spyOn(component['apiService'], 'getFileContent').and.callThrough()
-    spyOn(component.scriptFile, 'setInlineContent').and.callFake(() => {})
+  it('ngOnInit() should call setModeInline() and initializeContent()', () => {
+    spyOn(component.scriptFile, 'setModeInline')
+    spyOn(component, 'initializeContent')
     ngOnInitSpy.and.callThrough()
     component.ngOnInit()
-    expect(component.scriptFile.format).toEqual(component.scriptFile.formats.inline)
+    expect(component.scriptFile.setModeInline).toHaveBeenCalled()
+    expect(component.initializeContent).toHaveBeenCalled()
+  })
+
+  it('initializeContent() should get the script content', () => {
+    const fullpath = `scripts/${component.initialData.Path}`
+    spyOn(component['apiService'], 'getFileContent').and.callThrough()
+    spyOn(component, 'initializeContentFromBlob')
+    component.initializeContent()
     expect(component['apiService'].getFileContent).toHaveBeenCalledWith(fullpath)
-    // TODO: Find out what is happening here
-    // expect(component.scriptFile.setInlineContent).toHaveBeenCalledWith(MOCK_BLOB_CONTENT)
+    expect(component.initializeContentFromBlob).toHaveBeenCalledWith(MOCK_BLOB)
+  })
+
+  it('initializeContentFromBlob() should set the script content to the blob content', (done) => {
+    spyOn(component.scriptFile, 'setInlineContent').and.callThrough()
+    component.initializeContentFromBlob(MOCK_BLOB).then(() => {
+      expect(component.scriptFile.setInlineContent).toHaveBeenCalledWith(MOCK_BLOB_CONTENT)
+      done()
+    })
   })
 });

@@ -10,17 +10,14 @@ import { ImageItem } from 'src/types';
 })
 export class EditImageComponent implements OnInit {
   model: ImageItem = new ImageItem()
-  files: File[] = [];
+  files: File[] = []
 
 
   constructor(
     public dialogRef: MatDialogRef<EditImageComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ImageItem,
+    @Inject(MAT_DIALOG_DATA) public initialData: ImageItem,
     private apiService: ApiService
-  ) {
-    // TODO: Why?
-    this.model = Object.assign(new ImageItem(), data)
-  }
+  ) { }
 
 
   validate = () => !!this.model.Name

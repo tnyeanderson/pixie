@@ -14,6 +14,10 @@ export class MockUploadInline implements UploadInline {
     files: File[] = [MOCK_FILE]
     format = this.formats.upload
 
+    setModeInline(): void { }
+
+    setModeUpload(): void { }
+
     isInline(): boolean { return false }
 
     isUpload(): boolean { return true }

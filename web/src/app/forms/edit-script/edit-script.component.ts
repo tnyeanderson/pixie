@@ -12,18 +12,16 @@ import { UploadInline } from '../../formify/formify-components/form-input-upload
   styleUrls: ['./edit-script.component.scss']
 })
 export class EditScriptComponent implements OnInit {
-  model: ScriptItem
+  model: ScriptItem = new ScriptItem()
   scriptFile: UploadInline
 
   constructor(
     public dialogRef: MatDialogRef<EditScriptComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ScriptItem,
+    @Inject(MAT_DIALOG_DATA) public initialData: ScriptItem,
     private apiService: ApiService,
     private uploadInlineService: UploadInlineService
   ) {
     this.scriptFile = uploadInlineService.create()
-    // TODO: Why?
-    this.model = Object.assign(new ScriptItem(), data)
   }
 
   validate = () => !!this.model.Name
@@ -64,13 +62,18 @@ export class EditScriptComponent implements OnInit {
     }
   }
 
+  initializeContent() {
+    this.apiService.getFileContent(`scripts/${this.initialData.Path}`)
+      .subscribe(this.initializeContentFromBlob)
+  }
+
+  initializeContentFromBlob = (blob: Blob) => {
+    return blob.text().then(text => this.scriptFile.setInlineContent(text))
+  }
+
   ngOnInit(): void {
-    this.scriptFile.format = this.scriptFile.formats.inline
-    this.apiService.getFileContent(`scripts/${this.model.Path}`).subscribe((r: Blob) => {
-      r.text().then(text => {
-        this.scriptFile.setInlineContent(text)
-      })
-    })
+    this.scriptFile.setModeInline()
+    this.initializeContent()
   }
 
 }
