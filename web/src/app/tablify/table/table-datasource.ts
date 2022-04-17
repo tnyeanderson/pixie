@@ -4,7 +4,6 @@ import { MatSort } from '@angular/material/sort';
 import { merge, Observable, of as observableOf, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-// TODO: Replace this with your own data model type
 export interface TableScriptItem {
   ID: number,
   CreatedAt: string,

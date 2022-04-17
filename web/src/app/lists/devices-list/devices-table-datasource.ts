@@ -10,13 +10,12 @@ import { TableDataSource } from '../../tablify/table/table-datasource';
  */
 export class DevicesTableDataSource extends TableDataSource {
 
-  constructor(private apiService: ApiService) {
+  constructor() {
     super();
-    this.load()
   }
 
-  load() {
-    this.apiService.getDevices().subscribe(data => {
+  load(apiService: ApiService) {
+    apiService.getDevices().subscribe(data => {
       this.data = data as DeviceItem[]
       this.updated.next(true)
     })

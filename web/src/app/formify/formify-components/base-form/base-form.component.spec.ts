@@ -8,7 +8,6 @@ import { BaseFormComponent } from './base-form.component';
 describe('BaseFormComponent', () => {
   let component: BaseFormComponent;
   let fixture: ComponentFixture<BaseFormComponent>;
-  let ngOnInitSpy: jasmine.Spy
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,11 +25,13 @@ describe('BaseFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BaseFormComponent);
     component = fixture.componentInstance;
-    ngOnInitSpy = spyOn(component, 'ngOnInit')
-    fixture.detectChanges();
+    // Don't call this yet, calls ngOnInit()
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
+    // TODO: Test that ngOnInit effects are handled?
+    // fixture.detectChanges()
     expect(component).toBeTruthy();
   });
 
@@ -45,7 +46,6 @@ describe('BaseFormComponent', () => {
     component.model = model
     component.initialData = initialData
     spyOn(Object, 'assign').and.callThrough()
-    ngOnInitSpy.and.callThrough()
     component.ngOnInit()
     expect(Object.assign).toHaveBeenCalledWith(model, initialData)
     expect(component.model).toEqual(expected)

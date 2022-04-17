@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { DataSourceService } from 'src/app/tablify/services/data-source.service';
 import { ScriptItem } from 'src/types';
 import { AddScriptComponent } from '../../forms/add-script/add-script.component';
 import { EditScriptComponent } from '../../forms/edit-script/edit-script.component';
@@ -16,9 +17,9 @@ export class ScriptsListComponent implements OnInit {
   dataSource: ScriptsTableDataSource
   columns = ListColumns.scriptsColumns
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) {
+  constructor(private apiService: ApiService, public dialog: MatDialog, private dataSourceService: DataSourceService) {
     // TODO: Why?
-    this.dataSource = new ScriptsTableDataSource(apiService)
+    this.dataSource = this.dataSourceService.createScriptsTableDataSource()
   }
 
   editScript = (script: ScriptItem) => {
@@ -33,7 +34,7 @@ export class ScriptsListComponent implements OnInit {
     const dialogRef = this.dialog.open(EditScriptComponent, { width: '80%', data });
 
     this.dialog.afterAllClosed.subscribe(result => {
-      this.dataSource.load()
+      this.loadData()
     })
   }
 
@@ -41,16 +42,22 @@ export class ScriptsListComponent implements OnInit {
     const dialogRef = this.dialog.open(AddScriptComponent, { width: '80%' });
 
     this.dialog.afterAllClosed.subscribe(result => {
-      this.dataSource.load()
+      this.loadData()
     })
   }
 
   syncWithFilesystem() {
     this.apiService.syncScripts().subscribe(result => {
-      this.dataSource.load()
+      this.loadData()
     })
   }
 
-  ngOnInit(): void { }
+  loadData() {
+    this.dataSource.load(this.apiService)
+  }
+
+  ngOnInit(): void {
+    this.loadData()
+  }
 
 }

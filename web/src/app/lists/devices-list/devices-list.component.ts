@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { EditDeviceComponent } from 'src/app/forms/edit-device/edit-device.component';
+import { DataSourceService } from 'src/app/tablify/services/data-source.service';
 import { DeviceItem } from 'src/types';
 import { AddDeviceComponent } from '../../forms/add-device/add-device.component';
 import { ApiService } from '../../services/api.service';
@@ -16,9 +17,9 @@ export class DevicesListComponent implements OnInit {
   dataSource: DevicesTableDataSource
   columns = ListColumns.devicesColumns
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) {
+  constructor(private apiService: ApiService, public dialog: MatDialog, private dataSourceService: DataSourceService) {
     // TODO: Why?
-    this.dataSource = new DevicesTableDataSource(apiService)
+    this.dataSource = dataSourceService.createDevicesTableDataSource()
   }
 
   editDevice = (device: DeviceItem) => {
@@ -34,7 +35,7 @@ export class DevicesListComponent implements OnInit {
 
     // TODO: Should this be dialogRef.afterClosed ?
     this.dialog.afterAllClosed.subscribe(result => {
-      this.dataSource.load()
+      this.loadData()
     })
   }
 
@@ -43,10 +44,16 @@ export class DevicesListComponent implements OnInit {
 
     // TODO: Should this be dialogRef.afterClosed ?
     this.dialog.afterAllClosed.subscribe(result => {
-      this.dataSource.load()
+      this.loadData()
     });
   }
 
-  ngOnInit(): void { }
+  loadData() {
+    this.dataSource.load(this.apiService)
+  }
+
+  ngOnInit(): void {
+    this.loadData()
+  }
 
 }

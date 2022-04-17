@@ -14,6 +14,7 @@ import { UploadInline } from '../../formify/formify-components/form-input-upload
 export class EditScriptComponent implements OnInit {
   model: ScriptItem = new ScriptItem()
   scriptFile: UploadInline
+  onInitCount = 0
 
   constructor(
     public dialogRef: MatDialogRef<EditScriptComponent>,
@@ -72,6 +73,7 @@ export class EditScriptComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.onInitCount++
     this.scriptFile.setModeInline()
     this.initializeContent()
   }

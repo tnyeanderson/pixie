@@ -14,7 +14,6 @@ import { EditDeviceComponent } from './edit-device.component';
 describe('EditDeviceComponent', () => {
   let component: EditDeviceComponent;
   let fixture: ComponentFixture<EditDeviceComponent>;
-  let ngOnInitSpy: jasmine.Spy
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -38,12 +37,14 @@ describe('EditDeviceComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditDeviceComponent);
     component = fixture.componentInstance;
-    ngOnInitSpy = spyOn(component, 'ngOnInit')
-    fixture.detectChanges();
     component.model = new DeviceItem()
+    // Don't call this yet, calls ngOnInit()
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
+    // TODO: Test that ngOnInit effects are handled?
+    // fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
@@ -92,7 +93,6 @@ describe('EditDeviceComponent', () => {
   it('ngOnInit() should call apiService.getScripts() and set this.scripts', () => {
     spyOn(component['apiService'], 'getScripts').and.callThrough()
     spyOn(component, 'initializeScripts')
-    ngOnInitSpy.and.callThrough()
     component.ngOnInit()
     expect(component['apiService'].getScripts).toHaveBeenCalled()
     expect(component.initializeScripts).toHaveBeenCalledWith(MOCK_SCRIPTS)

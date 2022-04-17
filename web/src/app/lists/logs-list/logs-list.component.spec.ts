@@ -33,10 +33,25 @@ describe('LogsListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LogsListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // Don't call this yet, calls ngOnInit()
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
+    // TODO: Test that ngOnInit effects are handled?
+    // fixture.detectChanges();
     expect(component).toBeTruthy();
   });
+
+  it('loadData() should call dataSource.load()', () => {
+    spyOn(component.dataSource, 'load')
+    component.loadData()
+    expect(component.dataSource.load).toHaveBeenCalledWith(component['apiService'])
+  })
+
+  it('ngOnInit() should call loadData()', () => {
+    spyOn(component, 'loadData')
+    component.ngOnInit()
+    expect(component.loadData).toHaveBeenCalled()
+  })
 });

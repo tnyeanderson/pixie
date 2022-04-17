@@ -17,7 +17,6 @@ import { EditScriptComponent } from './edit-script.component';
 describe('EditScriptComponent', () => {
   let component: EditScriptComponent;
   let fixture: ComponentFixture<EditScriptComponent>;
-  let ngOnInitSpy: jasmine.Spy
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -42,11 +41,13 @@ describe('EditScriptComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditScriptComponent);
     component = fixture.componentInstance;
-    ngOnInitSpy = spyOn(component, 'ngOnInit')
-    fixture.detectChanges();
+    // Don't call this yet, calls ngOnInit()
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
+    // TODO: Test that ngOnInit effects are handled?
+    // fixture.detectChanges()
     expect(component).toBeTruthy();
   });
 
@@ -130,7 +131,6 @@ describe('EditScriptComponent', () => {
   it('ngOnInit() should call setModeInline() and initializeContent()', () => {
     spyOn(component.scriptFile, 'setModeInline')
     spyOn(component, 'initializeContent')
-    ngOnInitSpy.and.callThrough()
     component.ngOnInit()
     expect(component.scriptFile.setModeInline).toHaveBeenCalled()
     expect(component.initializeContent).toHaveBeenCalled()

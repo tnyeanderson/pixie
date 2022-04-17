@@ -37,10 +37,13 @@ describe('ImagesListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ImagesListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // Don't call this yet, calls ngOnInit()
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
+    // TODO: Test that ngOnInit effects are handled?
+    // fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
@@ -61,22 +64,39 @@ describe('ImagesListComponent', () => {
     // TODO: test that dialog.afterAllClosed is set up
     const data = MOCK_IMAGES[0]
     spyOn(component.dialog, 'open')
+    spyOn(component, 'loadData')
     component.openEditImageDialog(data)
     expect(component.dialog.open).toHaveBeenCalledWith(EditImageComponent, {width: '80%', data})
+    expect(component.loadData).toHaveBeenCalled()
   })
 
   it('openAddImageDialog() should open the dialog and load the datasource on close', () => {
     // TODO: test that dialog.afterAllClosed is set up
     spyOn(component.dialog, 'open')
+    spyOn(component, 'loadData')
     component.openAddImageDialog()
     expect(component.dialog.open).toHaveBeenCalledWith(AddImageComponent, {width: '80%'})
+    expect(component.loadData).toHaveBeenCalled()
   })
 
-  it('syncWithFilesystem() should call apiService.syncImages and datasource.load', () => {
+  it('syncWithFilesystem() should call apiService.syncImages and loadData', () => {
     spyOn(component['apiService'], 'syncImages').and.callThrough()
-    spyOn(component.dataSource, 'load')
+    spyOn(component, 'loadData')
     component.syncWithFilesystem()
     expect(component['apiService'].syncImages).toHaveBeenCalled()
-    expect(component.dataSource.load).toHaveBeenCalled()
+    expect(component.loadData).toHaveBeenCalled()
   })
+
+  it('loadData() should call dataSource.load()', () => {
+    spyOn(component.dataSource, 'load')
+    component.loadData()
+    expect(component.dataSource.load).toHaveBeenCalledWith(component['apiService'])
+  })
+
+  it('ngOnInit() should call loadData()', () => {
+    spyOn(component, 'loadData')
+    component.ngOnInit()
+    expect(component.loadData).toHaveBeenCalled()
+  })
+  
 });

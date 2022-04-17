@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddImageComponent } from 'src/app/forms/add-image/add-image.component';
 import { EditImageComponent } from 'src/app/forms/edit-image/edit-image.component';
+import { DataSourceService } from 'src/app/tablify/services/data-source.service';
 import { ImageItem } from 'src/types';
 import { ApiService } from '../../services/api.service';
 import { ListColumns } from '../../tablify/columns';
@@ -16,9 +17,9 @@ export class ImagesListComponent implements OnInit {
   dataSource: ImagesTableDataSource
   columns = ListColumns.imagesColumns
 
-  constructor(private apiService: ApiService, public dialog: MatDialog) {
+  constructor(private apiService: ApiService, public dialog: MatDialog, private dataSourceService: DataSourceService) {
     // TODO: Why?
-    this.dataSource = new ImagesTableDataSource(apiService)
+    this.dataSource = this.dataSourceService.createImagesTableDataSource()
   }
 
   editImage = (image: ImageItem) => {
@@ -33,7 +34,7 @@ export class ImagesListComponent implements OnInit {
     const dialogRef = this.dialog.open(EditImageComponent, { width: '80%', data });
 
     this.dialog.afterAllClosed.subscribe(result => {
-      this.dataSource.load()
+      this.loadData()
     })
   }
 
@@ -41,16 +42,22 @@ export class ImagesListComponent implements OnInit {
     const dialogRef = this.dialog.open(AddImageComponent, { width: '80%' });
 
     this.dialog.afterAllClosed.subscribe(result => {
-      this.dataSource.load()
+      this.loadData()
     })
   }
 
   syncWithFilesystem() {
     this.apiService.syncImages().subscribe(result => {
-      this.dataSource.load()
+      this.loadData()
     })
   }
 
-  ngOnInit(): void { }
+  loadData() {
+    this.dataSource.load(this.apiService)
+  }
+
+  ngOnInit(): void {
+    this.loadData()
+  }
 
 }

@@ -37,10 +37,13 @@ describe('DevicesListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DevicesListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // Don't call this yet, calls ngOnInit()
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
+    // TODO: Test that ngOnInit effects are handled?
+    // fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
@@ -61,15 +64,30 @@ describe('DevicesListComponent', () => {
     // TODO: test that dialog.afterAllClosed is set up
     const d1 = MOCK_DEVICES[0]
     spyOn(component.dialog, 'open')
+    spyOn(component, 'loadData')
     component.openEditDeviceDialog(d1)
     expect(component.dialog.open).toHaveBeenCalledWith(EditDeviceComponent, {width: '80%', data: d1})
+    expect(component.loadData).toHaveBeenCalled()
   });
   
   it('openAddDeviceDialog() should create a dialog', () => {
     // TODO: test that dialog.afterAllClosed is set up
-    const d1 = MOCK_DEVICES[0]
     spyOn(component.dialog, 'open')
+    spyOn(component, 'loadData')
     component.openAddDeviceDialog()
     expect(component.dialog.open).toHaveBeenCalledWith(AddDeviceComponent, {width: '80%'}) 
+    expect(component.loadData).toHaveBeenCalled()
   });
+
+  it('loadData() should call dataSource.load()', () => {
+    spyOn(component.dataSource, 'load')
+    component.loadData()
+    expect(component.dataSource.load).toHaveBeenCalledWith(component['apiService'])
+  })
+
+  it('ngOnInit() should call loadData()', () => {
+    spyOn(component, 'loadData')
+    component.ngOnInit()
+    expect(component.loadData).toHaveBeenCalled()
+  })
 });
