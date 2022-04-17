@@ -38,6 +38,16 @@ describe('BaseFormComponent', () => {
     expect(component.validate()).toBeTrue();
   });
 
-  // TODO
-  it('ngOnInit() should ?????')
+  it('ngOnInit() should apply initialData to model', () => {
+    const model = {name: 'TESTMODEL'}
+    const initialData = {data: 'TESTINITIALDATA'}
+    const expected = {name: 'TESTMODEL', data: 'TESTINITIALDATA'}
+    component.model = model
+    component.initialData = initialData
+    spyOn(Object, 'assign').and.callThrough()
+    ngOnInitSpy.and.callThrough()
+    component.ngOnInit()
+    expect(Object.assign).toHaveBeenCalledWith(model, initialData)
+    expect(component.model).toEqual(expected)
+  })
 });
