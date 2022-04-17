@@ -18,7 +18,6 @@ export class ImagesListComponent implements OnInit {
   columns = ListColumns.imagesColumns
 
   constructor(private apiService: ApiService, public dialog: MatDialog, private dataSourceService: DataSourceService) {
-    // TODO: Why?
     this.dataSource = this.dataSourceService.createImagesTableDataSource()
   }
 
