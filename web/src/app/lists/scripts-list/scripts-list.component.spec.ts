@@ -64,23 +64,27 @@ describe('ScriptsListComponent', () => {
     // TODO: test that dialog.afterAllClosed is set up
     const data = MOCK_SCRIPTS[0]
     spyOn(component.dialog, 'open')
+    spyOn(component, 'loadData')
     component.openEditScriptDialog(data)
     expect(component.dialog.open).toHaveBeenCalledWith(EditScriptComponent, { width: '80%', data })
+    expect(component.loadData).toHaveBeenCalled()
   })
 
   it('openAddScriptDialog() should open the dialog and load the datasource on close', () => {
     // TODO: test that dialog.afterAllClosed is set up
     spyOn(component.dialog, 'open')
+    spyOn(component, 'loadData')
     component.openAddScriptDialog()
     expect(component.dialog.open).toHaveBeenCalledWith(AddScriptComponent, { width: '80%' })
+    expect(component.loadData).toHaveBeenCalled()
   })
 
   it('syncWithFilesystem() should call apiService.syncScripts and datasource.load', () => {
     spyOn(component['apiService'], 'syncScripts').and.callThrough()
-    spyOn(component.dataSource, 'load')
+    spyOn(component, 'loadData')
     component.syncWithFilesystem()
     expect(component['apiService'].syncScripts).toHaveBeenCalled()
-    expect(component.dataSource.load).toHaveBeenCalled()
+    expect(component.loadData).toHaveBeenCalled()
   })
   
   it('loadData() should call dataSource.load()', () => {
