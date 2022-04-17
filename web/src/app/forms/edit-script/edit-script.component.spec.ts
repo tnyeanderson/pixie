@@ -8,7 +8,7 @@ import { MOCK_INLINE_CONTENT } from 'src/app/formify/formify-components/form-inp
 import { UploadInlineService } from 'src/app/formify/formify-services/upload-inline.service';
 import { MockUploadInlineService } from 'src/app/formify/formify-services/upload-inline.service.mock';
 import { ApiService } from 'src/app/services/api.service';
-import { MockApiService, MOCK_FILE } from 'src/app/services/api.service.mock';
+import { MockApiService, MOCK_BLOB_CONTENT, MOCK_FILE } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { FormifyModule } from '../../formify/formify.module';
 import { EditScriptComponent } from './edit-script.component';
@@ -17,6 +17,7 @@ import { EditScriptComponent } from './edit-script.component';
 describe('EditScriptComponent', () => {
   let component: EditScriptComponent;
   let fixture: ComponentFixture<EditScriptComponent>;
+  let ngOnInitSpy: jasmine.Spy
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -41,6 +42,7 @@ describe('EditScriptComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditScriptComponent);
     component = fixture.componentInstance;
+    ngOnInitSpy = spyOn(component, 'ngOnInit')
     fixture.detectChanges();
   });
 
@@ -128,6 +130,7 @@ describe('EditScriptComponent', () => {
     const fullpath = `scripts/${component.model.Path}`
     spyOn(component['apiService'], 'getFileContent').and.callThrough()
     spyOn(component.scriptFile, 'setInlineContent').and.callFake(() => {})
+    ngOnInitSpy.and.callThrough()
     component.ngOnInit()
     expect(component.scriptFile.format).toEqual(component.scriptFile.formats.inline)
     expect(component['apiService'].getFileContent).toHaveBeenCalledWith(fullpath)

@@ -8,6 +8,7 @@ import { BaseFormComponent } from './base-form.component';
 describe('BaseFormComponent', () => {
   let component: BaseFormComponent;
   let fixture: ComponentFixture<BaseFormComponent>;
+  let ngOnInitSpy: jasmine.Spy
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,6 +26,7 @@ describe('BaseFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(BaseFormComponent);
     component = fixture.componentInstance;
+    ngOnInitSpy = spyOn(component, 'ngOnInit')
     fixture.detectChanges();
   });
 
@@ -35,4 +37,7 @@ describe('BaseFormComponent', () => {
   it('validate() should return true by default', () => {
     expect(component.validate()).toBeTrue();
   });
+
+  // TODO
+  it('ngOnInit() should ?????')
 });
