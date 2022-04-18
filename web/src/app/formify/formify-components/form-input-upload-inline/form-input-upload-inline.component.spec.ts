@@ -30,4 +30,16 @@ describe('FormInputUploadInlineComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('fileAdded() should do nothing by default', () => {
+    spyOn(component, 'fileAdded').and.callThrough()
+    component.fileAdded()
+    expect(component.fileAdded).toHaveBeenCalled()
+  })
+
+  it('fileRemoved() should do nothing by default', () => {
+    spyOn(component, 'fileRemoved').and.callThrough()
+    component.fileRemoved()
+    expect(component.fileRemoved).toHaveBeenCalled()
+  })
 });
