@@ -1,5 +1,6 @@
 import { TableDataSource } from './table-datasource';
 
+// TODO: Find out why this file can't be named table-datasource.spec.ts without causing test errors
 
 describe('TableDataSource', () => {
   let obj: TableDataSource;
@@ -24,6 +25,27 @@ describe('TableDataSource', () => {
     spyOn(obj, 'disconnect').and.callThrough()
     obj.disconnect()
     expect(obj.disconnect).toHaveBeenCalled()
+  })
+
+  it('getPagedData() should return a the spliced page of results from the data array', () => {
+    const testdata: any[] = ['val0', 'val1', 'val2', 'val3', 'val4', 'val5']
+    const expected: any[] = ['val2', 'val3', 'val4']
+    obj.paginator = {pageSize: 3} as any
+    spyOn(obj, 'getStartIndex').and.returnValue(2)
+    spyOn(testdata, 'splice').and.callThrough()
+    const result = obj.getPagedData(testdata)
+    expect(testdata.splice).toHaveBeenCalled()
+    expect(result).toEqual(expected)
+  })
+
+  it('getStartIndex() should get the starting index for the page of results', () => {
+    obj.paginator = {} as any
+    obj.paginator.pageIndex = 3
+    obj.paginator.pageSize = 5
+    expect(obj.getStartIndex()).toEqual(15)
+    obj.paginator.pageIndex = 7
+    obj.paginator.pageSize = 12
+    expect(obj.getStartIndex()).toEqual(84)
   })
 
   it('sortIsActive() should return true if sort.active ', () => {

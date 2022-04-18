@@ -1,7 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { merge, Observable, of as observableOf, Subject } from 'rxjs';
+import { merge, Observable, of, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface TableItem {
@@ -32,11 +32,18 @@ export class TableDataSource extends DataSource<TableItem> {
   connect(): Observable<TableItem[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
-    return merge(observableOf(this.data), this.paginator.page, this.sort.sortChange, this.updated)
-      .pipe(map(() => {
-        let data = this.data || []
-        return this.getPagedData(this.getSortedData([...data]));
-      }));
+    return this.omniObservable().pipe(this.pageAndSort())
+  }
+
+  pageAndSort() {
+    return map(() => {
+      let data = this.data || []
+      return this.getPagedData(this.getSortedData([...data]));
+    });
+  }
+
+  omniObservable() {
+    return merge(of(this.data), this.paginator.page, this.sort.sortChange, this.updated)
   }
 
   /**
@@ -50,8 +57,12 @@ export class TableDataSource extends DataSource<TableItem> {
    * this would be replaced by requesting the appropriate data from the server.
    */
   getPagedData(data: TableItem[]): TableItem[] {
-    const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+    const startIndex = this.getStartIndex()
     return data.splice(startIndex, this.paginator.pageSize);
+  }
+
+  getStartIndex(): number {
+    return this.paginator.pageIndex * this.paginator.pageSize;
   }
 
   sortIsActive(): boolean {
