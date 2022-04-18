@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { UploadInline } from '../formify-components/form-input-upload-inline/upload-inline';
-
 import { UploadInlineService } from './upload-inline.service';
+
 
 describe('UploadInlineService', () => {
   let service: UploadInlineService;

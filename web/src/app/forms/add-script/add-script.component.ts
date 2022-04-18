@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { ScriptItem } from 'src/types';
-import { ApiService } from '../../services/api.service';
-import { UploadInline } from '../../formify/formify-components/form-input-upload-inline/upload-inline';
 import { UploadInlineService } from 'src/app/formify/formify-services/upload-inline.service';
+import { ScriptItem } from 'src/types';
+import { UploadInline } from '../../formify/formify-components/form-input-upload-inline/upload-inline';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-add-script',

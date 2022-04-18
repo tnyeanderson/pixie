@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { UploadInlineService } from '../../formify-services/upload-inline.service';
 import { UploadInline } from './upload-inline';
 
 @Component({

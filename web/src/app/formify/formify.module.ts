@@ -17,7 +17,6 @@ import { FormInputDropdownComponent } from './formify-components/form-input-drop
 import { FormInputFileComponent } from './formify-components/form-input-file/form-input-file.component';
 import { FormInputTextComponent } from './formify-components/form-input-text/form-input-text.component';
 import { FormInputUploadInlineComponent } from './formify-components/form-input-upload-inline/form-input-upload-inline.component';
-import { UploadInline } from './formify-components/form-input-upload-inline/upload-inline';
 
 
 

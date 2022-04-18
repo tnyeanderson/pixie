@@ -1,4 +1,3 @@
-import { Observable } from "rxjs"
 
 export class GormModel {
   ID: number | undefined

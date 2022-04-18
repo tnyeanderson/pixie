@@ -1,6 +1,5 @@
 import { MOCK_FILE } from 'src/app/services/api.service.mock';
 import { UploadInline } from './upload-inline';
-import { MOCK_INLINE_CONTENT } from './upload-inline.mock';
 
 
 describe('UploadInline class', () => {
