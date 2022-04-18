@@ -96,6 +96,7 @@
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
             "codeCoverageExclude": [
+              "src/types.ts",
               "src/testing/**",
               "src/**/*.mock.ts"
             ],
