@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Column } from '../columns';
-import { TableDataSource, TableScriptItem } from './table-datasource';
+import { TableDataSource, TableItem } from './table-datasource';
 
 @Component({
   selector: 'app-table',
@@ -13,7 +13,7 @@ import { TableDataSource, TableScriptItem } from './table-datasource';
 export class TableComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<TableScriptItem>;
+  @ViewChild(MatTable) table!: MatTable<TableItem>;
   @Input() dataSource: TableDataSource = new TableDataSource();
   @Input() editable: boolean = false
   @Input() addable: boolean = false

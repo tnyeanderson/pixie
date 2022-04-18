@@ -4,23 +4,16 @@ import { MatSort } from '@angular/material/sort';
 import { merge, Observable, of as observableOf, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-// TODO: Genericize this
-export interface TableScriptItem {
+export interface TableItem {
   ID: number,
-  CreatedAt: string,
-  UpdatedAt: string,
-  DeletedAt: string,
-  Name: string,
-  Path: string
 }
-
 
 /**
  * Data source for the Table view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class TableDataSource extends DataSource<TableScriptItem> {
+export class TableDataSource extends DataSource<TableItem> {
   data: any[] = [];
   paginator!: MatPaginator;
   sort!: MatSort;
@@ -36,7 +29,7 @@ export class TableDataSource extends DataSource<TableScriptItem> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<TableScriptItem[]> {
+  connect(): Observable<TableItem[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     return merge(observableOf(this.data), this.paginator.page, this.sort.sortChange, this.updated)
@@ -56,7 +49,7 @@ export class TableDataSource extends DataSource<TableScriptItem> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  getPagedData(data: TableScriptItem[]): TableScriptItem[] {
+  getPagedData(data: TableItem[]): TableItem[] {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
