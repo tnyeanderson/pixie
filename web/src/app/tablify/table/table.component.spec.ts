@@ -34,6 +34,18 @@ describe('TableComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('add() should do nothing by default', () => {
+    spyOn(component, 'add').and.callThrough()
+    component.add()
+    expect(component.add).toHaveBeenCalled()
+  })
+
+  it('edit() should do nothing by default', () => {
+    spyOn(component, 'edit').and.callThrough()
+    component.edit()
+    expect(component.edit).toHaveBeenCalled()
+  })
+
   it('getDisplayedColumns() should call getColumnNames() and send the result to addExtraColumns()', () => {
     const columns = ['name1', 'name2']
     const withExtra = [...columns, 'extra']

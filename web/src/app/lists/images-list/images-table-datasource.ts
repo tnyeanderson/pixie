@@ -10,14 +10,10 @@ import { TableDataSource } from '../../tablify/table/table-datasource';
  */
 export class ImagesTableDataSource extends TableDataSource {
 
-  constructor() {
-    super();
-  }
-
   load(apiService: ApiService) {
     apiService.getImages().subscribe(data => {
-      this.data = data as ImageItem[]
-      this.updated.next(true)
+      this.updateData(data as ImageItem[])
     })
   }
+
 }

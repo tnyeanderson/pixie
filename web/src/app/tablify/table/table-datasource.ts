@@ -4,6 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { merge, Observable, of as observableOf, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+// TODO: Genericize this
 export interface TableScriptItem {
   ID: number,
   CreatedAt: string,
@@ -29,6 +30,11 @@ export class TableDataSource extends DataSource<TableScriptItem> {
 
   constructor() {
     super();
+  }
+
+  updateData(data: any[]) {
+    this.data = data
+    this.updated.next(true)
   }
 
   /**
