@@ -28,7 +28,7 @@ func AddLog(log models.Log) (*models.Log, error) {
 	return &log, nil
 }
 
-func AddLogMessage(summary string, detail string) (*models.Log, error) {
-	log := models.Log{Summary: summary, Detail: detail}
+func AddLogMessage(logtype string, summary string, detail string) (*models.Log, error) {
+	log := models.Log{Type: logtype, Summary: summary, Detail: detail}
 	return AddLog(log)
 }

@@ -55,6 +55,7 @@ func AddScript(script models.Script) (*models.Script, error) {
 	}
 
 	AddLogMessage(
+		"CREATE",
 		fmt.Sprint("Added script: ID=", script.ID, ", Path=", script.Path),
 		fmt.Sprintf("%+v\n", script),
 	)
@@ -71,6 +72,7 @@ func UpdateScript(id uint, updated models.Script) (*models.Script, error) {
 	}
 
 	AddLogMessage(
+		"UPDATE",
 		fmt.Sprint("Updated script: ID=", id, ", Path=", updated.Path),
 		fmt.Sprintf("%+v\n", updated),
 	)
@@ -108,6 +110,7 @@ func DeleteScript(script models.Script) (*models.Script, error) {
 	}
 
 	AddLogMessage(
+		"DELETE",
 		fmt.Sprint("Deleted script: ID=", script.ID, ", Path=", script.Path),
 		fmt.Sprintf("%+v\n", script),
 	)

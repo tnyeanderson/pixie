@@ -1,7 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ReloadButtonModule } from 'src/app/fragments/reload-button/reload-button.module';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService } from 'src/app/services/api.service.mock';
 import { TablifyModule } from '../../tablify/tablify.module';
@@ -20,8 +22,10 @@ describe('LogsListComponent', () => {
       imports: [
         HttpClientModule,
         MatSnackBarModule,
+        MatIconModule,
         TablifyModule,
         NoopAnimationsModule,
+        ReloadButtonModule,
       ],
       declarations: [
         LogsListComponent,

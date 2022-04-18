@@ -27,6 +27,7 @@ import { ApiService } from './services/api.service';
 import { ConfirmService } from './services/confirm/confirm.service';
 import { ConfirmationDialogComponent } from './services/confirm/confirmation-dialog/confirmation-dialog.component';
 import { TablifyModule } from './tablify/tablify.module';
+import { ReloadButtonModule } from './fragments/reload-button/reload-button.module';
 
 
 @NgModule({
@@ -59,6 +60,7 @@ import { TablifyModule } from './tablify/tablify.module';
     FormifyModule,
     TablifyModule,
     NavModule,
+    ReloadButtonModule,
   ],
   providers: [
     ApiService,

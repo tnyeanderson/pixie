@@ -6,6 +6,7 @@ import (
 
 type Log struct {
 	gorm.Model
+	Type    string
 	Summary string
 	Detail  string
 }

@@ -91,6 +91,7 @@ export class ListColumns {
 
     static logsColumns: Column[] = [
         new Column('CreatedAt', 'timestamp', 'Timestamp'),
+        new Column('Type', 'string'),
         new Column('Summary', 'string'),
         new Column('Detail', 'longtext'),
     ]

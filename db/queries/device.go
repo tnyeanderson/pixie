@@ -38,6 +38,7 @@ func AddDevice(device models.Device) (*models.Device, error) {
 	}
 
 	AddLogMessage(
+		"CREATE",
 		fmt.Sprint("Added device: ID=", device.ID, ", Mac=", device.Mac),
 		fmt.Sprintf("%+v\n", device),
 	)
@@ -54,6 +55,7 @@ func UpdateDevice(id uint, updated models.Device) (*models.Device, error) {
 	}
 
 	AddLogMessage(
+		"UPDATE",
 		fmt.Sprint("Updated device: ID=", id, ", Mac=", updated.Mac),
 		fmt.Sprintf("%+v\n", updated),
 	)
@@ -77,6 +79,7 @@ func DeleteDevice(id uint) (*models.Device, error) {
 	}
 
 	AddLogMessage(
+		"DELETE",
 		fmt.Sprint("Deleted device: ID=", device.ID, ", Mac=", device.Mac),
 		fmt.Sprintf("%+v\n", device),
 	)

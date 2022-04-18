@@ -17,7 +17,7 @@ export class LogsListComponent implements OnInit {
     this.dataSource = this.dataSourceService.createLogsTableDataSource()
   }
 
-  loadData() {
+  loadData = () =>  {
     this.dataSource.load(this.apiService)
   }
 

@@ -55,6 +55,7 @@ func AddImage(image models.Image) (*models.Image, error) {
 	}
 
 	AddLogMessage(
+		"CREATE",
 		fmt.Sprint("Added image: ID=", image.ID, ", Path=", image.Path),
 		fmt.Sprintf("%+v\n", image),
 	)
@@ -71,6 +72,7 @@ func UpdateImage(id uint, updated models.Image) (*models.Image, error) {
 	}
 
 	AddLogMessage(
+		"UPDATE",
 		fmt.Sprint("Updated image: ID=", id, ", Path=", updated.Path),
 		fmt.Sprintf("%+v\n", updated),
 	)
@@ -108,6 +110,7 @@ func DeleteImage(image models.Image) (*models.Image, error) {
 	}
 
 	AddLogMessage(
+		"DELETE",
 		fmt.Sprint("Deleted image: ID=", image.ID, ", Path=", image.Path),
 		fmt.Sprintf("%+v\n", image),
 	)
