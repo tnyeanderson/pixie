@@ -25,7 +25,16 @@ export class TableComponent implements AfterViewInit {
   displayedColumns: string[] = []
 
   getDisplayedColumns() {
-    const out = this.columns.map(column => column.name)
+    const columns = this.getColumnNames()
+    return this.addExtraColumns(columns)
+  }
+
+  getColumnNames() {
+    return this.columns.map(column => column.name)
+  }
+
+  addExtraColumns(columns: string[]) {
+    const out = [...columns]
     if (this.editable) {
       out.push('edit')
     }
@@ -36,12 +45,14 @@ export class TableComponent implements AfterViewInit {
     this.edit(row)
   }
 
+  updateDisplayedColumns() {
+    this.displayedColumns = this.getDisplayedColumns()
+  }
+
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
-    setTimeout(() => {
-      this.displayedColumns = this.getDisplayedColumns()
-    }, 0)
+    this.updateDisplayedColumns()
   }
 }
