@@ -1,3 +1,4 @@
+import { Observable, of } from 'rxjs';
 import { TableDataSource } from './table-datasource';
 
 // TODO: Find out why this file can't be named table-datasource.spec.ts without causing test errors
@@ -19,6 +20,19 @@ describe('TableDataSource', () => {
     obj.updateData(testdata)
     expect(obj.data).toBe(testdata)
     expect(obj.updated.next).toHaveBeenCalledWith(true)
+  })
+
+  it('connect() should return an observable that has been paged and sorted', (done) => {
+    const fakeOmni = {pipe: (val: any) => val} as any
+    const fakeSuccess = 'success' as any
+    spyOn(obj, 'omniObservable').and.returnValue(fakeOmni)
+    spyOn(obj, 'pageAndSort').and.returnValue(of(fakeSuccess) as any)
+    obj.connect().subscribe(val => {
+      expect(val).toEqual(fakeSuccess)
+      done()
+    })
+    expect(obj.omniObservable).toHaveBeenCalled()
+    expect(obj.pageAndSort).toHaveBeenCalled()
   })
 
   it('disconnect() should do nothing', () => {
@@ -90,6 +104,41 @@ describe('TableDataSource', () => {
     expect(obj.localeSortInPlace).toHaveBeenCalledWith(testdata, testkey)
     expect(testdata.reverse).toHaveBeenCalled()
     expect(result).toBe(testdata)
+  })
+
+  it('localeSortInPlace() should sort the array naturally as strings', () => {
+    const key = 'key1'
+    const toSort = [
+      200,
+      10,
+      1,
+      'B',
+      3,
+      '0002',
+      'a',
+      0
+    ].map(n => {return {key1: n}})
+    const expected = [
+      0,
+      1,
+      '0002',
+      3,
+      10,
+      200,
+      'a',
+      'B',
+    ].map(n => {return {key1: n}})
+    obj.localeSortInPlace(toSort, key)
+    expect(toSort).toEqual(expected)
+  })
+
+  it('localeCompare() should return -1, 0, or 1 based on comparison result', () => {
+    expect(obj.localeCompare('B', 'a')).toEqual(1)
+    expect(obj.localeCompare('a', 'B')).toEqual(-1)
+    expect(obj.localeCompare(3, 10)).toEqual(-1)
+    expect(obj.localeCompare('0035', 23)).toEqual(1)
+    expect(obj.localeCompare('0001', 1)).toEqual(0)
+    expect(obj.localeCompare('0001', '1')).toEqual(0)
   })
   
   it('isDescending() should return true only if sort.direction === desc', () => {
