@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/pin/tftp"
@@ -14,9 +15,14 @@ import (
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
 	print("TFTP get: " + filename)
+	if filename == "pixie.kpxe" {
+		// For compatibility reasons, allow loading pixie.kpxe from the root path
+		filename = path.Join(config.Pixie.Paths.FileServer, filename)
+	}
 	if !strings.HasPrefix(filename, config.Pixie.Paths.FileServer) {
 		return errors.New("Path must begin with " + config.Pixie.Paths.FileServer)
 	}
+	// TODO: This should add the FileServer prefix, skip the above check
 	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
