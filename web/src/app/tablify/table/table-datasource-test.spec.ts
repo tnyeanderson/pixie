@@ -14,7 +14,7 @@ describe('TableDataSource', () => {
     expect(obj).toBeTruthy();
   });
 
-   it('updateData() should set this.data and call updated.next()', () => {
+  it('updateData() should set this.data and call updated.next()', () => {
     const testdata = {data: 'test'} as any
     spyOn(obj.updated, 'next')
     obj.updateData(testdata)
