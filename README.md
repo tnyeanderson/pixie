@@ -58,6 +58,5 @@ Then navigate to `localhost:8880` in a browser.
 ```bash
 docker-compose up -d
 ```
-> NOTE: TFTP is not functional in docker at the moment due to how TFTP uses ports.
 
 Then navigate to `localhost:8880` in a browser.
