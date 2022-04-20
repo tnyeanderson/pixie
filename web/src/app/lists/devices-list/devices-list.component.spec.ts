@@ -5,6 +5,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AddDeviceComponent } from 'src/app/forms/add-device/add-device.component';
 import { EditDeviceComponent } from 'src/app/forms/edit-device/edit-device.component';
+import { ReloadButtonModule } from 'src/app/fragments/reload-button/reload-button.module';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_DEVICES } from 'src/app/services/api.service.mock';
 import { TablifyModule } from '../../tablify/tablify.module';
@@ -25,6 +26,7 @@ describe('DevicesListComponent', () => {
         MatSnackBarModule,
         MatDialogModule,
         TablifyModule,
+        ReloadButtonModule,
         NoopAnimationsModule,
       ],
       declarations: [

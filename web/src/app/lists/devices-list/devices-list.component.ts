@@ -47,7 +47,7 @@ export class DevicesListComponent implements OnInit {
     });
   }
 
-  loadData() {
+  loadData = () => {
     this.dataSource.load(this.apiService)
   }
 
