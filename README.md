@@ -21,6 +21,7 @@ PROJECT IS IN ALPHA. MORE DOCUMENTATION AND FUNCTIONALITY TO COME
 - [ ] Boot script handlebars templating
 - [ ] Library of boots (ex: ubuntu, debian, coreos, etc) that can be "imported" and modified
 - [ ] Temporarily boot another script for testing/debugging (for x number of boots, or y seconds, etc)
+- [ ] Disable TFTP server (use your own)
 
 ## Getting started
 First, generate a `pixie.kpxe` file that will be the default boot image sent by the DHCP server. The URL used below will be the [chainloaded](https://ipxe.org/howto/chainloading) host.
@@ -44,9 +45,11 @@ docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://local
 Then, run the app!
 
 ## Run locally
-Since a TFTP server is included, `sudo` must be used.
 ```bash
-$ (cd web/ && ng build) ; sudo go run main.go
+# Build the web interface
+(cd web/ && ng build)
+# Since a TFTP server is included, `sudo` must be used.
+sudo go run main.go
 ```
 
 Then navigate to `localhost:8880` in a browser.
