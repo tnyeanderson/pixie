@@ -42,6 +42,8 @@ func BootHandler(c *gin.Context) {
 		scriptPath = filepath.Join(config.Pixie.Paths.Scripts, device.Script.Path)
 	}
 
+	queries.AddBootEvent(device.ID, device.ScriptID)
+
 	queries.AddLogMessage(
 		"BOOT",
 		fmt.Sprint("Device ", device.Mac, " booted script ", scriptPath),

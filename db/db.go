@@ -21,6 +21,7 @@ func ConnectDatabase() {
 	database.AutoMigrate(&models.Script{})
 	database.AutoMigrate(&models.Image{})
 	database.AutoMigrate(&models.Log{})
+	database.AutoMigrate(&models.Event{})
 
 	DB = database
 }
