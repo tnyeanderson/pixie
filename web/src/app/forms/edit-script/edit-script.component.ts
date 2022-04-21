@@ -59,7 +59,9 @@ export class EditScriptComponent implements OnInit {
 
   delete = () => {
     if (this.model.ID) {
-      this.apiService.deleteScript(this.model.ID).subscribe()
+      this.apiService.deleteScript(this.model.ID).subscribe(r => {
+        this.dialogRef.close()
+      })
     }
   }
 

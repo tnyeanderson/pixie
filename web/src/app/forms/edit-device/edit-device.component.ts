@@ -23,15 +23,17 @@ export class EditDeviceComponent implements OnInit {
   submit = () => {
     if (this.model.ID) {
       this.apiService.editDevice(this.model.ID, this.model).subscribe(r => {
-      this.dialogRef.close()
-    })
+        this.dialogRef.close()
+      })
     }
 
   }
 
   delete = () => {
     if (this.model.ID) {
-      this.apiService.deleteDevice(this.model.ID).subscribe()
+      this.apiService.deleteDevice(this.model.ID).subscribe(r => {
+        this.dialogRef.close()
+      })
     }
   }
 
