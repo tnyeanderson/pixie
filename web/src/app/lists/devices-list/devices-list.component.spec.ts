@@ -8,6 +8,7 @@ import { EditDeviceComponent } from 'src/app/forms/edit-device/edit-device.compo
 import { ReloadButtonModule } from 'src/app/fragments/reload-button/reload-button.module';
 import { ApiService } from 'src/app/services/api.service';
 import { MockApiService, MOCK_DEVICES } from 'src/app/services/api.service.mock';
+import { DeviceItem } from 'src/types';
 import { TablifyModule } from '../../tablify/tablify.module';
 import { DevicesListComponent } from './devices-list.component';
 
@@ -60,6 +61,17 @@ describe('DevicesListComponent', () => {
     spyOn(component, 'openAddDeviceDialog')
     component.addDevice()
     expect(component.openAddDeviceDialog).toHaveBeenCalled()
+  });
+
+  it('deleteDevice() should call apiService.deleteDevice() and loadData()', () => {
+    const id = 55
+    const device = new DeviceItem()
+    device.ID = id
+    spyOn(component['apiService'], 'deleteDevice').and.callThrough()
+    spyOn(component, 'loadData')
+    component.deleteDevice(device)
+    expect(component['apiService'].deleteDevice).toHaveBeenCalledWith(id)
+    expect(component.loadData).toHaveBeenCalled()
   });
 
   it('openEditDeviceDialog() should create a dialog', () => {

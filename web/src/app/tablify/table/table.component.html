@@ -11,13 +11,18 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="edit">
+      <ng-container matColumnDef="extras">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell class="actions" *matCellDef="let element">
           <mat-chip-list selectable="false">
             <mat-chip *ngIf="element.IsDefault" color="primary" disabled>default</mat-chip>
           </mat-chip-list>
-          <div class="edit-button">
+          <div class="delete-button" *ngIf="deletable">
+            <button type="button" aria-label="Delete item" mat-icon-button (click)="deleteItem(element)">
+              <mat-icon aria-label="Delete button">delete</mat-icon>
+            </button>
+          </div>
+          <div class="edit-button" *ngIf="editable">
             <button type="button" aria-label="Edit item" mat-icon-button (click)="editItem(element)">
               <mat-icon aria-label="Edit button">edit</mat-icon>
             </button>

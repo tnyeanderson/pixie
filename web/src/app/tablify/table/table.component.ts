@@ -2,6 +2,7 @@ import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
+import { ConfirmService } from 'src/app/services/confirm/confirm.service';
 import { Column } from '../columns';
 import { TableDataSource, TableItem } from './table-datasource';
 
@@ -17,12 +18,16 @@ export class TableComponent implements AfterViewInit {
   @Input() dataSource: TableDataSource = new TableDataSource();
   @Input() editable: boolean = false
   @Input() addable: boolean = false
+  @Input() deletable: boolean = false
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   @Input() add: Function = () => { }
   @Input() edit: Function = () => { }
+  @Input() delete: Function = () => { }
   @Input() columns: Column[] = []
   displayedColumns: string[] = []
+
+  constructor(private confirm: ConfirmService) { }
 
   getDisplayedColumns() {
     const columns = this.getColumnNames()
@@ -35,14 +40,18 @@ export class TableComponent implements AfterViewInit {
 
   addExtraColumns(columns: string[]) {
     const out = [...columns]
-    if (this.editable) {
-      out.push('edit')
-    }
+    out.push('extras')
     return out
   }
 
   editItem(row: any) {
     this.edit(row)
+  }
+
+  deleteItem(row: any) {
+    this.confirm.ask(() => {
+      this.delete(row)
+    }, 'Delete item?')
   }
 
   updateDisplayedColumns() {

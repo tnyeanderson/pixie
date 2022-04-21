@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ConfirmService } from 'src/app/services/confirm/confirm.service';
 import { ConfirmServiceStub, MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { FormifyModule } from '../../formify.module';
 import { FormButtonsComponent } from './form-buttons.component';
@@ -12,7 +13,11 @@ describe('FormButtonsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [{ provide: MatDialogRef, useValue: MatDialogRefStub }, { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB }],
+      providers: [
+        { provide: MatDialogRef, useValue: MatDialogRefStub },
+        { provide: MAT_DIALOG_DATA, useValue: MAT_DIALOG_DATA_STUB },
+        { provide: ConfirmService, useValue: ConfirmServiceStub },
+      ],
       imports: [
         MatDialogModule,
         FormifyModule,
@@ -36,7 +41,7 @@ describe('FormButtonsComponent', () => {
   it('doDelete() should open the confirmation dialog', () => {
     const ID = 55
     component.model = {ID}
-    spyOn(component.confirm, 'ask').and.callFake(ConfirmServiceStub.ask)
+    spyOn(component.confirm, 'ask').and.callThrough()
     spyOn(component, 'delete')
     spyOn(component, 'close')
     component.doDelete()

@@ -22,8 +22,12 @@
     display: inline-block;
   }
 
-  .edit-button {
+  button {
     color: #999
+  }
+
+  .delete-button > button {
+    color: #E63131
   }
 }
 

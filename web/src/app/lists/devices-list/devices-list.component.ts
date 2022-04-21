@@ -29,6 +29,14 @@ export class DevicesListComponent implements OnInit {
     this.openAddDeviceDialog()
   }
 
+  deleteDevice = (device: DeviceItem) => {
+    if (device.ID) {
+      this.apiService.deleteDevice(device.ID).subscribe(data => {
+        this.loadData()
+      })
+    }
+  }
+
   openEditDeviceDialog(data: DeviceItem) {
     const dialogRef = this.dialog.open(EditDeviceComponent, { width: '80%', data });
 
