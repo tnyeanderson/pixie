@@ -21,6 +21,7 @@ export class DeviceItem extends GormModel {
   Name = ''
   Mac = ''
   GroupName = ''
+  LastBooted = ''
   ScriptID = ''
   Script = new ScriptItem()
 }

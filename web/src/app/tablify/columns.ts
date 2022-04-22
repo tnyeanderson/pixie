@@ -86,7 +86,8 @@ export class ListColumns {
         new Column('Name', 'string'),
         new Column('Mac', 'string'),
         new Column('GroupName', 'string', 'Group'),
-        new Column('ScriptID', 'string', 'Script', ['Script', 'Name'], 'Default')
+        new Column('ScriptID', 'string', 'Script', ['Script', 'Name'], 'Default'),
+        new Column('LastBooted', 'timestamp', 'Latest boot')
     ]
 
     static logsColumns: Column[] = [

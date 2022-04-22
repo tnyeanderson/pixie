@@ -3,6 +3,7 @@ package queries
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/tnyeanderson/pixie/db"
 	"github.com/tnyeanderson/pixie/db/models"
@@ -21,6 +22,7 @@ func GetDevices() ([]models.Device, error) {
 
 func GetDeviceByMac(mac string) (*models.Device, error) {
 	var device models.Device
+	// TODO: /src/db/queries/device.go:25 record not found
 	result := db.Get().Joins("Script").First(&device, "mac = ?", mac)
 
 	if result.Error != nil || device.ID == 0 {
@@ -61,6 +63,17 @@ func UpdateDevice(id uint, updated models.Device) (*models.Device, error) {
 	)
 
 	return &device, nil
+}
+
+func UpdateDeviceLastBoot(id uint) error {
+	var device models.Device
+	result := db.Get().Model(device).Where("id = ?", id).Update("last_booted", time.Now())
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
 
 func DeleteDevice(id uint) (*models.Device, error) {

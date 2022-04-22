@@ -20,19 +20,19 @@ func BootHandler(c *gin.Context) {
 	}
 
 	d, err := queries.GetDeviceByMac(mac)
-	var device models.Device
+	var device *models.Device
 
 	if err != nil {
 		print("Adding device: " + mac)
-		device = models.Device{}
-		device.Mac = mac
-		_, err := queries.AddDevice(device)
+		toAdd := models.Device{}
+		toAdd.Mac = mac
+		device, err = queries.AddDevice(toAdd)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 	} else {
-		device = *d
+		device = d
 	}
 
 	var scriptPath string
@@ -47,6 +47,8 @@ func BootHandler(c *gin.Context) {
 		fmt.Sprint("Device ", device.Mac, " booted script ", scriptPath),
 		fmt.Sprintf("%+v\n", device),
 	)
+
+	queries.UpdateDeviceLastBoot(device.ID)
 
 	c.File(scriptPath)
 }
