@@ -21,14 +21,14 @@ PROJECT IS IN ALPHA. MORE DOCUMENTATION AND FUNCTIONALITY TO COME
 - [ ] Boot script handlebars templating
 - [ ] Library of boots (ex: ubuntu, debian, coreos, etc) that can be "imported" and modified
 - [ ] Temporarily boot another script for testing/debugging (for x number of boots, or y seconds, etc)
-- [ ] Disable TFTP server (use your own)
+- [ ] Disable TFTP server? (use your own)
 
 ## Getting started
 First, generate a `pixie.kpxe` file that will be the default boot image sent by the DHCP server. The URL used below will be the [chainloaded](https://ipxe.org/howto/chainloading) host.
 
 This requires building iPXE which requires a fair amount of dependencies. A docker image is defined here for convenience:
 ```bash
-# Build the docker image we will use to generate the kpxe file
+# Build the docker image used to generate the kpxe file
 docker build -f Dockerfile.generate-kpxe -t pixie-kpxe-generator .
 ```
 
