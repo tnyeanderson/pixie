@@ -2,6 +2,7 @@ paths:
   # Path to the user config file (recursive, lol)
   # Changing this in the user config won't actually do anything.
   # Only the value present at compile time is used
+  # To actually change, use the --config-file flag
   configfile: "data/pixie.yaml"
   
   # API URL subpath

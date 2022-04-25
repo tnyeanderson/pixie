@@ -3,6 +3,7 @@ package config
 import (
 	_ "embed"
 	"errors"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -25,22 +26,31 @@ func loadDefaults() {
 }
 
 func init() {
+	loadConfig()
+	printConfig()
+	validateOrDie()
+}
+
+func loadConfig() {
 	loadDefaults()
-
+	parseConfigFileFlag()
 	readUserConfig()
+}
 
+func parseConfigFileFlag() {
+	flag.StringVar(&Pixie.Paths.ConfigFile, "config-file", Pixie.Paths.ConfigFile, "path to config file")
+	flag.Parse()
+}
+
+func printConfig() {
 	fmt.Printf("%+v\n", Pixie)
-
-	if err := validateConfig(); err != nil {
-		fmt.Println("CONFIG ERROR: ", err.Error())
-		os.Exit(1)
-	}
 }
 
 func readUserConfig() {
-	content, err := readConfigFile(Pixie.Paths.ConfigFile)
+	configpath := Pixie.Paths.ConfigFile
+	content, err := readConfigFile(configpath)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("User config not found or could not be read: ", configpath)
 		fmt.Println("Using default config")
 	} else {
 		if err := parseConfigYaml(content); err != nil {
@@ -74,4 +84,11 @@ func validateConfig() error {
 		return errors.New("Paths.Images must start with Paths.FileServer")
 	}
 	return nil
+}
+
+func validateOrDie() {
+	if err := validateConfig(); err != nil {
+		fmt.Println("CONFIG ERROR: ", err.Error())
+		os.Exit(1)
+	}
 }

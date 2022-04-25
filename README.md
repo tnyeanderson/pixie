@@ -13,8 +13,8 @@ PROJECT IS IN ALPHA. MORE DOCUMENTATION AND FUNCTIONALITY TO COME
 - [x] Assign a default boot script
 - [x] Assign scripts to devices
 - [x] Logging (audit trail)
-- [ ] Upload/manage config files (ignition, clout-init, etc)
-- [ ] Config file (ignition, clout-init, etc) handlebars templating
+- [ ] Upload/manage config files (ignition, cloud-init, etc)
+- [ ] Config file (ignition, cloud-init, etc) handlebars templating
 - [ ] Build a boot script (select images, config) with a GUI
 - [ ] Authentication (RBAC?)
 - [ ] Groups (assign a script/config to a group of devices)
@@ -44,18 +44,16 @@ docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://local
 
 Then, run the app!
 
-## Configuration
-
-**The default configuration should be sufficient for most users.**
-
-To tweak the config:
-```
-cp config/default.yaml data/pixie.yaml
+## Run using docker
+This is the recommended method:
+```bash
+docker-compose up -d
 ```
 
-Then edit `data/pixie.yaml` as needed.
+Then navigate to `localhost:8880` in a browser.
 
 ## Run locally
+Or run the app without docker:
 ```bash
 # Build the web interface
 (cd web/ && ng build)
@@ -65,9 +63,20 @@ sudo go run main.go
 
 Then navigate to `localhost:8880` in a browser.
 
-## Run using docker
+## Configuration
+
+**The default configuration should be sufficient for most users.**
+
+To see configuration options and their explanations, see the [default config](config/default.yaml)
+
+To tweak the config, use the default config as a template:
 ```bash
-docker-compose up -d
+cp config/default.yaml data/pixie.yaml
 ```
 
-Then navigate to `localhost:8880` in a browser.
+Then edit `data/pixie.yaml` as needed.
+
+Or, load a different config file:
+```bash
+./pixie --config-file /path/to/config
+```
