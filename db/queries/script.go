@@ -3,6 +3,7 @@ package queries
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/tnyeanderson/pixie/db"
 	"github.com/tnyeanderson/pixie/db/models"
@@ -78,6 +79,18 @@ func UpdateScript(id uint, updated models.Script) (*models.Script, error) {
 	)
 
 	return &script, nil
+}
+
+func UpdateScriptLastAccessedByPath(fullpath string) error {
+	var script models.Script
+	scriptpath := utils.GetRelativeScriptPath(fullpath)
+	result := db.Get().Model(script).Where("path = ?", scriptpath).Update("last_accessed", time.Now())
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
 
 func DeleteScriptById(id uint) (*models.Script, error) {

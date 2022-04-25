@@ -71,7 +71,7 @@ func ListenHTTP() {
 	r.GET("/boot.ipxe", handlers.BootHandler)
 
 	// File server
-	r.Static("/files", config.Pixie.Paths.FileServer)
+	r.GET("/files/*path", handlers.StaticHandler)
 
 	// Angular site
 	r.Static("/app", config.Pixie.Paths.WebRoot)

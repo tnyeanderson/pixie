@@ -10,6 +10,7 @@ import (
 
 	"github.com/pin/tftp"
 	"github.com/tnyeanderson/pixie/config"
+	"github.com/tnyeanderson/pixie/db/queries"
 )
 
 // readHandler is called when client starts file download from server
@@ -34,6 +35,7 @@ func readHandler(filename string, rf io.ReaderFrom) error {
 		return err
 	}
 	fmt.Printf("%d bytes sent\n", n)
+	queries.UpdateScriptLastAccessedByPath(filename)
 	return nil
 }
 

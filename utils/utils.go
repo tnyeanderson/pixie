@@ -10,6 +10,8 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+
+	"github.com/tnyeanderson/pixie/config"
 )
 
 func SanitizeMac(mac string) (string, error) {
@@ -175,4 +177,22 @@ func GetNextName(name string, existingNames []string) string {
 			return possibleName
 		}
 	}
+}
+
+func IsScriptPath(fullpath string) bool {
+	return strings.HasPrefix(fullpath, config.Pixie.Paths.Scripts)
+}
+
+func IsImagePath(fullpath string) bool {
+	return strings.HasPrefix(fullpath, config.Pixie.Paths.Images)
+}
+
+func GetRelativeImagePath(fullpath string) string {
+	prefix := config.Pixie.Paths.Images + "/"
+	return strings.TrimPrefix(fullpath, prefix)
+}
+
+func GetRelativeScriptPath(fullpath string) string {
+	prefix := config.Pixie.Paths.Scripts + "/"
+	return strings.TrimPrefix(fullpath, prefix)
 }

@@ -3,6 +3,7 @@ package queries
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/tnyeanderson/pixie/db"
 	"github.com/tnyeanderson/pixie/db/models"
@@ -78,6 +79,18 @@ func UpdateImage(id uint, updated models.Image) (*models.Image, error) {
 	)
 
 	return &image, nil
+}
+
+func UpdateImageLastAccessedByPath(fullpath string) error {
+	var image models.Image
+	imagepath := utils.GetRelativeImagePath(fullpath)
+	result := db.Get().Model(image).Where("path = ?", imagepath).Update("last_accessed", time.Now())
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
 
 func DeleteImageById(id uint) (*models.Image, error) {
