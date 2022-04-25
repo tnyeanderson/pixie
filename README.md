@@ -44,6 +44,17 @@ docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://local
 
 Then, run the app!
 
+## Configuration
+
+**The default configuration should be sufficient for most users.**
+
+To tweak the config:
+```
+cp config/default.yaml data/pixie.yaml
+```
+
+Then edit `data/pixie.yaml` as needed.
+
 ## Run locally
 ```bash
 # Build the web interface

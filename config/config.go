@@ -1,6 +1,7 @@
 package config
 
 import (
+	_ "embed"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -12,26 +13,21 @@ import (
 
 var Pixie = ConfigModel{}
 
+//go:embed default.yaml
+var defaultConfigYaml []byte
+
 func loadDefaults() {
-	Pixie.Paths.Api = "/api/v1"
-	Pixie.Paths.ConfigFile = "data/pixie.yaml"
-	Pixie.Paths.Database = "data/pixie.db"
-	Pixie.Paths.FileServer = "data/files"
-	Pixie.Paths.Scripts = "data/files/scripts"
-	Pixie.Paths.Images = "data/files/images"
-	Pixie.Paths.FallbackScript = "defaults/shell.ipxe"
-	Pixie.Paths.WebRoot = "web/dist/html"
-	Pixie.AccessModes.FileDefault = uint32(0660)
-	Pixie.AccessModes.DirDefault = uint32(0770)
+	err := parseConfigYaml(defaultConfigYaml)
+	if err != nil {
+		fmt.Println("Error parsing default config: ", err.Error())
+		os.Exit(1)
+	}
 }
 
 func init() {
 	loadDefaults()
 
-	if err := readConfigFile(Pixie.Paths.ConfigFile); err != nil {
-		fmt.Println(err.Error())
-		fmt.Println("Loading default config")
-	}
+	readUserConfig()
 
 	fmt.Printf("%+v\n", Pixie)
 
@@ -41,12 +37,29 @@ func init() {
 	}
 }
 
-func readConfigFile(file string) error {
+func readUserConfig() {
+	content, err := readConfigFile(Pixie.Paths.ConfigFile)
+	if err != nil {
+		fmt.Println(err.Error())
+		fmt.Println("Using default config")
+	} else {
+		if err := parseConfigYaml(content); err != nil {
+			fmt.Println(err.Error())
+			fmt.Println("Using default config")
+		}
+	}
+}
+
+func readConfigFile(file string) ([]byte, error) {
 	contents, err := ioutil.ReadFile(file)
 	if err != nil {
-		return errors.New("Unable to read config file: " + err.Error())
+		return nil, errors.New("Unable to read config file: " + err.Error())
 	}
-	err = yaml.Unmarshal(contents, &Pixie)
+	return contents, nil
+}
+
+func parseConfigYaml(content []byte) error {
+	err := yaml.UnmarshalStrict(content, &Pixie)
 	if err != nil {
 		return errors.New("Unable to parse config file: " + err.Error())
 	}
