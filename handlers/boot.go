@@ -50,5 +50,7 @@ func BootHandler(c *gin.Context) {
 
 	queries.UpdateDeviceLastBoot(device.ID)
 
+	queries.LogLastAccessed(scriptPath)
+
 	c.File(scriptPath)
 }
