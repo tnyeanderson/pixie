@@ -1,7 +1,7 @@
 package models
 
 import (
-	"time"
+	"database/sql"
 
 	"gorm.io/gorm"
 )
@@ -13,7 +13,7 @@ type Device struct {
 	Mac        string `gorm:"unique;not null"`
 	Name       string
 	GroupName  string
-	LastBooted time.Time
+	LastBooted sql.NullTime
 	ScriptID   uint `gorm:"type:INT UNSIGNED REFERENCES scripts(id) ON DELETE RESTRICT ON UPDATE RESTRICT"`
 	Script     Script
 }

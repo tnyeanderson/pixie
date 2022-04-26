@@ -20,6 +20,7 @@ func ConnectDatabase() {
 	database.AutoMigrate(&models.Device{})
 	database.AutoMigrate(&models.Script{})
 	database.AutoMigrate(&models.Image{})
+	database.AutoMigrate(&models.CloudConfig{})
 	database.AutoMigrate(&models.Log{})
 
 	DB = database

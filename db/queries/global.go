@@ -7,5 +7,7 @@ func LogLastAccessed(fullpath string) {
 		UpdateScriptLastAccessedByPath(fullpath)
 	} else if utils.IsImagePath(fullpath) {
 		UpdateImageLastAccessedByPath(fullpath)
+	} else if utils.IsCloudConfigPath(fullpath) {
+		UpdateCloudConfigLastAccessedByPath(fullpath)
 	}
 }

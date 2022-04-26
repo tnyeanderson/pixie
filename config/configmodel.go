@@ -7,6 +7,7 @@ type ConfigModel struct {
 		FileServer     string
 		Scripts        string
 		Images         string
+		CloudConfigs   string
 		FallbackScript string
 		WebRoot        string
 		Database       string

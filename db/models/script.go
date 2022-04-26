@@ -1,7 +1,7 @@
 package models
 
 import (
-	"time"
+	"database/sql"
 
 	"gorm.io/gorm"
 )
@@ -11,5 +11,5 @@ type Script struct {
 	Name         string `gorm:"unique"`
 	Path         string `gorm:"unique;not null"`
 	IsDefault    bool
-	LastAccessed time.Time
+	LastAccessed sql.NullTime
 }

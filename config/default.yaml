@@ -19,6 +19,11 @@ paths:
   # Must be inside FileServer directory
   images: "data/files/images"
 
+  # Path to root directory for serving cloud config files
+  # Things like cloud-init, ignition, etc
+  # Must be inside FileServer directory
+  cloudconfigs: "data/files/cloudconfigs"
+
   # Path to the script which is served if both:
   #   1) no script is associated to the device
   #   2) no default script has been set by the user

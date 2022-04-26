@@ -113,3 +113,54 @@ func SyncImagesHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, paths)
 }
+
+func SyncCloudConfigsHandler(c *gin.Context) {
+	files, err := utils.GetFilesRecursive(config.Pixie.Paths.CloudConfigs)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	cloudconfigs, err := queries.GetCloudConfigs()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	paths := []string{}
+	for _, image := range cloudconfigs {
+		paths = append(paths, image.Path)
+	}
+
+	toAdd, toDelete := utils.GetUniqueArrayDiff(paths, files)
+
+	errors := []string{}
+
+	for _, path := range toAdd {
+		cloudconfig := models.CloudConfig{}
+		_, fileName := filepath.Split(path)
+		cloudconfig.Name = queries.GetNewCloudConfigName(fileName)
+		cloudconfig.Path = path
+
+		_, err := queries.AddCloudConfig(cloudconfig)
+
+		if err != nil {
+			msg := path + ": " + err.Error()
+			errors = append(errors, msg)
+		}
+	}
+
+	for _, path := range toDelete {
+		if _, err := queries.DeleteCloudConfigByPath(path); err != nil {
+			msg := path + ": " + err.Error()
+			errors = append(errors, msg)
+		}
+	}
+
+	if len(errors) > 0 {
+		c.JSON(http.StatusInternalServerError, gin.H{"errors": errors})
+		return
+	}
+
+	c.JSON(http.StatusOK, paths)
+}

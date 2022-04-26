@@ -187,6 +187,10 @@ func IsImagePath(fullpath string) bool {
 	return strings.HasPrefix(fullpath, config.Pixie.Paths.Images)
 }
 
+func IsCloudConfigPath(fullpath string) bool {
+	return strings.HasPrefix(fullpath, config.Pixie.Paths.CloudConfigs)
+}
+
 func GetRelativeImagePath(fullpath string) string {
 	prefix := config.Pixie.Paths.Images + "/"
 	return strings.TrimPrefix(fullpath, prefix)
@@ -194,5 +198,10 @@ func GetRelativeImagePath(fullpath string) string {
 
 func GetRelativeScriptPath(fullpath string) string {
 	prefix := config.Pixie.Paths.Scripts + "/"
+	return strings.TrimPrefix(fullpath, prefix)
+}
+
+func GetRelativeCloudConfigPath(fullpath string) string {
+	prefix := config.Pixie.Paths.CloudConfigs + "/"
 	return strings.TrimPrefix(fullpath, prefix)
 }

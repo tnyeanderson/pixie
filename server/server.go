@@ -25,6 +25,15 @@ func ListenHTTP() {
 	// API
 	v1 := r.Group(config.Pixie.Paths.Api)
 	{
+		cloudconfigs := v1.Group("cloudconfigs")
+		{
+			cloudconfigs.GET("/", api.GetAllCloudConfigsHandler)
+			cloudconfigs.POST("/add", api.AddCloudConfigHandler)
+			cloudconfigs.POST("/update/:id", api.UpdateCloudConfigHandler)
+			cloudconfigs.DELETE("/delete/:id", api.DeleteCloudConfigHandler)
+			cloudconfigs.POST("/sync", api.SyncCloudConfigsHandler)
+		}
+
 		devices := v1.Group("devices")
 		{
 			devices.GET("/", api.GetAllDevicesHandler)
