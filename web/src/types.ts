@@ -12,6 +12,8 @@ export class FileItem extends GormModel {
   LastAccessed = ''
 }
 
+export class CloudConfigItem extends FileItem { }
+
 export class ImageItem extends FileItem { }
 
 export class ScriptItem extends FileItem {

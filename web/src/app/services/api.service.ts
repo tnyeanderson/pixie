@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, throwError } from 'rxjs';
-import { DeviceItem, ImageItem, ScriptItem } from 'src/types';
+import { CloudConfigItem, DeviceItem, ImageItem, ScriptItem } from 'src/types';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,34 @@ export class ApiService {
     const formData = new FormData()
     formData.append('file', file)
     return formData
+  }
+
+  getCloudConfigs() {
+    return this.httpClient.get(`${this.baseUrl}/cloudconfigs`).pipe(catchError(this.handleError))
+  }
+
+  syncCloudConfigs() {
+    return this.httpClient.post(`${this.baseUrl}/cloudconfigs/sync`, {}).pipe(catchError(this.handleError))
+  }
+
+  addCloudConfig(cloudConfig: CloudConfigItem) {
+    return this.httpClient.post(`${this.baseUrl}/cloudconfigs/add`, cloudConfig).pipe(catchError(this.handleError))
+  }
+
+  uploadCloudConfig(path: string, cloudConfig: File) {
+    return this.httpClient.put(`${this.baseUrl}/upload/cloudconfig?path=${path}`, this.fileUploadBody(cloudConfig)).pipe(catchError(this.handleError))
+  }
+
+  uploadCloudConfigText(path: string, cloudConfig: string) {
+    return this.httpClient.put(`${this.baseUrl}/upload/cloudconfig?path=${path}`, cloudConfig).pipe(catchError(this.handleError))
+  }
+
+  editCloudConfig(id: number, cloudConfig: CloudConfigItem) {
+    return this.httpClient.post(`${this.baseUrl}/cloudconfigs/update/${id}`, cloudConfig).pipe(catchError(this.handleError))
+  }
+
+  deleteCloudConfig(id: number) {
+    return this.httpClient.delete(`${this.baseUrl}/cloudconfigs/delete/${id}`).pipe(catchError(this.handleError))
   }
 
   getImages() {

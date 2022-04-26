@@ -11,6 +11,11 @@ export const MAT_DIALOG_DATA_SCRIPT_STUB = {
     callback: () => { }
 }
 
+export const MAT_DIALOG_DATA_CLOUD_CONFIG_STUB = {
+    Path: 'MOCKCLOUDCONFIGPATH',
+    callback: () => { }
+}
+
 export const ConfirmServiceStub = {
     ask: (callback: Function, prompt?: string) => {
         callback()

@@ -65,9 +65,9 @@ func ListenHTTP() {
 
 		upload := v1.Group("upload")
 		{
+			upload.PUT("/cloudconfig", api.UploadCloudConfigHandler)
 			upload.PUT("/image", api.UploadImageHandler)
 			upload.PUT("/script", api.UploadScriptHandler)
-
 		}
 
 		logs := v1.Group("logs")

@@ -28,6 +28,9 @@ import { ConfirmService } from './services/confirm/confirm.service';
 import { ConfirmationDialogComponent } from './services/confirm/confirmation-dialog/confirmation-dialog.component';
 import { TablifyModule } from './tablify/tablify.module';
 import { ReloadButtonModule } from './fragments/reload-button/reload-button.module';
+import { CloudConfigsListComponent } from './lists/cloud-configs-list/cloud-configs-list.component';
+import { AddCloudConfigComponent } from './forms/add-cloud-config/add-cloud-config.component';
+import { EditCloudConfigComponent } from './forms/edit-cloud-config/edit-cloud-config.component';
 
 
 @NgModule({
@@ -44,6 +47,9 @@ import { ReloadButtonModule } from './fragments/reload-button/reload-button.modu
     EditDeviceComponent,
     LogsListComponent,
     EditImageComponent,
+    CloudConfigsListComponent,
+    AddCloudConfigComponent,
+    EditCloudConfigComponent,
   ],
   imports: [
     BrowserModule,

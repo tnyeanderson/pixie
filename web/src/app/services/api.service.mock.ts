@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http"
 import { of, throwError } from "rxjs"
-import { DeviceItem, ImageItem, LogItem, ScriptItem } from "src/types"
+import { CloudConfigItem, DeviceItem, ImageItem, LogItem, ScriptItem } from "src/types"
 import { ApiService } from "./api.service"
 
 export const MOCK_BLOB_CONTENT = 'blobcontent'
@@ -9,6 +9,20 @@ export const MOCK_BLOB = new Blob([MOCK_BLOB_CONTENT])
 
 export const MOCK_FILE = new File([MOCK_BLOB_CONTENT], 'testFile.txt')
 
+export const MOCK_CLOUD_CONFIGS = [
+    {
+        ID: 8,
+        Name: 'helloha',
+        Path: 'testpathit',
+    },
+    {
+        ID: 87,
+        Name: 'hellotwohi',
+        Path: 'testpathtoowoo',
+    }
+] as CloudConfigItem[]
+
+// TODO: IsDefault
 export const MOCK_SCRIPTS = [
     {
         ID: 5,
@@ -80,6 +94,24 @@ export class MockApiService implements ApiService {
         return formData
     }
 
+    getCloudConfigs() { return of(MOCK_CLOUD_CONFIGS) }
+
+    syncCloudConfigs() { return of({}) }
+
+    addCloudConfig(cloudConfig: CloudConfigItem) { return of({data: cloudConfig}) }
+
+    uploadCloudConfig(path: string, cloudConfig: File) { return of({ status: `'${path}' uploaded!` }) }
+
+    uploadCloudConfigText(path: string, cloudConfig: string) { return of({ status: `'${path}' uploaded!` }) }
+
+    editCloudConfig(id: number, cloudConfig: CloudConfigItem) { return of({data: cloudConfig}) }
+
+    deleteCloudConfig(id: number) {
+        const cloudConfig = new CloudConfigItem()
+        cloudConfig.ID = id
+        return of({ data: cloudConfig })
+    }
+
     getImages() { return of(MOCK_IMAGES) }
 
     // TODO: Get return
@@ -104,9 +136,9 @@ export class MockApiService implements ApiService {
 
     addScript(script: ScriptItem) { return of({ data: script }) }
 
-    uploadScript(path: string, script: File) { return of({ data: script }) }
+    uploadScript(path: string, script: File) { return of({ status: `'${path}' uploaded!` }) }
 
-    uploadScriptText(path: string, script: string) { return of({ data: script }) }
+    uploadScriptText(path: string, script: string) { return of({ status: `'${path}' uploaded!` }) }
 
     editScript(id: number, script: ScriptItem) { return of({ data: script }) }
 
