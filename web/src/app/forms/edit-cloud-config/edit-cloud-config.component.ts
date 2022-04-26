@@ -14,7 +14,6 @@ import { CloudConfigItem } from 'src/types';
 export class EditCloudConfigComponent implements OnInit {
   model: CloudConfigItem = new CloudConfigItem()
   cloudConfigFile: UploadInline
-  onInitCount = 0
 
   constructor(
     public dialogRef: MatDialogRef<EditCloudConfigComponent>,
@@ -75,7 +74,6 @@ export class EditCloudConfigComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.onInitCount++
     this.cloudConfigFile.setModeInline()
     this.initializeContent()
   }

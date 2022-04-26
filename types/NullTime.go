@@ -20,6 +20,12 @@ func (nb *NullTime) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON for NullBool
 func (nb *NullTime) UnmarshalJSON(b []byte) error {
+	// For some reason the byte array is just two double quotes
+	emptyStr := "\"\""
+	if string(b) == emptyStr {
+		nb = nil
+		return nil
+	}
 	err := json.Unmarshal(b, &nb.Time)
 	nb.Valid = (err == nil)
 	return err
