@@ -10,13 +10,14 @@ import (
 
 var DB *gorm.DB
 
-func ConnectDatabase() {
+func Initialize() {
 	database, err := gorm.Open(sqlite.Open(config.Pixie.Paths.Database))
 
 	if err != nil {
 		panic("Failed to connect to database!")
 	}
 
+	// Set up tables based on models
 	database.AutoMigrate(&models.Device{})
 	database.AutoMigrate(&models.Script{})
 	database.AutoMigrate(&models.Image{})
