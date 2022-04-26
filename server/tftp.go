@@ -35,7 +35,7 @@ func readHandler(filename string, rf io.ReaderFrom) error {
 		return err
 	}
 	fmt.Printf("%d bytes sent\n", n)
-	queries.UpdateScriptLastAccessedByPath(filename)
+	queries.LogLastAccessed(filename)
 	return nil
 }
 

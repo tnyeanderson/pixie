@@ -13,7 +13,7 @@ PROJECT IS IN ALPHA. MORE DOCUMENTATION AND FUNCTIONALITY TO COME
 - [x] Assign a default boot script
 - [x] Assign scripts to devices
 - [x] Logging (audit trail)
-- [ ] Upload/manage config files (ignition, cloud-init, etc)
+- [x] Upload/manage config files (ignition, cloud-init, etc)
 - [ ] Config file (ignition, cloud-init, etc) handlebars templating
 - [ ] Build a boot script (select images, config) with a GUI
 - [ ] Authentication (RBAC?)
