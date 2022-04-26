@@ -19,7 +19,7 @@ export class Column {
 
     getValue(obj: any) {
         const val: string = this.getRawValue(obj)
-        if (this.isTimestamp()) {
+        if (val && this.isTimestamp()) {
             return new Date(val).toLocaleString()
         }
         return val
@@ -68,17 +68,20 @@ export class Column {
 
 export class ListColumns {
     static idColumn = new Column('ID', 'number')
+    static lastAccessedColumn = new Column('LastAccessed', 'timestamp', 'Last Accessed')
 
     static imagesColumns: Column[] = [
         this.idColumn,
         new Column('Name', 'string'),
         new Column('Path', 'string'),
+        this.lastAccessedColumn,
     ]
 
     static scriptsColumns: Column[] = [
         this.idColumn,
         new Column('Name', 'string'),
         new Column('Path', 'string'),
+        this.lastAccessedColumn,
     ]
 
     static devicesColumns: Column[] = [

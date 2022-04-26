@@ -1,8 +1,7 @@
 package models
 
 import (
-	"database/sql"
-
+	"github.com/tnyeanderson/pixie/types"
 	"gorm.io/gorm"
 )
 
@@ -13,7 +12,7 @@ type Device struct {
 	Mac        string `gorm:"unique;not null"`
 	Name       string
 	GroupName  string
-	LastBooted sql.NullTime
+	LastBooted types.NullTime
 	ScriptID   uint `gorm:"type:INT UNSIGNED REFERENCES scripts(id) ON DELETE RESTRICT ON UPDATE RESTRICT"`
 	Script     Script
 }

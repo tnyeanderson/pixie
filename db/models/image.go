@@ -1,8 +1,7 @@
 package models
 
 import (
-	"database/sql"
-
+	"github.com/tnyeanderson/pixie/types"
 	"gorm.io/gorm"
 )
 
@@ -10,5 +9,5 @@ type Image struct {
 	gorm.Model
 	Name         string `gorm:"unique"`
 	Path         string `gorm:"unique;not null"`
-	LastAccessed sql.NullTime
+	LastAccessed types.NullTime
 }

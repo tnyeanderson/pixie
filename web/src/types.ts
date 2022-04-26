@@ -9,6 +9,7 @@ export class GormModel {
 export class FileItem extends GormModel {
   Name = ''
   Path = ''
+  LastAccessed = ''
 }
 
 export class ImageItem extends FileItem { }
