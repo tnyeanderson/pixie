@@ -11,6 +11,8 @@ import (
 func StaticHandler(c *gin.Context) {
 	subpath := c.Param("path")
 	fullpath := path.Join(config.Pixie.Paths.FileServer, subpath)
-	queries.LogLastAccessed(fullpath)
+	if c.Query("log") != "disable" {
+		queries.LogLastAccessed(fullpath)
+	}
 	c.File(fullpath)
 }

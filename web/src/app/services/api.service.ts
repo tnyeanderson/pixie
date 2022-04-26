@@ -135,7 +135,8 @@ export class ApiService {
 
   getFileContent(path: string) {
     // TODO: Why is error checking commented?
-    return this.httpClient.get(`${this.filesBaseUrl}/${path}`, {responseType: 'blob'}) //.pipe(catchError(this.handleError))
+    // Disable logging here to not trigger an update to LastAccessed
+    return this.httpClient.get(`${this.filesBaseUrl}/${path}?log=disable`, {responseType: 'blob'}) //.pipe(catchError(this.handleError))
   }
 
   getLogs() {
