@@ -1,10 +1,8 @@
 package utils
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -38,39 +36,6 @@ func FormatMac(mac string) string {
 		out = append(out, mac[i:i+2])
 	}
 	return strings.Join(out, ":")
-}
-
-func WriteJson(rw http.ResponseWriter, b interface{}) {
-	body, err := json.Marshal(b)
-	if err != nil {
-		http.Error(rw, "Error marshalling result to JSON", 500)
-		return
-	}
-
-	rw.Header().Set("Content-Type", "application/json")
-	rw.Write(body)
-}
-
-func ParseJson(target interface{}, rw http.ResponseWriter, r *http.Request) (interface{}, error) {
-	if r.Header.Get("Content-Type") != "application/json" {
-		http.Error(rw, "Content Type is not application/json", http.StatusUnsupportedMediaType)
-		return nil, errors.New("wrong content type")
-	}
-	var unmarshalErr *json.UnmarshalTypeError
-
-	decoder := json.NewDecoder(r.Body)
-	decoder.DisallowUnknownFields()
-	err := decoder.Decode(target)
-	if err != nil {
-		if errors.As(err, &unmarshalErr) {
-			http.Error(rw, "Bad Request. Wrong Type provided for field "+unmarshalErr.Field, http.StatusBadRequest)
-		} else {
-			http.Error(rw, "Bad Request "+err.Error(), http.StatusBadRequest)
-		}
-		return nil, errors.New("bad request")
-	}
-
-	return target, nil
 }
 
 func ValidateSlug(slug string) (bool, error) {
