@@ -24,9 +24,11 @@ PROJECT IS IN ALPHA. MORE DOCUMENTATION AND FUNCTIONALITY TO COME
 - [ ] Disable TFTP server? (use your own)
 
 ## Getting started
-First, generate a `pixie.kpxe` file that will be the default boot image sent by the DHCP server. The URL used below will be the [chainloaded](https://ipxe.org/howto/chainloading) host.
+Pixie works by creating a static initial boot image for all PXE booted clients. This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the script located at `<PIXIEHOST>/boot.ipxe?mac=<MACADDRESS>`, which resolves to the appropriate boot script for the host with the provided MAC address.
 
-This requires building iPXE which requires a fair amount of dependencies. A docker image is defined here for convenience:
+For example, the call may look like: `http://pixiehost:8880/boot.ipxe?mac=112233445566`, which would load the script that Pixie has associated to the device with MAC address `112233445566`.
+
+Generating the `pixie.kpxe` file requires building iPXE, which requires a fair amount of dependencies. A docker image is defined here for convenience:
 ```bash
 # Build the docker image used to generate the kpxe file
 docker build -f Dockerfile.generate-kpxe -t pixie-kpxe-generator .
@@ -34,12 +36,12 @@ docker build -f Dockerfile.generate-kpxe -t pixie-kpxe-generator .
 
 The generated file will be placed inside the container at `/output/pixie.kpxe`, and it needs to be placed in the TFTP root directory using volume mounts.
 
-If using the default configuration, `Paths.FileServer` (the TFTP root) is `data/files`, so this will be used as an example.
+As an example, if using the default configuration, `Paths.FileServer` (the TFTP root) is `data/files`:
 ```bash
 # Create the local directory that the generated file will be copied into
 mkdir -p data/files
-# Change the localhost address below to a host that will resolve to Pixie!
-docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://localhost:8880'
+# Change the pixiehost address below to a host that will resolve to Pixie!
+docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://pixiehost:8880'
 ```
 
 Then, run the app!
@@ -76,11 +78,11 @@ Then navigate to `localhost:8880` in a browser.
 
 **The default configuration should be sufficient for most users.**
 
-To see configuration options and their explanations, see the [default config](config/default.yaml)
+To see configuration options and their explanations, see the [default config](src/config/default.yaml)
 
 To tweak the config, use the default config as a template:
 ```bash
-cp config/default.yaml data/pixie.yaml
+cp src/config/default.yaml data/pixie.yaml
 ```
 
 Then edit `data/pixie.yaml` as needed.
