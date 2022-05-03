@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/tnyeanderson/pixie/config"
 	"github.com/tnyeanderson/pixie/db"
 	"github.com/tnyeanderson/pixie/db/models"
 	"github.com/tnyeanderson/pixie/utils"
@@ -72,7 +73,7 @@ func UpdateCloudConfig(id uint, updated models.CloudConfig) (*models.CloudConfig
 
 func UpdateCloudConfigLastAccessedByPath(fullpath string) error {
 	var cloudconfig models.CloudConfig
-	cloudconfigpath := utils.GetRelativeCloudConfigPath(fullpath)
+	cloudconfigpath := utils.GetRelativeCloudConfigPath(fullpath, config.Pixie)
 	result := db.Get().Model(cloudconfig).Where("path = ?", cloudconfigpath).Update("last_accessed", time.Now())
 
 	if result.Error != nil {

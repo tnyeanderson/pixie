@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/tnyeanderson/pixie/config"
 	"github.com/tnyeanderson/pixie/db"
 	"github.com/tnyeanderson/pixie/db/models"
 	"github.com/tnyeanderson/pixie/utils"
@@ -83,7 +84,7 @@ func UpdateScript(id uint, updated models.Script) (*models.Script, error) {
 
 func UpdateScriptLastAccessedByPath(fullpath string) error {
 	var script models.Script
-	scriptpath := utils.GetRelativeScriptPath(fullpath)
+	scriptpath := utils.GetRelativeScriptPath(fullpath, config.Pixie)
 	result := db.Get().Model(script).Where("path = ?", scriptpath).Update("last_accessed", time.Now())
 
 	if result.Error != nil {

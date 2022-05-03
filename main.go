@@ -41,6 +41,8 @@ func start() {
 }
 
 func main() {
+	config.Initialize()
+
 	setupDirectories()
 
 	db.Initialize()

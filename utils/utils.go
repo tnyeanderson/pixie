@@ -144,29 +144,32 @@ func GetNextName(name string, existingNames []string) string {
 	}
 }
 
-func IsScriptPath(fullpath string) bool {
-	return strings.HasPrefix(fullpath, config.Pixie.Paths.Scripts)
+func IsScriptPath(fullpath string, config config.ConfigModel) bool {
+	prefix := config.Paths.Scripts + "/"
+	return strings.HasPrefix(fullpath, prefix)
 }
 
-func IsImagePath(fullpath string) bool {
-	return strings.HasPrefix(fullpath, config.Pixie.Paths.Images)
+func IsImagePath(fullpath string, config config.ConfigModel) bool {
+	prefix := config.Paths.Images + "/"
+	return strings.HasPrefix(fullpath, prefix)
 }
 
-func IsCloudConfigPath(fullpath string) bool {
-	return strings.HasPrefix(fullpath, config.Pixie.Paths.CloudConfigs)
+func IsCloudConfigPath(fullpath string, config config.ConfigModel) bool {
+	prefix := config.Paths.CloudConfigs + "/"
+	return strings.HasPrefix(fullpath, prefix)
 }
 
-func GetRelativeImagePath(fullpath string) string {
-	prefix := config.Pixie.Paths.Images + "/"
+func GetRelativeImagePath(fullpath string, config config.ConfigModel) string {
+	prefix := config.Paths.Images + "/"
 	return strings.TrimPrefix(fullpath, prefix)
 }
 
-func GetRelativeScriptPath(fullpath string) string {
-	prefix := config.Pixie.Paths.Scripts + "/"
+func GetRelativeScriptPath(fullpath string, config config.ConfigModel) string {
+	prefix := config.Paths.Scripts + "/"
 	return strings.TrimPrefix(fullpath, prefix)
 }
 
-func GetRelativeCloudConfigPath(fullpath string) string {
-	prefix := config.Pixie.Paths.CloudConfigs + "/"
+func GetRelativeCloudConfigPath(fullpath string, config config.ConfigModel) string {
+	prefix := config.Paths.CloudConfigs + "/"
 	return strings.TrimPrefix(fullpath, prefix)
 }

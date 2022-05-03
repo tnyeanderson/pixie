@@ -25,7 +25,7 @@ func loadDefaults() {
 	}
 }
 
-func init() {
+func Initialize() {
 	loadConfig()
 	printConfig()
 	validateOrDie()

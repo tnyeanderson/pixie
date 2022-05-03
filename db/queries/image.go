@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/tnyeanderson/pixie/config"
 	"github.com/tnyeanderson/pixie/db"
 	"github.com/tnyeanderson/pixie/db/models"
 	"github.com/tnyeanderson/pixie/utils"
@@ -83,7 +84,7 @@ func UpdateImage(id uint, updated models.Image) (*models.Image, error) {
 
 func UpdateImageLastAccessedByPath(fullpath string) error {
 	var image models.Image
-	imagepath := utils.GetRelativeImagePath(fullpath)
+	imagepath := utils.GetRelativeImagePath(fullpath, config.Pixie)
 	result := db.Get().Model(image).Where("path = ?", imagepath).Update("last_accessed", time.Now())
 
 	if result.Error != nil {
