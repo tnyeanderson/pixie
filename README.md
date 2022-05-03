@@ -35,7 +35,7 @@ Please feel free to open an issue or pull request!
 ![Audit log](screenshots/audit-log.png)
 
 ## Getting started
-Pixie works by creating a static initial boot image for all PXE booted clients. This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the script located at `<PIXIEHOST>/boot.ipxe?mac=<MACADDRESS>`, which resolves to the appropriate boot script for the host with the provided MAC address.
+Pixie works by creating a static initial boot image for all PXE booted clients. This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the script located at `<PIXIEHOST>/boot.ipxe?mac=<MACADDRESS>`, which resolves to the appropriate boot script for the device with the provided MAC address.
 
 For example, the call may look like: `http://pixiehost:8880/boot.ipxe?mac=112233445566`, which would load the script that Pixie has associated to the device with MAC address `112233445566`.
 
@@ -89,10 +89,11 @@ Then navigate to `localhost:8880` in a browser.
 
 **The default configuration should be sufficient for most users.**
 
-To see configuration options and their explanations, see the [default config](src/config/default.yaml)
+To show configuration options and their explanations, see the [default config](src/config/default.yaml)
 
-To tweak the config, use the default config as a template:
+To tweak the config, use the default as a template:
 ```bash
+# By default, the user config file is loaded from `data/pixie.yaml`
 cp src/config/default.yaml data/pixie.yaml
 ```
 
