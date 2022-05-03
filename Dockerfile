@@ -11,12 +11,11 @@ RUN npm run build
 FROM golang AS build-go
 RUN mkdir -p /src
 WORKDIR /src
-COPY go.mod go.sum ./
-RUN find /src
+COPY src/go.mod src/go.sum ./
 RUN go mod download
 # This package takes a while to compile. Cache for speed
 RUN go install gorm.io/driver/sqlite
-COPY . /src
+COPY src/ ./
 RUN go build
 
 # Final image
@@ -25,6 +24,6 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY --from=build-go /src/pixie ./pixie
 COPY --from=build-angular /web/dist ./web/dist
-COPY ./defaults ./defaults
+COPY src/defaults ./defaults
 
 ENTRYPOINT [ "/app/pixie" ]

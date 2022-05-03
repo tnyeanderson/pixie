@@ -38,7 +38,7 @@ If using the default configuration, `Paths.FileServer` (the TFTP root) is `data/
 ```bash
 # Create the local directory that the generated file will be copied into
 mkdir -p data/files
-# Change the localhost address below to a resolvable host!
+# Change the localhost address below to a host that will resolve to Pixie!
 docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://localhost:8880'
 ```
 
@@ -52,13 +52,22 @@ docker-compose up -d
 
 Then navigate to `localhost:8880` in a browser.
 
+>NOTE: The image can be rebuilt/updated with `docker-compose build`
+
 ## Run locally
-Or run the app without docker:
+To run the app without docker, first build the components:
 ```bash
 # Build the web interface
 (cd web/ && ng build)
-# Since a TFTP server is included, `sudo` must be used.
-sudo go run main.go
+# Build the app
+(cd src/ && go build -o ../pixie)
+```
+
+Then run the app:
+```bash
+# TFTP server (running on a privileged port) is included
+# Therefore sudo must be used.
+sudo ./pixie
 ```
 
 Then navigate to `localhost:8880` in a browser.
