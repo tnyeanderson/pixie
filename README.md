@@ -2,9 +2,11 @@
 
 Pixie is a web interface for managing and auditing PXE booted clients. Boot scripts, images, and cloud config files can be easily assigned to different devices on the fly. Every boot and every configuration change can be inspected via an audit log.
 
-When a device that isn't recognized by Pixie tries to network boot, it immediately appears in Pixie where it can be assigned a boot script, and an iPXE shell prompt is started on the device (or the user-assigned default script is loaded). Once assigned, the device can simply be restarted to have it boot to the assigned script.
+When a device that isn't recognized by Pixie tries to network boot, it immediately appears in Pixie where it can be assigned a boot script. Until then, an iPXE shell prompt is started on the device (or the user-assigned default script is loaded). Once assigned, the device can simply be restarted to have it boot to the assigned script.
 
 PROJECT IS IN ALPHA. MORE DOCUMENTATION AND FUNCTIONALITY TO COME... BUT IT WORKS! :)
+
+The `main` branch is considered stable (or as stable as possible for alpha sofware).
 
 Please feel free to open an issue or pull request!
 
