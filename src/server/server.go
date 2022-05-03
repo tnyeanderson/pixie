@@ -85,7 +85,7 @@ func ListenHTTP() {
 	// Angular site
 	r.Static("/app", config.Pixie.Paths.WebRoot)
 	r.NoRoute(func(c *gin.Context) {
-		fmt.Println("Route not found for: %s", c.Request.RequestURI)
+		fmt.Println("Route not found for:", c.Request.RequestURI)
 		if strings.HasPrefix(c.Request.RequestURI, "/app") {
 			c.File(filepath.Join(config.Pixie.Paths.WebRoot, "index.html"))
 		}
