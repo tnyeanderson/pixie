@@ -13,6 +13,7 @@ Please feel free to open an issue or pull request!
 - [x] Web interface & HTTP API
 - [x] Chainload iPXE boot image generator
 - [x] Upload/manage scripts and boot images
+- [x] Add scripts, cloud configs, and images in bulk directly from the filesystem
 - [x] Devices which try to network boot are added to the database
 - [x] Assign a default boot script
 - [x] Assign scripts to devices
@@ -26,6 +27,12 @@ Please feel free to open an issue or pull request!
 - [ ] Library of boots (ex: ubuntu, debian, coreos, etc) that can be "imported" and modified
 - [ ] Temporarily boot another script for testing/debugging (for x number of boots, or y seconds, etc)
 - [ ] Disable TFTP server? (use your own)
+
+## Screenshots
+![Device list](screenshots/devices.png)
+![Edit device](screenshots/device-edit.png)
+![Scripts list](screenshots/scripts.png)
+![Audit log](screenshots/audit-log.png)
 
 ## Getting started
 Pixie works by creating a static initial boot image for all PXE booted clients. This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the script located at `<PIXIEHOST>/boot.ipxe?mac=<MACADDRESS>`, which resolves to the appropriate boot script for the host with the provided MAC address.
