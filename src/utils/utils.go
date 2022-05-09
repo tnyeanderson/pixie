@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -11,6 +12,11 @@ import (
 
 	"github.com/tnyeanderson/pixie/config"
 )
+
+func Jsonify(obj interface{}) string {
+	jsonBytes, _ := json.MarshalIndent(obj, "", " ")
+	return string(jsonBytes[:])
+}
 
 func SanitizeMac(mac string) (string, error) {
 	re, err := regexp.Compile(`[:-]`)

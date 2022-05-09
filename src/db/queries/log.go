@@ -32,3 +32,18 @@ func AddLogMessage(logtype string, summary string, detail string) (*models.Log, 
 	log := models.Log{Type: logtype, Summary: summary, Detail: detail}
 	return AddLog(log)
 }
+
+func LogCreationOfFile(f models.LoggableItem) {
+	summary, detail := f.LogItemCreated()
+	AddLogMessage("CREATE", summary, detail)
+}
+
+func LogUpdationOfFile(f models.LoggableItem) {
+	summary, detail := f.LogItemUpdated()
+	AddLogMessage("UPDATE", summary, detail)
+}
+
+func LogDeletionOfFile(f models.LoggableItem) {
+	summary, detail := f.LogItemDeleted()
+	AddLogMessage("DELETE", summary, detail)
+}

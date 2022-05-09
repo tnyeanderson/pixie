@@ -2,7 +2,6 @@ package queries
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/tnyeanderson/pixie/config"
@@ -45,28 +44,21 @@ func AddCloudConfig(cloudconfig models.CloudConfig) (*models.CloudConfig, error)
 		return nil, result.Error
 	}
 
-	AddLogMessage(
-		"CREATE",
-		fmt.Sprint("Added cloudconfig: ID=", cloudconfig.ID, ", Path=", cloudconfig.Path),
-		fmt.Sprintf("%+v\n", cloudconfig),
-	)
+	LogCreationOfFile(cloudconfig)
 
 	return &cloudconfig, nil
 }
 
 func UpdateCloudConfig(id uint, updated models.CloudConfig) (*models.CloudConfig, error) {
 	var cloudconfig models.CloudConfig
+	updated.ID = id
 	result := db.Get().Model(cloudconfig).Select("Name", "Path").Where("id = ?", id).Updates(updated)
 
 	if result.Error != nil {
 		return nil, result.Error
 	}
 
-	AddLogMessage(
-		"UPDATE",
-		fmt.Sprint("Updated cloudconfig: ID=", id, ", Path=", updated.Path),
-		fmt.Sprintf("%+v\n", updated),
-	)
+	LogUpdationOfFile(updated)
 
 	return &cloudconfig, nil
 }
@@ -112,11 +104,7 @@ func DeleteCloudConfig(cloudconfig models.CloudConfig) (*models.CloudConfig, err
 		return nil, errors.New("no rows deleted")
 	}
 
-	AddLogMessage(
-		"DELETE",
-		fmt.Sprint("Deleted cloudconfig: ID=", cloudconfig.ID, ", Path=", cloudconfig.Path),
-		fmt.Sprintf("%+v\n", cloudconfig),
-	)
+	LogDeletionOfFile(cloudconfig)
 
 	return &cloudconfig, nil
 }
