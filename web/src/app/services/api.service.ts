@@ -8,7 +8,9 @@ import { CloudConfigItem, DeviceItem, ImageItem, ScriptItem } from 'src/types';
   providedIn: 'root'
 })
 export class ApiService {
-  host = 'http://localhost:8880'
+  // Set this to a different base URL if running the API on a different server, i.e.
+  //host = 'http://apihost:8880'
+  host = ''
   baseUrl = `${this.host}/api/v1`
   filesBaseUrl = `${this.host}/files`
 
