@@ -13,51 +13,42 @@ import (
 	"github.com/tnyeanderson/pixie/utils"
 )
 
-func GetAllScriptsHandler(c *gin.Context) {
-	scripts, err := queries.GetScripts()
+func GetAllFilesHandler(c *gin.Context) {
+	files, err := queries.GetFiles()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	} else {
-		c.JSON(http.StatusOK, scripts)
+		c.JSON(http.StatusOK, files)
 	}
 }
 
-func GetDefaultScriptHandler(c *gin.Context) {
-	script, err := queries.GetDefaultScript()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	} else {
-		c.JSON(http.StatusOK, script)
-	}
-}
-
-func AddScriptHandler(c *gin.Context) {
+func AddFileHandler(c *gin.Context) {
 	// Validate input
-	var script models.Script
+	var file models.File
 	var err error
-	if err := c.ShouldBindJSON(&script); err != nil {
+	if err := c.ShouldBindJSON(&file); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	script.Path, err = utils.ValidatePath(script.Path)
+	file.Path, err = utils.ValidatePath(file.Path)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	_, err = queries.AddScript(script)
+	_, err = queries.AddFile(file)
 
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": script})
+	c.JSON(http.StatusOK, gin.H{"data": file})
 }
 
-func UpdateScriptHandler(c *gin.Context) {
+func UpdateFileHandler(c *gin.Context) {
 	// Validate input
 	id64, err := strconv.ParseUint(c.Params.ByName("id"), 10, 64)
 	if err != nil {
@@ -66,30 +57,30 @@ func UpdateScriptHandler(c *gin.Context) {
 
 	id := uint(id64)
 
-	var script models.Script
-	if err := c.ShouldBindJSON(&script); err != nil {
+	var file models.File
+	if err := c.ShouldBindJSON(&file); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	script.Path, err = utils.ValidatePath(script.Path)
+	file.Path, err = utils.ValidatePath(file.Path)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	_, err = queries.UpdateScript(id, script)
+	_, err = queries.UpdateFile(id, file)
 
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": script})
+	c.JSON(http.StatusOK, gin.H{"data": file})
 }
 
-func DeleteScriptHandler(c *gin.Context) {
+func DeleteFileHandler(c *gin.Context) {
 	// Validate input
 	id64, err := strconv.ParseUint(c.Params.ByName("id"), 10, 64)
 	if err != nil {
@@ -98,14 +89,14 @@ func DeleteScriptHandler(c *gin.Context) {
 
 	id := uint(id64)
 
-	script, err := queries.DeleteScriptById(id)
+	file, err := queries.DeleteFileById(id)
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 
 	// We don't care about errors here
-	os.Remove(filepath.Join(config.Pixie.Paths.Scripts, script.Path))
+	os.Remove(filepath.Join(config.Pixie.Paths.FileServer, file.Path))
 
-	c.JSON(http.StatusOK, gin.H{"data": *script})
+	c.JSON(http.StatusOK, gin.H{"data": *file})
 }

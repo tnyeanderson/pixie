@@ -11,22 +11,22 @@ import (
 	"github.com/tnyeanderson/pixie/utils"
 )
 
-func SyncScriptsHandler(c *gin.Context) {
-	files, err := utils.GetFilesRecursive(config.Pixie.Paths.Scripts)
+func SyncFilesHandler(c *gin.Context) {
+	files, err := utils.GetFilesRecursive(config.Pixie.Paths.FileServer)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	scripts, err := queries.GetScripts()
+	filesInDatabase, err := queries.GetFiles()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	paths := []string{}
-	for _, script := range scripts {
-		paths = append(paths, script.Path)
+	for _, f := range filesInDatabase {
+		paths = append(paths, f.Path)
 	}
 
 	toAdd, toDelete := utils.GetUniqueArrayDiff(paths, files)
@@ -34,13 +34,12 @@ func SyncScriptsHandler(c *gin.Context) {
 	errors := []string{}
 
 	for _, path := range toAdd {
-		script := models.Script{}
+		f := models.File{}
 		_, fileName := filepath.Split(path)
-		script.Name = queries.GetNewScriptName(fileName)
-		script.Path = path
-		script.IsDefault = false
+		f.Name = queries.GetNewFileName(fileName)
+		f.Path = path
 
-		_, err := queries.AddScript(script)
+		_, err := queries.AddFile(f)
 
 		if err != nil {
 			msg := path + ": " + err.Error()
@@ -49,109 +48,7 @@ func SyncScriptsHandler(c *gin.Context) {
 	}
 
 	for _, path := range toDelete {
-		if _, err := queries.DeleteScriptByPath(path); err != nil {
-			msg := path + ": " + err.Error()
-			errors = append(errors, msg)
-		}
-	}
-
-	if len(errors) > 0 {
-		c.JSON(http.StatusInternalServerError, gin.H{"errors": errors})
-		return
-	}
-
-	c.JSON(http.StatusOK, paths)
-}
-
-func SyncImagesHandler(c *gin.Context) {
-	files, err := utils.GetFilesRecursive(config.Pixie.Paths.Images)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	images, err := queries.GetImages()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	paths := []string{}
-	for _, image := range images {
-		paths = append(paths, image.Path)
-	}
-
-	toAdd, toDelete := utils.GetUniqueArrayDiff(paths, files)
-
-	errors := []string{}
-
-	for _, path := range toAdd {
-		image := models.Image{}
-		_, fileName := filepath.Split(path)
-		image.Name = queries.GetNewImageName(fileName)
-		image.Path = path
-
-		_, err := queries.AddImage(image)
-
-		if err != nil {
-			msg := path + ": " + err.Error()
-			errors = append(errors, msg)
-		}
-	}
-
-	for _, path := range toDelete {
-		if _, err := queries.DeleteImageByPath(path); err != nil {
-			msg := path + ": " + err.Error()
-			errors = append(errors, msg)
-		}
-	}
-
-	if len(errors) > 0 {
-		c.JSON(http.StatusInternalServerError, gin.H{"errors": errors})
-		return
-	}
-
-	c.JSON(http.StatusOK, paths)
-}
-
-func SyncCloudConfigsHandler(c *gin.Context) {
-	files, err := utils.GetFilesRecursive(config.Pixie.Paths.CloudConfigs)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	cloudconfigs, err := queries.GetCloudConfigs()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	paths := []string{}
-	for _, image := range cloudconfigs {
-		paths = append(paths, image.Path)
-	}
-
-	toAdd, toDelete := utils.GetUniqueArrayDiff(paths, files)
-
-	errors := []string{}
-
-	for _, path := range toAdd {
-		cloudconfig := models.CloudConfig{}
-		_, fileName := filepath.Split(path)
-		cloudconfig.Name = queries.GetNewCloudConfigName(fileName)
-		cloudconfig.Path = path
-
-		_, err := queries.AddCloudConfig(cloudconfig)
-
-		if err != nil {
-			msg := path + ": " + err.Error()
-			errors = append(errors, msg)
-		}
-	}
-
-	for _, path := range toDelete {
-		if _, err := queries.DeleteCloudConfigByPath(path); err != nil {
+		if _, err := queries.DeleteFileByPath(path); err != nil {
 			msg := path + ": " + err.Error()
 			errors = append(errors, msg)
 		}

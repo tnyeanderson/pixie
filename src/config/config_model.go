@@ -5,9 +5,6 @@ type ConfigModel struct {
 		ConfigFile     string
 		Api            string
 		FileServer     string
-		Scripts        string
-		Images         string
-		CloudConfigs   string
 		FallbackScript string
 		WebRoot        string
 		Database       string

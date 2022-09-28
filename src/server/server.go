@@ -25,49 +25,25 @@ func ListenHTTP() {
 	// API
 	v1 := r.Group(config.Pixie.Paths.Api)
 	{
-		cloudconfigs := v1.Group("cloudconfigs")
-		{
-			cloudconfigs.GET("/", api.GetAllCloudConfigsHandler)
-			cloudconfigs.POST("/add", api.AddCloudConfigHandler)
-			cloudconfigs.POST("/update/:id", api.UpdateCloudConfigHandler)
-			cloudconfigs.DELETE("/delete/:id", api.DeleteCloudConfigHandler)
-			cloudconfigs.POST("/sync", api.SyncCloudConfigsHandler)
-		}
-
 		devices := v1.Group("devices")
 		{
 			devices.GET("/", api.GetAllDevicesHandler)
-			devices.GET("/mac/:mac", api.GetDeviceByMacHandler)
-			devices.POST("/add", api.AddDeviceHandler)
-			devices.POST("/update/:id", api.UpdateDeviceHandler)
-			devices.DELETE("/delete/:id", api.DeleteDeviceHandler)
+			devices.POST("/", api.AddDeviceHandler)
+			devices.GET("/:id", api.GetAllDevicesHandler)
+			devices.PUT("/:id", api.UpdateDeviceHandler)
+			devices.DELETE("/:id", api.DeleteDeviceHandler)
+			devices.GET("/boot", handlers.BootHandler)
 		}
 
-		images := v1.Group("images")
+		files := v1.Group("files")
 		{
-			images.GET("/", api.GetAllImagesHandler)
-			images.GET("/default", api.GetDefaultImageHandler)
-			images.POST("/add", api.AddImageHandler)
-			images.POST("/update/:id", api.UpdateImageHandler)
-			images.DELETE("/delete/:id", api.DeleteImageHandler)
-			images.POST("/sync", api.SyncImagesHandler)
-		}
-
-		scripts := v1.Group("scripts")
-		{
-			scripts.GET("/", api.GetAllScriptsHandler)
-			scripts.GET("/default", api.GetDefaultScriptHandler)
-			scripts.POST("/add", api.AddScriptHandler)
-			scripts.POST("/update/:id", api.UpdateScriptHandler)
-			scripts.DELETE("/delete/:id", api.DeleteScriptHandler)
-			scripts.POST("/sync", api.SyncScriptsHandler)
-		}
-
-		upload := v1.Group("upload")
-		{
-			upload.PUT("/cloudconfig", api.UploadCloudConfigHandler)
-			upload.PUT("/image", api.UploadImageHandler)
-			upload.PUT("/script", api.UploadScriptHandler)
+			files.GET("/", api.GetAllFilesHandler)
+			files.POST("/", api.AddFileHandler)
+			files.GET("/:id", api.GetAllFilesHandler)
+			files.PUT("/:id", api.UpdateFileHandler)
+			files.DELETE("/:id", api.DeleteFileHandler)
+			files.POST("/:id/upload", api.UploadFileHandler)
+			files.POST("/:id/sync", api.SyncFilesHandler)
 		}
 
 		logs := v1.Group("logs")
@@ -76,11 +52,8 @@ func ListenHTTP() {
 		}
 	}
 
-	// Boot script handler
-	r.GET("/boot.ipxe", handlers.BootHandler)
-
 	// File server
-	r.GET("/files/*path", handlers.StaticHandler)
+	r.GET("/static/*path", handlers.StaticHandler)
 
 	// Angular site
 	r.Static("/app", config.Pixie.Paths.WebRoot)

@@ -1,3 +1,4 @@
+# TODO: /sync and /upload endpoints
 openapi: 3.0.2
 info:
   description: >
@@ -54,9 +55,37 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Device'
-  '/devices/{deviceId}':
+  /devices/boot:
+    get:
+      tags:
+        - devices
+      summary: >
+        Retrieve the boot script for the device with the provided MAC address.
+      operationId: GetScriptForDevice
+      parameters:
+        - name: mac
+          in: query
+          description: >
+						Mac address for the device. A variety of formats are accepted.
+          required: true
+          schema:
+						$ref: '#/components/schemas/mac'
+      responses:
+        '200':
+          description: The iPXE boot script
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: |
+                  #!ipxe
+                  
+                  echo No script associated with device. Use the shell below.
+                  
+                  shell
+  '/devices/{id}':
     parameters:
-      - name: deviceId
+      - name: id
         in: path
         description: ID of device to return
         required: true
@@ -147,9 +176,9 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
-  '/files/{fileId}':
+  '/files/{id}':
     parameters:
-      - name: fileId
+      - name: id
         in: path
         description: ID of file to return
         required: true
@@ -222,6 +251,11 @@ paths:
                   $ref: '#/components/schemas/Log'
 components:
   schemas:
+    mac:
+      description: MAC address, all caps, colon-delimited
+      type: string
+      pattern: "^[0-9A-F]{2}(:[0-9A-F]{2}){5}$"
+      example: "A3:B3:2D:3F:4C:91"
     BaseModel:
       description: All resources have these properties
       type: object
@@ -235,9 +269,11 @@ components:
         updatedAt:
           type: string
           format: date-time
+          nullable: true
         deletedAt:
           type: string
           format: date-time
+          nullable: true
         type:
           type: string
           enum:
@@ -251,9 +287,7 @@ components:
         - type: object
           properties:
             mac:
-              type: string
-              pattern: "^[0-9A-F]{2}(:[0-9A-F]{2}){5}$"
-              example: "A3:B3:2D:3F:4C:91"
+							$ref: '#/components/schemas/mac'
             name:
               type: string
               example: My super cool device

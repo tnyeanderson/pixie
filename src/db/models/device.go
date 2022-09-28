@@ -11,8 +11,7 @@ type Device struct {
 	gorm.Model
 	Mac        string `gorm:"unique;not null"`
 	Name       string
-	GroupName  string
 	LastBooted types.NullTime
 	ScriptID   uint `gorm:"type:INT UNSIGNED REFERENCES scripts(id) ON DELETE RESTRICT ON UPDATE RESTRICT"`
-	Script     Script
+	Script     File
 }

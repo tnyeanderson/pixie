@@ -19,10 +19,9 @@ func Initialize() {
 
 	// Set up tables based on models
 	database.AutoMigrate(&models.Device{})
-	database.AutoMigrate(&models.Script{})
-	database.AutoMigrate(&models.Image{})
-	database.AutoMigrate(&models.CloudConfig{})
+	database.AutoMigrate(&models.File{})
 	database.AutoMigrate(&models.Log{})
+	database.AutoMigrate(&models.Setting{})
 
 	DB = database
 }

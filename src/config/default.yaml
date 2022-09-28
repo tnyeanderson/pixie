@@ -8,21 +8,8 @@ paths:
   # API URL subpath
   api: "/api/v1"
 
-  # Path to root directory for serving static files via /files
+  # Path to root directory for serving static files via /static
   fileserver: "data/files"
-
-  # Path to root directory for serving script files
-  # Must be inside FileServer directory
-  scripts: "data/files/scripts"
-
-  # Path to root directory for serving image files
-  # Must be inside FileServer directory
-  images: "data/files/images"
-
-  # Path to root directory for serving cloud config files
-  # Things like cloud-init, ignition, etc
-  # Must be inside FileServer directory
-  cloudconfigs: "data/files/cloudconfigs"
 
   # Path to the script which is served if both:
   #   1) no script is associated to the device

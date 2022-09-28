@@ -71,7 +71,7 @@ func saveFileByText(c *gin.Context, path string) error {
 	return nil
 }
 
-func UploadCloudConfigHandler(c *gin.Context) {
+func UploadFileHandler(c *gin.Context) {
 	subpath, err := utils.ValidatePath(c.Query("path"))
 
 	if err != nil {
@@ -79,27 +79,5 @@ func UploadCloudConfigHandler(c *gin.Context) {
 		return
 	}
 
-	saveFile(c, config.Pixie.Paths.CloudConfigs, subpath)
-}
-
-func UploadImageHandler(c *gin.Context) {
-	subpath, err := utils.ValidatePath(c.Query("path"))
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	saveFile(c, config.Pixie.Paths.Images, subpath)
-}
-
-func UploadScriptHandler(c *gin.Context) {
-	path, err := utils.ValidatePath(c.Query("path"))
-
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	saveFile(c, config.Pixie.Paths.Scripts, path)
+	saveFile(c, config.Pixie.Paths.FileServer, subpath)
 }

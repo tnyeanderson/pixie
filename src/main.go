@@ -15,8 +15,6 @@ func setupDirectories() {
 	dirs := []string{
 		filepath.Dir(config.Pixie.Paths.Database),
 		config.Pixie.Paths.FileServer,
-		config.Pixie.Paths.Images,
-		config.Pixie.Paths.Scripts,
 	}
 	for _, dir := range dirs {
 		_ = os.Mkdir(dir, fs.FileMode(config.Pixie.AccessModes.DirDefault))

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -28,7 +27,7 @@ func loadDefaults() {
 func Initialize() {
 	loadConfig()
 	printConfig()
-	validateOrDie()
+	mustValidate()
 }
 
 func loadConfig() {
@@ -77,16 +76,11 @@ func parseConfigYaml(content []byte) error {
 }
 
 func validateConfig() error {
-	if !strings.HasPrefix(Pixie.Paths.Scripts, Pixie.Paths.FileServer) {
-		return errors.New("Paths.Scripts must start with Paths.FileServer")
-	}
-	if !strings.HasPrefix(Pixie.Paths.Images, Pixie.Paths.FileServer) {
-		return errors.New("Paths.Images must start with Paths.FileServer")
-	}
+	// Put any required validation here
 	return nil
 }
 
-func validateOrDie() {
+func mustValidate() {
 	if err := validateConfig(); err != nil {
 		fmt.Println("CONFIG ERROR: ", err.Error())
 		os.Exit(1)
