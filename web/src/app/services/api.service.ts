@@ -39,32 +39,8 @@ export class ApiService {
     return formData
   }
 
-  getCloudConfigs() {
-    return this.httpClient.get(`${this.baseUrl}/cloudconfigs`).pipe(catchError(this.handleError))
-  }
-
-  syncCloudConfigs() {
-    return this.httpClient.post(`${this.baseUrl}/cloudconfigs/sync`, {}).pipe(catchError(this.handleError))
-  }
-
-  addCloudConfig(cloudConfig: CloudConfigItem) {
-    return this.httpClient.post(`${this.baseUrl}/cloudconfigs/add`, cloudConfig).pipe(catchError(this.handleError))
-  }
-
-  uploadCloudConfig(path: string, cloudConfig: File) {
-    return this.httpClient.put(`${this.baseUrl}/upload/cloudconfig?path=${path}`, this.fileUploadBody(cloudConfig)).pipe(catchError(this.handleError))
-  }
-
-  uploadCloudConfigText(path: string, cloudConfig: string) {
-    return this.httpClient.put(`${this.baseUrl}/upload/cloudconfig?path=${path}`, cloudConfig).pipe(catchError(this.handleError))
-  }
-
-  editCloudConfig(id: number, cloudConfig: CloudConfigItem) {
-    return this.httpClient.post(`${this.baseUrl}/cloudconfigs/update/${id}`, cloudConfig).pipe(catchError(this.handleError))
-  }
-
-  deleteCloudConfig(id: number) {
-    return this.httpClient.delete(`${this.baseUrl}/cloudconfigs/delete/${id}`).pipe(catchError(this.handleError))
+  getScripts() {
+    return this.httpClient.get(`${this.baseUrl}/files?fileType=script`).pipe(catchError(this.handleError))
   }
 
   getFiles() {
@@ -89,58 +65,6 @@ export class ApiService {
 
   deleteFile(id: number) {
     return this.httpClient.delete(`${this.baseUrl}/files/${id}`).pipe(catchError(this.handleError))
-  }
-
-  getImages() {
-    return this.httpClient.get(`${this.baseUrl}/images`).pipe(catchError(this.handleError))
-  }
-
-  syncImages() {
-    return this.httpClient.post(`${this.baseUrl}/images/sync`, {}).pipe(catchError(this.handleError))
-  }
-
-  addImage(image: ImageItem) {
-    return this.httpClient.post(`${this.baseUrl}/images/add`, image).pipe(catchError(this.handleError))
-  }
-
-  uploadImage(path: string, image: File) {
-    return this.httpClient.put(`${this.baseUrl}/upload/image?path=${path}`, this.fileUploadBody(image)).pipe(catchError(this.handleError))
-  }
-
-  editImage(id: number, image: ImageItem) {
-    return this.httpClient.post(`${this.baseUrl}/images/update/${id}`, image).pipe(catchError(this.handleError))
-  }
-
-  deleteImage(id: number) {
-    return this.httpClient.delete(`${this.baseUrl}/images/delete/${id}`).pipe(catchError(this.handleError))
-  }
-
-  getScripts() {
-    return this.httpClient.get(`${this.baseUrl}/scripts`).pipe(catchError(this.handleError))
-  }
-
-  syncScripts() {
-    return this.httpClient.post(`${this.baseUrl}/scripts/sync`, {}).pipe(catchError(this.handleError))
-  }
-
-  addScript(script: ScriptItem) {
-    return this.httpClient.post(`${this.baseUrl}/scripts/add`, script).pipe(catchError(this.handleError))
-  }
-
-  uploadScript(path: string, script: File) {
-    return this.httpClient.put(`${this.baseUrl}/upload/script?path=${path}`, this.fileUploadBody(script)).pipe(catchError(this.handleError))
-  }
-
-  uploadScriptText(path: string, script: string) {
-    return this.httpClient.put(`${this.baseUrl}/upload/script?path=${path}`, script).pipe(catchError(this.handleError))
-  }
-
-  editScript(id: number, script: ScriptItem) {
-    return this.httpClient.post(`${this.baseUrl}/scripts/update/${id}`, script).pipe(catchError(this.handleError))
-  }
-
-  deleteScript(id: number) {
-    return this.httpClient.delete(`${this.baseUrl}/scripts/delete/${id}`).pipe(catchError(this.handleError))
   }
 
   getDevices() {
