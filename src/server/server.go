@@ -39,11 +39,11 @@ func ListenHTTP() {
 		{
 			files.GET("/", api.GetAllFilesHandler)
 			files.POST("/", api.AddFileHandler)
+			files.POST("/sync", api.SyncFilesHandler)
 			files.GET("/:id", api.GetAllFilesHandler)
 			files.PUT("/:id", api.UpdateFileHandler)
 			files.DELETE("/:id", api.DeleteFileHandler)
 			files.POST("/:id/upload", api.UploadFileHandler)
-			files.POST("/:id/sync", api.SyncFilesHandler)
 		}
 
 		logs := v1.Group("logs")
