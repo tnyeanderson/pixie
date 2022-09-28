@@ -1,0 +1,493 @@
+openapi: 3.0.2
+info:
+  description: |-
+    The specification for the Pixie API. Pixie is a web utility for managing PXE booted machines.
+
+    [Pixie Github](https://github.com/tnyeanderson/pixie)
+  version: 0.0.1
+  title: Pixie API
+  license:
+    name: MIT
+tags:
+  - name: devices
+    description: Devices attempting PXE boots
+  - name: images
+    description: Boot images
+  - name: configs
+    description: Automatic server configurations (ignition, cloud-init, autoyast, etc)
+  - name: scripts
+    description: PXE boot scripts
+  - name: logs
+    description: Audit log of everything Pixie has done
+paths:
+  /devices:
+    post:
+      tags:
+        - devices
+      summary: Add a new device
+      operationId: CreateDevice
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '405':
+          description: Invalid input
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+    get:
+      tags:
+        - devices
+      summary: Lists all devices
+      operationId: GetDevices
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
+        '400':
+          description: Invalid status value
+  '/devices/{deviceId}':
+    parameters:
+      - name: deviceId
+        in: path
+        description: ID of device to return
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags:
+        - devices
+      summary: Find device by ID
+      description: Returns a single device
+      operationId: GetDeviceById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Device not found
+    put:
+      tags:
+        - devices
+      summary: Update an existing device
+      operationId: UpdateDevice
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Device'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Device not found
+        '405':
+          description: Validation exception
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Device'
+    delete:
+      tags:
+        - devices
+      summary: Delete a device
+      operationId: DeleteDevice
+      responses:
+        '400':
+          description: Invalid ID supplied
+  /images:
+    post:
+      tags:
+        - images
+      summary: Add a new image
+      operationId: CreateImage
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '405':
+          description: Invalid input
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Image'
+    get:
+      tags:
+        - images
+      summary: Lists all images
+      operationId: GetImages
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Image'
+        '400':
+          description: Invalid status value
+  '/images/{imageId}':
+    parameters:
+      - name: imageId
+        in: path
+        description: ID of image to return
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags:
+        - images
+      summary: Find image by ID
+      description: Returns a single image
+      operationId: GetImageById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Image not found
+    put:
+      tags:
+        - images
+      summary: Update an existing image
+      operationId: UpdateImage
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Image not found
+        '405':
+          description: Validation exception
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Image'
+    delete:
+      tags:
+        - images
+      summary: Delete a image
+      operationId: DeleteImage
+      responses:
+        '400':
+          description: Invalid ID supplied
+  /configs:
+    post:
+      tags:
+        - configs
+      summary: Add a new config
+      operationId: CreateConfig
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '405':
+          description: Invalid input
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+    get:
+      tags:
+        - configs
+      summary: Lists all configs
+      operationId: GetConfigs
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Config'
+        '400':
+          description: Invalid status value
+  '/configs/{configId}':
+    parameters:
+      - name: configId
+        in: path
+        description: ID of config to return
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags:
+        - configs
+      summary: Find config by ID
+      description: Returns a single config
+      operationId: GetConfigById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Config not found
+    put:
+      tags:
+        - configs
+      summary: Update an existing config
+      operationId: UpdateConfig
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Config not found
+        '405':
+          description: Validation exception
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Config'
+    delete:
+      tags:
+        - configs
+      summary: Delete a config
+      operationId: DeleteConfig
+      responses:
+        '400':
+          description: Invalid ID supplied
+  /scripts:
+    post:
+      tags:
+        - scripts
+      summary: Add a new script
+      operationId: CreateScript
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+        '405':
+          description: Invalid input
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Script'
+    get:
+      tags:
+        - scripts
+      summary: Lists all scripts
+      operationId: GetScripts
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Script'
+        '400':
+          description: Invalid status value
+  '/scripts/{scriptId}':
+    parameters:
+      - name: scriptId
+        in: path
+        description: ID of script to return
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      tags:
+        - scripts
+      summary: Find script by ID
+      description: Returns a single script
+      operationId: GetScriptById
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Script not found
+    put:
+      tags:
+        - scripts
+      summary: Update an existing script
+      operationId: UpdateScript
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Script'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Script not found
+        '405':
+          description: Validation exception
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Script'
+    delete:
+      tags:
+        - scripts
+      summary: Delete a script
+      operationId: DeleteScript
+      responses:
+        '400':
+          description: Invalid ID supplied
+components:
+  schemas:
+    BaseModel:
+      description: All resources have these properties
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+        type:
+          type: string
+          enum:
+            - Device
+            - Image
+            - Config
+            - Script
+            - Log
+    File:
+      description: >
+        Resources that represent files have these properties. See "fileType"
+        for affected resources
+      type: object
+      properties:
+        name:
+          type: string
+          example: My super cool device
+        path:
+          type: string
+          example: relative/file/path.ext
+        lastAccessedAt:
+          type: string
+          format: date-time
+        fileType:
+          type: string
+          enum:
+            - Image
+            - Config
+            - Script
+    Device:
+      description: Device attempting PXE boot
+      allOf:
+        - $ref: '#/components/schemas/BaseModel'
+        - type: object
+          properties:
+            mac:
+              type: string
+              pattern: "^[0-9A-F]{2}(:[0-9A-F]{2}){5}$"
+              example: "A3:B3:2D:3F:4C:91"
+            name:
+              type: string
+              example: My super cool device
+            lastBootedAt:
+              type: string
+              format: date-time
+      discriminator:
+        propertyName: type
+    Image:
+      description: Boot image
+      allOf:
+        - $ref: '#/components/schemas/BaseModel'
+        - $ref: '#/components/schemas/File'
+      discriminator:
+        propertyName: fileType
+    Config:
+      description: Automatic server configuration (ignition, cloud-init, autoyast, etc)
+      allOf:
+        - $ref: '#/components/schemas/BaseModel'
+        - $ref: '#/components/schemas/File'
+      discriminator:
+        propertyName: fileType
+    Script:
+      description: PXE boot script
+      allOf:
+        - $ref: '#/components/schemas/BaseModel'
+        - $ref: '#/components/schemas/File'
+        - type: object
+          properties:
+            isDefault:
+              type: boolean
+      discriminator:
+        propertyName: fileType
+
