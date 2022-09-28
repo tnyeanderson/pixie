@@ -31,14 +31,20 @@ import { ReloadButtonModule } from './fragments/reload-button/reload-button.modu
 import { CloudConfigsListComponent } from './lists/cloud-configs-list/cloud-configs-list.component';
 import { AddCloudConfigComponent } from './forms/add-cloud-config/add-cloud-config.component';
 import { EditCloudConfigComponent } from './forms/edit-cloud-config/edit-cloud-config.component';
+import { AddFileComponent } from './forms/add-file/add-file.component';
+import { EditFileComponent } from './forms/edit-file/edit-file.component';
+import { FilesListComponent } from './lists/files-list/files-list.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    FilesListComponent,
     ImagesListComponent,
     ScriptsListComponent,
     DevicesListComponent,
+    AddFileComponent,
+    EditFileComponent,
     AddImageComponent,
     AddScriptComponent,
     EditScriptComponent,

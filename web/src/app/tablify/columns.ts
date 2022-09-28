@@ -68,7 +68,7 @@ export class Column {
 
 export class ListColumns {
     static idColumn = new Column('ID', 'number')
-    static lastAccessedColumn = new Column('LastAccessed', 'timestamp', 'Last Accessed')
+    static lastAccessedColumn = new Column('LastAccessedAt', 'timestamp', 'Last Accessed')
 
     static cloudConfigsColumns: Column[] = [
         this.idColumn,
@@ -78,6 +78,13 @@ export class ListColumns {
     ]
 
     static imagesColumns: Column[] = [
+        this.idColumn,
+        new Column('Name', 'string'),
+        new Column('Path', 'string'),
+        this.lastAccessedColumn,
+    ]
+
+    static filesColumns: Column[] = [
         this.idColumn,
         new Column('Name', 'string'),
         new Column('Path', 'string'),

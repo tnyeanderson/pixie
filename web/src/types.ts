@@ -9,7 +9,7 @@ export class GormModel {
 export class FileItem extends GormModel {
   Name = ''
   Path = ''
-  LastAccessed = ''
+  LastAccessedAt = ''
 }
 
 export class CloudConfigItem extends FileItem { }

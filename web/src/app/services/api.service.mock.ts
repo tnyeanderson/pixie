@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http"
 import { of, throwError } from "rxjs"
-import { CloudConfigItem, DeviceItem, ImageItem, LogItem, ScriptItem } from "src/types"
+import { CloudConfigItem, DeviceItem, FileItem, ImageItem, LogItem, ScriptItem } from "src/types"
 import { ApiService } from "./api.service"
 
 export const MOCK_BLOB_CONTENT = 'blobcontent'
@@ -60,6 +60,19 @@ export const MOCK_IMAGES = [
 
     }
 ] as ImageItem[]
+
+export const MOCK_FILES = [
+    {
+        ID: 3,
+        Name: 'name1',
+
+    },
+    {
+        ID: 55,
+        Name: 'name2',
+
+    }
+] as FileItem[]
 
 export const MOCK_LOGS = [
     {

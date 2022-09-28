@@ -67,6 +67,30 @@ export class ApiService {
     return this.httpClient.delete(`${this.baseUrl}/cloudconfigs/delete/${id}`).pipe(catchError(this.handleError))
   }
 
+  getFiles() {
+    return this.httpClient.get(`${this.baseUrl}/files`).pipe(catchError(this.handleError))
+  }
+
+  syncFiles() {
+    return this.httpClient.post(`${this.baseUrl}/files/sync`, {}).pipe(catchError(this.handleError))
+  }
+
+  addFile(image: ImageItem) {
+    return this.httpClient.post(`${this.baseUrl}/files`, image).pipe(catchError(this.handleError))
+  }
+
+  uploadFile(path: string, image: File) {
+    return this.httpClient.put(`${this.baseUrl}/files/upload?path=${path}`, this.fileUploadBody(image)).pipe(catchError(this.handleError))
+  }
+
+  editFile(id: number, image: ImageItem) {
+    return this.httpClient.post(`${this.baseUrl}/files/${id}`, image).pipe(catchError(this.handleError))
+  }
+
+  deleteFile(id: number) {
+    return this.httpClient.delete(`${this.baseUrl}/files/${id}`).pipe(catchError(this.handleError))
+  }
+
   getImages() {
     return this.httpClient.get(`${this.baseUrl}/images`).pipe(catchError(this.handleError))
   }
