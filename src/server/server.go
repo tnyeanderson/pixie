@@ -17,39 +17,35 @@ func ListenHTTP() {
 	// Set up gin
 	r := gin.Default()
 
+	// Redirect to angular site from site root
 	r.GET("/", func(c *gin.Context) {
 		location := url.URL{Path: "/app"}
 		c.Redirect(http.StatusFound, location.RequestURI())
 	})
 
 	// API
+	// Default base path: /api/v1
 	v1 := r.Group(config.Pixie.Paths.Api)
 	{
-		devices := v1.Group("devices")
-		{
-			devices.GET("/", api.GetAllDevicesHandler)
-			devices.POST("/", api.AddDeviceHandler)
-			devices.GET("/:id", api.GetAllDevicesHandler)
-			devices.PUT("/:id", api.UpdateDeviceHandler)
-			devices.DELETE("/:id", api.DeleteDeviceHandler)
-			devices.GET("/boot", handlers.BootHandler)
-		}
+		// devices
+		v1.GET("/devices", api.GetAllDevicesHandler)
+		v1.POST("/devices", api.AddDeviceHandler)
+		v1.GET("/devices/:id", api.GetAllDevicesHandler)
+		v1.PUT("/devices/:id", api.UpdateDeviceHandler)
+		v1.DELETE("/devices/:id", api.DeleteDeviceHandler)
+		v1.GET("/devices/boot", handlers.BootHandler)
 
-		files := v1.Group("files")
-		{
-			files.GET("/", api.GetAllFilesHandler)
-			files.POST("/", api.AddFileHandler)
-			files.POST("/sync", api.SyncFilesHandler)
-			files.GET("/:id", api.GetAllFilesHandler)
-			files.PUT("/:id", api.UpdateFileHandler)
-			files.DELETE("/:id", api.DeleteFileHandler)
-			files.POST("/:id/upload", api.UploadFileHandler)
-		}
+		// files
+		v1.GET("/files", api.GetAllFilesHandler)
+		v1.POST("/files", api.AddFileHandler)
+		v1.POST("/files/sync", api.SyncFilesHandler)
+		v1.GET("/files/:id", api.GetAllFilesHandler)
+		v1.PUT("/files/:id", api.UpdateFileHandler)
+		v1.DELETE("/files/:id", api.DeleteFileHandler)
+		v1.POST("/files/:id/upload", api.UploadFileHandler)
 
-		logs := v1.Group("logs")
-		{
-			logs.GET("/", api.GetLogsHandler)
-		}
+		// logs
+		v1.GET("/logs", api.GetLogsHandler)
 	}
 
 	// File server
