@@ -1,12 +1,8 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
-
 type Setting struct {
-	gorm.Model
-	Key          string `gorm:"unique"`
-	Value        string
-	DefaultValue string
+	BaseModel
+	Key          string `json:"key" gorm:"unique"`
+	Value        string `json:"value"`
+	DefaultValue string `json:"defaultValue"`
 }

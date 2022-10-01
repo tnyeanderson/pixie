@@ -67,7 +67,7 @@ func AddFile(file models.File) (*models.File, error) {
 
 func UpdateFile(id uint, updated models.File) (*models.File, error) {
 	var file models.File
-	result := db.Get().Model(file).Select("Name", "Path").Where("id = ?", id).Updates(updated)
+	result := db.Get().Model(file).Select("Name", "Path", "FileType").Where("id = ?", id).Updates(updated)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -75,7 +75,7 @@ func UpdateFile(id uint, updated models.File) (*models.File, error) {
 
 	AddLogMessage(
 		"UPDATE",
-		fmt.Sprint("Updated file: ID=", id, ", Path=", updated.Path),
+		fmt.Sprintf("Updated file: ID=%s, Path=%s, FileType=%s", id, updated.Path, updated.FileType),
 		fmt.Sprintf("%+v\n", updated),
 	)
 
@@ -85,7 +85,7 @@ func UpdateFile(id uint, updated models.File) (*models.File, error) {
 func UpdateFileLastAccessedByPath(fullpath string) error {
 	var file models.File
 	filepath := utils.GetRelativeFilePath(fullpath, config.Pixie)
-	result := db.Get().Model(file).Where("path = ?", filepath).Update("last_accessed_by", time.Now())
+	result := db.Get().Model(file).Where("path = ?", filepath).Update("last_accessed_at", time.Now())
 
 	if result.Error != nil {
 		return result.Error

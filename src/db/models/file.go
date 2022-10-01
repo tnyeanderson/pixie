@@ -1,14 +1,11 @@
 package models
 
-import (
-	"github.com/tnyeanderson/pixie/types"
-	"gorm.io/gorm"
-)
+import "time"
 
 type File struct {
-	gorm.Model
-	Name           string `gorm:"unique"`
-	Path           string `gorm:"unique;not null"`
-	LastAccessedAt types.NullTime
-	FileType       string
+	BaseModel
+	Name           string     `json:"name"  gorm:"unique"`
+	Path           string     `json:"path" gorm:"unique;not null"`
+	LastAccessedAt *time.Time `json:"lastAccessedAt"`
+	FileType       string     `json:"fileType"`
 }

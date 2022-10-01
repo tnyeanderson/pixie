@@ -1,12 +1,8 @@
 package models
 
-import (
-	"gorm.io/gorm"
-)
-
 type Log struct {
-	gorm.Model
-	Type    string
-	Summary string
-	Detail  string
+	BaseModel
+	Event   string `json:"event"`
+	Summary string `json:"summary"`
+	Detail  string `json:"detail"`
 }
