@@ -4,7 +4,7 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'src/app/services/api.service';
-import { MockApiService, MOCK_DEVICES, MOCK_SCRIPTS } from 'src/app/services/api.service.mock';
+import { MockApiService, MOCK_DEVICES, MOCK_FILES } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { FormifyModule } from '../../formify/formify.module';
 import { AddDeviceComponent } from './add-device.component';
@@ -48,7 +48,7 @@ describe('AddDeviceComponent', () => {
 
   it('validate() should check that a Mac is set', () => {
     expect(component.validate()).toBeFalse()
-    component.model.Mac = 'has a value'
+    component.model.mac = 'has a value'
     expect(component.validate()).toBeTrue()
   });
 
@@ -64,16 +64,16 @@ describe('AddDeviceComponent', () => {
 
   it('initializeScripts() should set this.scripts', () => {
     component.scripts = []
-    expect(component.scripts).not.toEqual(MOCK_SCRIPTS)
-    component.initializeScripts(MOCK_SCRIPTS)
-    expect(component.scripts).toEqual(MOCK_SCRIPTS)
+    expect(component.scripts).not.toEqual(MOCK_FILES)
+    component.initializeScripts(MOCK_FILES)
+    expect(component.scripts).toEqual(MOCK_FILES)
   })
 
-  it('ngOnInit() should call apiService.getScripts() and set this.scripts', () => {
-    spyOn(component['apiService'], 'getScripts').and.callThrough()
+  it('ngOnInit() should call apiService.getFiles() and set this.scripts', () => {
+    spyOn(component['apiService'], 'getFiles').and.callThrough()
     spyOn(component, 'initializeScripts')
     component.ngOnInit()
-    expect(component['apiService'].getScripts).toHaveBeenCalled()
-    expect(component.initializeScripts).toHaveBeenCalledWith(MOCK_SCRIPTS)
+    expect(component['apiService'].getFiles).toHaveBeenCalled()
+    expect(component.initializeScripts).toHaveBeenCalledWith(MOCK_FILES)
   })
 })

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http"
 import { of, throwError } from "rxjs"
-import { CloudConfigItem, DeviceItem, FileItem, ImageItem, LogItem, ScriptItem } from "src/types"
+import { DeviceItem, FileItem, LogItem } from "src/types"
 import { ApiService } from "./api.service"
 
 export const MOCK_BLOB_CONTENT = 'blobcontent'
@@ -9,79 +9,39 @@ export const MOCK_BLOB = new Blob([MOCK_BLOB_CONTENT])
 
 export const MOCK_FILE = new File([MOCK_BLOB_CONTENT], 'testFile.txt')
 
-export const MOCK_CLOUD_CONFIGS = [
-    {
-        ID: 8,
-        Name: 'helloha',
-        Path: 'testpathit',
-    },
-    {
-        ID: 87,
-        Name: 'hellotwohi',
-        Path: 'testpathtoowoo',
-    }
-] as CloudConfigItem[]
-
-// TODO: IsDefault
-export const MOCK_SCRIPTS = [
-    {
-        ID: 5,
-        Name: 'hello',
-        Path: 'testpath',
-    },
-    {
-        ID: 57,
-        Name: 'hellotwo',
-        Path: 'testpathtoo',
-    }
-] as ScriptItem[]
-
 export const MOCK_DEVICES = [
     {
-        Mac: 'testmac',
-        ID: 3,
+        mac: 'testmac',
+        id: 3,
     },
     {
-        Mac: 'mactest',
-        ID: 42,
+        mac: 'mactest',
+        id: 42,
 
     }
 ] as DeviceItem[]
 
-export const MOCK_IMAGES = [
-    {
-        ID: 3,
-        Name: 'name1',
-
-    },
-    {
-        ID: 55,
-        Name: 'name2',
-
-    }
-] as ImageItem[]
-
 export const MOCK_FILES = [
     {
-        ID: 3,
-        Name: 'name1',
+        id: 3,
+        name: 'name1',
 
     },
     {
-        ID: 55,
-        Name: 'name2',
+        id: 55,
+        name: 'name2',
 
     }
 ] as FileItem[]
 
 export const MOCK_LOGS = [
     {
-        ID: 3,
-        Summary: 'hello',
+        id: 3,
+        summary: 'hello',
     },
     {
-        ID: 35,
-        Summary: 'hello 2',
+        id: 35,
+        summary: 'hello 2',
 
     }
 ] as LogItem[]
@@ -107,58 +67,21 @@ export class MockApiService implements ApiService {
         return formData
     }
 
-    getCloudConfigs() { return of(MOCK_CLOUD_CONFIGS) }
-
-    syncCloudConfigs() { return of({}) }
-
-    addCloudConfig(cloudConfig: CloudConfigItem) { return of({data: cloudConfig}) }
-
-    uploadCloudConfig(path: string, cloudConfig: File) { return of({ status: `'${path}' uploaded!` }) }
-
-    uploadCloudConfigText(path: string, cloudConfig: string) { return of({ status: `'${path}' uploaded!` }) }
-
-    editCloudConfig(id: number, cloudConfig: CloudConfigItem) { return of({data: cloudConfig}) }
-
-    deleteCloudConfig(id: number) {
-        const cloudConfig = new CloudConfigItem()
-        cloudConfig.ID = id
-        return of({ data: cloudConfig })
-    }
-
-    getImages() { return of(MOCK_IMAGES) }
+    getFiles() { return of(MOCK_FILES) }
 
     // TODO: Get return
-    syncImages() { return of({}) }
+    syncFiles() { return of({}) }
 
-    addImage(image: ImageItem) { return of({ data: image }) }
+    addFile(file: FileItem) { return of({ data: file }) }
 
-    uploadImage(path: string, image: File) { return of({ status: `'${path}' uploaded!` }) }
+    uploadFile(path: string, file: File) { return of({ status: `'${path}' uploaded!` }) }
 
-    editImage(id: number, image: ImageItem) { return of({ data: image }) }
+    editFile(id: number, file: FileItem) { return of({ data: file }) }
 
-    deleteImage(id: number) {
-        const image = new ImageItem()
-        image.ID = id
-        return of({ data: image })
-    }
-
-    getScripts() { return of(MOCK_SCRIPTS) }
-
-    // TODO: Get return
-    syncScripts() { return of({}) }
-
-    addScript(script: ScriptItem) { return of({ data: script }) }
-
-    uploadScript(path: string, script: File) { return of({ status: `'${path}' uploaded!` }) }
-
-    uploadScriptText(path: string, script: string) { return of({ status: `'${path}' uploaded!` }) }
-
-    editScript(id: number, script: ScriptItem) { return of({ data: script }) }
-
-    deleteScript(id: number) {
-        const script = new ScriptItem()
-        script.ID = id
-        return of({ data: script })
+    deleteFile(id: number) {
+        const file = new FileItem()
+        file.id = id
+        return of({ data: file })
     }
 
     getDevices() { return of(MOCK_DEVICES) }
@@ -169,7 +92,7 @@ export class MockApiService implements ApiService {
 
     deleteDevice(id: number) {
         const device = new DeviceItem()
-        device.ID = id
+        device.id = id
         return of({ data: device })
     }
 

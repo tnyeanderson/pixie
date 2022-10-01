@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
-import { DeviceItem, ScriptItem } from 'src/types';
+import { DeviceItem, FileItem } from 'src/types';
 
 @Component({
   selector: 'app-add-device',
@@ -10,11 +10,11 @@ import { DeviceItem, ScriptItem } from 'src/types';
 })
 export class AddDeviceComponent implements OnInit {
   model: DeviceItem = new DeviceItem()
-  scripts: ScriptItem[] = []
+  scripts: FileItem[] = []
 
   constructor(public dialogRef: MatDialogRef<AddDeviceComponent>, private apiService: ApiService) { }
 
-  validate = () => !!this.model.Mac
+  validate = () => !!this.model.mac
 
   submit = () => {
     this.apiService.addDevice(this.model).subscribe(r => {
@@ -23,11 +23,11 @@ export class AddDeviceComponent implements OnInit {
   }
 
   initializeScripts = (value: any) => {
-    this.scripts = value as ScriptItem[]
+    this.scripts = value as FileItem[]
   }
 
   ngOnInit(): void {
-    this.apiService.getScripts().subscribe(data => this.initializeScripts(data))
+    this.apiService.getFiles().subscribe(data => this.initializeScripts(data))
   }
 
 }

@@ -66,7 +66,7 @@ describe('DevicesListComponent', () => {
   it('deleteDevice() should call apiService.deleteDevice() and loadData()', () => {
     const id = 55
     const device = new DeviceItem()
-    device.ID = id
+    device.id = id
     spyOn(component['apiService'], 'deleteDevice').and.callThrough()
     spyOn(component, 'loadData')
     component.deleteDevice(device)

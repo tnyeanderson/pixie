@@ -1,35 +1,30 @@
+export const FILE_TYPES = [ 'Image', 'Config', 'Script', 'Binary', 'Plain' ]
 
-export class GormModel {
-  ID: number | undefined
-  CreatedAt: string | undefined
-  UpdatedAt: string | undefined
-  DeletedAt: string | undefined
+export class BaseModel {
+  id: number | undefined
+  createdAt: string | undefined
+  updatedAt: string | undefined
+  deletedAt: string | undefined
+  type: string | undefined
 }
 
-export class FileItem extends GormModel {
-  Name = ''
-  Path = ''
-  LastAccessedAt = ''
+export class FileItem extends BaseModel {
+  name = ''
+  path = ''
+  fileType = ''
+  lastAccessedAt = ''
 }
 
-export class CloudConfigItem extends FileItem { }
-
-export class ImageItem extends FileItem { }
-
-export class ScriptItem extends FileItem {
-  IsDefault = false
+export class DeviceItem extends BaseModel {
+  name = ''
+  mac = ''
+  groupName = ''
+  lastBootedAt = ''
+  scriptID = ''
+  script = new FileItem()
 }
 
-export class DeviceItem extends GormModel {
-  Name = ''
-  Mac = ''
-  GroupName = ''
-  LastBooted = ''
-  ScriptID = ''
-  Script = new ScriptItem()
-}
-
-export class LogItem extends GormModel {
-  Summary = ''
-  Detail = ''
+export class LogItem extends BaseModel {
+  summary = ''
+  detail = ''
 }

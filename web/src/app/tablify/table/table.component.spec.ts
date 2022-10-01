@@ -98,7 +98,7 @@ describe('TableComponent', () => {
 
   it('deleteItem() should call delete() after asking for confirmation', () => {
     const device = new DeviceItem()
-    device.ID = 55
+    device.id = 55
     spyOn(component['confirm'], 'ask').and.callThrough()
     spyOn(component, 'delete')
     component.deleteItem(device)

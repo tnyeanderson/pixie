@@ -1,6 +1,6 @@
 <app-base-form [model]="model" [initialData]="initialData">
-    <app-form-input-text name="Name" [model]="model"></app-form-input-text>
-    <app-form-input-text name="Mac" [model]="model"></app-form-input-text>
-    <app-form-input-dropdown name="ScriptID" label="Script" [options]="scripts" [model]="model"></app-form-input-dropdown>
+    <app-form-input-text name="name" label="name" [model]="model"></app-form-input-text>
+    <app-form-input-text name="mac" label="MAC Address" [model]="model"></app-form-input-text>
+    <app-form-input-dropdown name="scriptID" label="Script" [options]="scripts" [model]="model"></app-form-input-dropdown>
     <app-form-buttons action="Save" [showDelete]="true" [validate]="validate" [submit]="submit" [delete]="delete" [model]="model"></app-form-buttons>
 </app-base-form>

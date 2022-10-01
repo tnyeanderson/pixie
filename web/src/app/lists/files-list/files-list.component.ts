@@ -29,6 +29,14 @@ export class FilesListComponent implements OnInit {
     this.openAddFileDialog()
   }
 
+  deleteFile = (file: FileItem) => {
+    if (file.id) {
+      this.apiService.deleteFile(file.id).subscribe(data => {
+        this.loadData()
+      })
+    }
+  }
+
   openEditFileDialog(data: FileItem) {
     const dialogRef = this.dialog.open(EditFileComponent, { width: '80%', data });
 
@@ -51,7 +59,7 @@ export class FilesListComponent implements OnInit {
     })
   }
 
-  loadData() {
+  loadData = () => {
     this.dataSource.load(this.apiService)
   }
 

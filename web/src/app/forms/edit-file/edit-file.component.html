@@ -1,6 +1,7 @@
 <app-base-form [validate]="validate" [model]="model" [initialData]="initialData">
-    <app-form-input-text name="Name" [model]="model"></app-form-input-text>
-    <app-form-input-text name="Path" [model]="model"></app-form-input-text>
+    <app-form-input-text name="name" label="Name" [model]="model"></app-form-input-text>
+    <app-form-input-text name="path" label="Path" [model]="model"></app-form-input-text>
+    <app-form-input-dropdown name="fileType" label="File Type" [options]="fileTypes" [model]="model"></app-form-input-dropdown>
     <app-form-input-file label="Upload a file" [files]="files"></app-form-input-file>
     <app-form-buttons action="Save" [submit]="submit" [model]="model"></app-form-buttons>
 </app-base-form>

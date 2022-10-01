@@ -49,13 +49,13 @@ describe('EditFileComponent', () => {
 
   it('validate() should return true if model.Name is set', () => {
     expect(component.validate()).toBeFalse()
-    component.model.Name = 'now i have a name'
+    component.model.name = 'now i have a name'
     expect(component.validate()).toBeTrue()
   });
 
   it('submit() when files.length==0 should only call apiService.editFile()', () => {
-    component.model.ID = 3
-    component.model.Name = 'name 1'
+    component.model.id = 3
+    component.model.name = 'name 1'
     spyOn(component['apiService'], 'editFile').and.callThrough()
     spyOn(component['apiService'], 'uploadFile').and.callThrough()
     spyOn(component.dialogRef, 'close')
@@ -67,15 +67,15 @@ describe('EditFileComponent', () => {
 
   it('submit() when files.length>0 should call apiService.editFile() and apiService.uploadFile()', () => {
     component.files[0] = {fileName: 'toupload'} as unknown as File
-    component.model.ID = 3
-    component.model.Name = 'name 1'
-    component.model.Path = 'path1'
+    component.model.id = 3
+    component.model.name = 'name 1'
+    component.model.path = 'path1'
     spyOn(component['apiService'], 'editFile').and.callThrough()
     spyOn(component['apiService'], 'uploadFile').and.callThrough()
     spyOn(component.dialogRef, 'close')
     component.submit()
     expect(component['apiService'].editFile).toHaveBeenCalledWith(3, component.model)
-    expect(component['apiService'].uploadFile).toHaveBeenCalledWith(component.model.Path, component.files[0])
+    expect(component['apiService'].uploadFile).toHaveBeenCalledWith(component.model.path, component.files[0])
     expect(component.dialogRef.close).toHaveBeenCalled()
   });
 });

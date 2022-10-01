@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
-import { DeviceItem, ScriptItem } from 'src/types';
+import { DeviceItem, FileItem } from 'src/types';
 
 @Component({
   selector: 'app-edit-device',
@@ -10,7 +10,7 @@ import { DeviceItem, ScriptItem } from 'src/types';
 })
 export class EditDeviceComponent implements OnInit {
   model: DeviceItem = new DeviceItem()
-  scripts: ScriptItem[] = []
+  scripts: FileItem[] = []
 
   constructor(
     public dialogRef: MatDialogRef<EditDeviceComponent>,
@@ -18,11 +18,11 @@ export class EditDeviceComponent implements OnInit {
     private apiService: ApiService
   ) { }
 
-  validate = () => !!this.model.Mac
+  validate = () => !!this.model.mac
 
   submit = () => {
-    if (this.model.ID) {
-      this.apiService.editDevice(this.model.ID, this.model).subscribe(r => {
+    if (this.model.id) {
+      this.apiService.editDevice(this.model.id, this.model).subscribe(r => {
         this.dialogRef.close()
       })
     }
@@ -30,19 +30,19 @@ export class EditDeviceComponent implements OnInit {
   }
 
   delete = () => {
-    if (this.model.ID) {
-      this.apiService.deleteDevice(this.model.ID).subscribe(r => {
+    if (this.model.id) {
+      this.apiService.deleteDevice(this.model.id).subscribe(r => {
         this.dialogRef.close()
       })
     }
   }
 
   initializeScripts = (value: any) => {
-    this.scripts = value as ScriptItem[]
+    this.scripts = value as FileItem[]
   }
 
   ngOnInit(): void {
-    this.apiService.getScripts().subscribe(data => this.initializeScripts(data))
+    this.apiService.getFiles().subscribe(data => this.initializeScripts(data))
   }
 
 }

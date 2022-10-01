@@ -6,7 +6,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AddFileComponent } from 'src/app/forms/add-file/add-file.component';
 import { EditFileComponent } from 'src/app/forms/edit-file/edit-file.component';
 import { ApiService } from 'src/app/services/api.service';
-import { MockApiService, MOCK_FILES, MOCK_IMAGES } from 'src/app/services/api.service.mock';
+import { MockApiService, MOCK_FILES } from 'src/app/services/api.service.mock';
+import { FileItem } from 'src/types';
 import { TablifyModule } from '../../tablify/tablify.module';
 import { FilesListComponent } from './files-list.component';
 
@@ -58,6 +59,17 @@ describe('FilesListComponent', () => {
     spyOn(component, 'openAddFileDialog')
     component.addFile()
     expect(component.openAddFileDialog).toHaveBeenCalled()
+  });
+
+  it('deleteFile() should call apiService.deleteFile() and loadData()', () => {
+    const id = 55
+    const file = new FileItem()
+    file.id = id
+    spyOn(component['apiService'], 'deleteFile').and.callThrough()
+    spyOn(component, 'loadData')
+    component.deleteFile(file)
+    expect(component['apiService'].deleteFile).toHaveBeenCalledWith(id)
+    expect(component.loadData).toHaveBeenCalled()
   });
 
   it('openEditFileDialog() should open the dialog and load the datasource on close', () => {

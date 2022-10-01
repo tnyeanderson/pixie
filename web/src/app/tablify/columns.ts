@@ -67,50 +67,30 @@ export class Column {
 }
 
 export class ListColumns {
-    static idColumn = new Column('ID', 'number')
-    static lastAccessedColumn = new Column('LastAccessedAt', 'timestamp', 'Last Accessed')
-
-    static cloudConfigsColumns: Column[] = [
-        this.idColumn,
-        new Column('Name', 'string'),
-        new Column('Path', 'string'),
-        this.lastAccessedColumn,
-    ]
-
-    static imagesColumns: Column[] = [
-        this.idColumn,
-        new Column('Name', 'string'),
-        new Column('Path', 'string'),
-        this.lastAccessedColumn,
-    ]
+    static idColumn = new Column('id', 'number', 'ID')
+    static lastAccessedColumn = new Column('lastAccessedAt', 'timestamp', 'Last Accessed')
 
     static filesColumns: Column[] = [
         this.idColumn,
-        new Column('Name', 'string'),
-        new Column('Path', 'string'),
-        this.lastAccessedColumn,
-    ]
-
-    static scriptsColumns: Column[] = [
-        this.idColumn,
-        new Column('Name', 'string'),
-        new Column('Path', 'string'),
+        new Column('name', 'string', 'Name'),
+        new Column('path', 'string', 'Path'),
+        new Column('fileType', 'string', 'File Type'),
         this.lastAccessedColumn,
     ]
 
     static devicesColumns: Column[] = [
         this.idColumn,
-        new Column('Name', 'string'),
-        new Column('Mac', 'string'),
-        new Column('GroupName', 'string', 'Group'),
-        new Column('ScriptID', 'string', 'Script', ['Script', 'Name'], 'Default'),
-        new Column('LastBooted', 'timestamp', 'Latest boot')
+        new Column('name', 'string', 'Name'),
+        new Column('mac', 'string', 'Mac'),
+        new Column('groupName', 'string', 'Group'),
+        new Column('scriptID', 'string', 'Script', ['Script', 'Name'], 'Default'),
+        new Column('lastBootedAt', 'timestamp', 'Latest boot')
     ]
 
     static logsColumns: Column[] = [
-        new Column('CreatedAt', 'timestamp', 'Timestamp'),
-        new Column('Type', 'string'),
-        new Column('Summary', 'string'),
-        new Column('Detail', 'longtext'),
+        new Column('createdAt', 'timestamp', 'Timestamp'),
+        new Column('type', 'string', 'Type'),
+        new Column('summary', 'string', 'Summary'),
+        new Column('detail', 'longtext', 'Detail'),
     ]
 }

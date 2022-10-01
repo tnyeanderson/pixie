@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, throwError } from 'rxjs';
-import { CloudConfigItem, DeviceItem, ImageItem, ScriptItem } from 'src/types';
+import { DeviceItem, FileItem } from 'src/types';
 
 @Injectable({
   providedIn: 'root'
@@ -39,10 +39,6 @@ export class ApiService {
     return formData
   }
 
-  getScripts() {
-    return this.httpClient.get(`${this.baseUrl}/files?fileType=script`).pipe(catchError(this.handleError))
-  }
-
   getFiles() {
     return this.httpClient.get(`${this.baseUrl}/files`).pipe(catchError(this.handleError))
   }
@@ -51,16 +47,17 @@ export class ApiService {
     return this.httpClient.post(`${this.baseUrl}/files/sync`, {}).pipe(catchError(this.handleError))
   }
 
-  addFile(image: ImageItem) {
-    return this.httpClient.post(`${this.baseUrl}/files`, image).pipe(catchError(this.handleError))
+  addFile(file: FileItem) {
+    return this.httpClient.post(`${this.baseUrl}/files`, file).pipe(catchError(this.handleError))
   }
 
   uploadFile(path: string, image: File) {
     return this.httpClient.put(`${this.baseUrl}/files/upload?path=${path}`, this.fileUploadBody(image)).pipe(catchError(this.handleError))
   }
 
-  editFile(id: number, image: ImageItem) {
-    return this.httpClient.post(`${this.baseUrl}/files/${id}`, image).pipe(catchError(this.handleError))
+  editFile(id: number, file: FileItem) {
+    console.log(file)
+    return this.httpClient.put(`${this.baseUrl}/files/${id}`, file).pipe(catchError(this.handleError))
   }
 
   deleteFile(id: number) {
@@ -72,15 +69,15 @@ export class ApiService {
   }
 
   addDevice(device: DeviceItem) {
-    return this.httpClient.post(`${this.baseUrl}/devices/add`, device).pipe(catchError(this.handleError))
+    return this.httpClient.post(`${this.baseUrl}/devices`, device).pipe(catchError(this.handleError))
   }
 
   editDevice(id: number, device: DeviceItem) {
-    return this.httpClient.post(`${this.baseUrl}/devices/update/${id}`, device).pipe(catchError(this.handleError))
+    return this.httpClient.put(`${this.baseUrl}/devices/${id}`, device).pipe(catchError(this.handleError))
   }
 
   deleteDevice(id: number) {
-    return this.httpClient.delete(`${this.baseUrl}/devices/delete/${id}`).pipe(catchError(this.handleError))
+    return this.httpClient.delete(`${this.baseUrl}/devices/${id}`).pipe(catchError(this.handleError))
   }
 
   getFileContent(path: string) {

@@ -30,8 +30,8 @@ export class DevicesListComponent implements OnInit {
   }
 
   deleteDevice = (device: DeviceItem) => {
-    if (device.ID) {
-      this.apiService.deleteDevice(device.ID).subscribe(data => {
+    if (device.id) {
+      this.apiService.deleteDevice(device.id).subscribe(data => {
         this.loadData()
       })
     }

@@ -4,7 +4,7 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'src/app/services/api.service';
-import { MockApiService, MOCK_SCRIPTS } from 'src/app/services/api.service.mock';
+import { MockApiService, MOCK_FILES } from 'src/app/services/api.service.mock';
 import { MatDialogRefStub, MAT_DIALOG_DATA_STUB } from 'src/testing/stubs';
 import { DeviceItem } from 'src/types';
 import { FormifyModule } from '../../formify/formify.module';
@@ -50,7 +50,7 @@ describe('EditDeviceComponent', () => {
 
   it('validate() should return true if this.model.Mac is set', () => {
     expect(component.validate()).toBeFalse()
-    component.model.Mac = 'has a mac now'
+    component.model.mac = 'has a mac now'
     expect(component.validate()).toBeTrue()
   });
 
@@ -61,8 +61,8 @@ describe('EditDeviceComponent', () => {
   });
   
   it('submit() with a model.ID should call apiService.editDevice() and close the dialog', () => {
-    component.model.ID = 5
-    component.model.Mac = 'testmac'
+    component.model.id = 5
+    component.model.mac = 'testmac'
     spyOn(component['apiService'], 'editDevice').and.callThrough()
     spyOn(component.dialogRef, 'close')
     component.submit()
@@ -77,7 +77,7 @@ describe('EditDeviceComponent', () => {
   });
 
   it('delete() with a model.ID should call apiService.deleteDevice()', () => {
-    component.model.ID = 3
+    component.model.id = 3
     spyOn(component['apiService'], 'deleteDevice').and.callThrough()
     component.delete()
     expect(component['apiService'].deleteDevice).toHaveBeenCalledWith(3)
@@ -85,17 +85,17 @@ describe('EditDeviceComponent', () => {
 
   it('initializeScripts() should set this.scripts', () => {
     component.scripts = []
-    expect(component.scripts).not.toEqual(MOCK_SCRIPTS)
-    component.initializeScripts(MOCK_SCRIPTS)
-    expect(component.scripts).toEqual(MOCK_SCRIPTS)
+    expect(component.scripts).not.toEqual(MOCK_FILES)
+    component.initializeScripts(MOCK_FILES)
+    expect(component.scripts).toEqual(MOCK_FILES)
   })
 
   it('ngOnInit() should call apiService.getScripts() and set this.scripts', () => {
-    spyOn(component['apiService'], 'getScripts').and.callThrough()
+    spyOn(component['apiService'], 'getFiles').and.callThrough()
     spyOn(component, 'initializeScripts')
     component.ngOnInit()
-    expect(component['apiService'].getScripts).toHaveBeenCalled()
-    expect(component.initializeScripts).toHaveBeenCalledWith(MOCK_SCRIPTS)
+    expect(component['apiService'].getFiles).toHaveBeenCalled()
+    expect(component.initializeScripts).toHaveBeenCalledWith(MOCK_FILES)
   })
 
 });

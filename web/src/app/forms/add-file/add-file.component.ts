@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FileItem } from 'src/types';
+import { FileItem, FILE_TYPES } from 'src/types';
 import { ApiService } from '../../services/api.service';
 
 @Component({
@@ -11,16 +11,17 @@ import { ApiService } from '../../services/api.service';
 export class AddFileComponent implements OnInit {
   model: FileItem = new FileItem()
   files: File[] = [];
+  fileTypes = FILE_TYPES.map(v => { return {ID: v, Name: v} })
 
 
   constructor(public dialogRef: MatDialogRef<AddFileComponent>, private apiService: ApiService) { }
 
-  validate = () => !!this.model.Name
+  validate = () => !!this.model.name
 
   submit = () => {
     this.apiService.addFile(this.model).subscribe(r => {
       if (this.files[0]) {
-        this.apiService.uploadFile(this.model.Path, this.files[0]).subscribe(r => {
+        this.apiService.uploadFile(this.model.path, this.files[0]).subscribe(r => {
           this.dialogRef.close()
         })
       } else {
