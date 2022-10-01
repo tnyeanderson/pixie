@@ -7,3 +7,5 @@
 - [x] Fix timestamp updating when file is viewed in browser
 - [x] Fix file upload when adding
 - [ ] Write go tests
+- [ ] SHA-256 checksum and size for files
+  - [ ] Detect changes when syncing with fs
