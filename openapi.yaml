@@ -1,7 +1,7 @@
 # TODO: /sync and /upload endpoints
 openapi: 3.0.2
 info:
-  description: >
+  description: |
     The specification for the Pixie API. Pixie is a web utility for managing PXE booted machines.
 
     [Pixie Github](https://github.com/tnyeanderson/pixie)
@@ -13,7 +13,7 @@ tags:
   - name: devices
     description: Devices attempting PXE boots
   - name: files
-    description: >
+    description: >-
       Files that are served over HTTP or TFTP. Can include boot images,
       automatic server configurations (ignition, cloud-init, autoyast, etc),
       PXE boot scripts, or any arbitrary file.
@@ -59,17 +59,21 @@ paths:
     get:
       tags:
         - devices
-      summary: >
+      summary: >-
         Retrieve the boot script for the device with the provided MAC address.
+        As a side effect, if the MAC address doesn't correlate to a known
+        device, the device is added to the database. If no boot script is
+        associated with the device, the default script (or a fallback to an
+        iPXE prompt) will be returned.
       operationId: GetScriptForDevice
       parameters:
         - name: mac
           in: query
-          description: >
-						Mac address for the device. A variety of formats are accepted.
+          description: >-
+            Mac address for the device. A variety of formats are accepted.
           required: true
           schema:
-						$ref: '#/components/schemas/mac'
+            $ref: '#/components/schemas/mac'
       responses:
         '200':
           description: The iPXE boot script
@@ -269,7 +273,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-          nullable: true
         deletedAt:
           type: string
           format: date-time
@@ -287,7 +290,7 @@ components:
         - type: object
           properties:
             mac:
-							$ref: '#/components/schemas/mac'
+              $ref: '#/components/schemas/mac'
             name:
               type: string
               example: My super cool device
@@ -317,6 +320,7 @@ components:
                 - Image
                 - Config
                 - Script
+                - Binary
                 - Plain
       discriminator:
         propertyName: fileType
@@ -338,7 +342,7 @@ components:
               example: A short summary of what happened.
             detail:
               type: string
-              example: >
+              example: >-
                 A much longer explanation of what happened. Might include the
                 resulting object, detailed information, or other relevant
                 stuff.
@@ -355,13 +359,13 @@ components:
               enum:
                 - defaultBootScript
             value:
-              description: >
+              description: >-
                 The user-provided value for a setting. Always a string. Parse
                 values on the client side.
               type: string
               example: "15"
             defaultValue:
-              description: >
+              description: >-
                 The default value for the setting. Always a string. Parse
                 values on the client side. Can be empty.
               type: string
