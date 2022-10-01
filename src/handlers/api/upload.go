@@ -41,7 +41,7 @@ func saveFile(c *gin.Context, basepath string, subpath string) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": fmt.Sprintf("'%s' uploaded!", path)})
+	c.JSON(http.StatusOK, gin.H{"status": fmt.Sprintf("uploaded '%s'", path)})
 }
 
 func saveUploadedFile(c *gin.Context, path string) error {

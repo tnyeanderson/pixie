@@ -74,7 +74,7 @@ export class MockApiService implements ApiService {
 
     addFile(file: FileItem) { return of({ data: file }) }
 
-    uploadFile(path: string, file: File) { return of({ status: `'${path}' uploaded!` }) }
+    uploadFile(path: string, file: File) { return of({ status: `uploaded '${path}'` }) }
 
     editFile(id: number, file: FileItem) { return of({ data: file }) }
 

@@ -1,8 +1,10 @@
-# TODO: /sync and /upload endpoints
-openapi: 3.0.2
+openapi: 3.0.1
+servers:
+  - url: /api/v1
 info:
-  description: |
-    The specification for the Pixie API. Pixie is a web utility for managing PXE booted machines.
+  description: >-
+    The specification for the Pixie API. Pixie is a web utility for managing
+    PXE booted machines.
 
     [Pixie Github](https://github.com/tnyeanderson/pixie)
   version: 0.0.1
@@ -44,7 +46,7 @@ paths:
     get:
       tags:
         - devices
-      summary: Lists all devices
+      summary: List all devices
       operationId: GetDevices
       responses:
         '200':
@@ -169,7 +171,7 @@ paths:
     get:
       tags:
         - files
-      summary: Lists all files
+      summary: List all files
       operationId: GetFiles
       responses:
         '200':
@@ -180,6 +182,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/File'
+  /files/sync:
+    post:
+      tags:
+        - files
+      summary: >-
+        Sync the files table in the database to reflect what is actually on the
+        filesystem.
+      operationId: SyncFiles
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '405':
+          description: Invalid input
   '/files/{id}':
     parameters:
       - name: id
@@ -238,6 +257,43 @@ paths:
       responses:
         '400':
           description: Invalid ID supplied
+  '/files/{id}/upload':
+    parameters:
+      - name: id
+        in: path
+        description: ID of file to upload
+        required: true
+        schema:
+          type: integer
+          format: int64
+    post:
+      tags:
+        - files
+      summary: Upload a file
+      operationId: UploadFile
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "uploaded 'relative/path/to/file.txt'"
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: File not found
+        '405':
+          description: Validation exception
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
   /logs:
     get:
       tags:
