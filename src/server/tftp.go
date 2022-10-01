@@ -15,7 +15,7 @@ import (
 
 // readHandler is called when client starts file download from server
 func readHandler(filename string, rf io.ReaderFrom) error {
-	print("TFTP get: " + filename)
+	fmt.Printf("TFTP get: %s\n", filename)
 	if filename == "pixie.kpxe" {
 		// For compatibility reasons, allow loading pixie.kpxe from the root path
 		filename = path.Join(config.Pixie.Paths.FileServer, filename)
