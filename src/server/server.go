@@ -33,7 +33,7 @@ func ListenHTTP() {
 		v1.GET("/devices/:id", api.GetAllDevicesHandler)
 		v1.PUT("/devices/:id", api.UpdateDeviceHandler)
 		v1.DELETE("/devices/:id", api.DeleteDeviceHandler)
-		v1.GET("/devices/boot", handlers.BootHandler)
+		v1.GET("/devices/boot", api.BootHandler)
 
 		// files
 		v1.GET("/files", api.GetAllFilesHandler)
