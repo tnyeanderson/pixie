@@ -7,7 +7,7 @@ import (
 
 	"github.com/tnyeanderson/pixie/config"
 	"github.com/tnyeanderson/pixie/db"
-	"github.com/tnyeanderson/pixie/db/models"
+	"github.com/tnyeanderson/pixie/models"
 	"github.com/tnyeanderson/pixie/utils"
 )
 

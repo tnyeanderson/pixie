@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/tnyeanderson/pixie/db"
-	"github.com/tnyeanderson/pixie/db/models"
+	"github.com/tnyeanderson/pixie/models"
 )
 
 func GetDevices() ([]models.Device, error) {

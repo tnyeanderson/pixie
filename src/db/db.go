@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/tnyeanderson/pixie/config"
-	"github.com/tnyeanderson/pixie/db/models"
+	"github.com/tnyeanderson/pixie/models"
 )
 
 var DB *gorm.DB
