@@ -67,7 +67,7 @@ func UpdateDevice(id uint, updated models.Device) (*models.Device, error) {
 
 func UpdateDeviceLastBoot(id uint) error {
 	var device models.Device
-	result := db.Get().Model(device).Where("id = ?", id).Update("last_booted", time.Now())
+	result := db.Get().Model(device).Where("id = ?", id).Update("last_booted_at", time.Now())
 
 	if result.Error != nil {
 		return result.Error

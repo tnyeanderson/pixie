@@ -9,6 +9,6 @@ type Device struct {
 	Mac          string     `json:"mac" gorm:"unique;not null"`
 	Name         string     `json:"name"`
 	LastBootedAt *time.Time `json:"lastBootedAt"`
-	ScriptID     uint       `json:"scriptId" gorm:"type:INT UNSIGNED REFERENCES scripts(id) ON DELETE RESTRICT ON UPDATE RESTRICT"`
+	ScriptID     uint       `json:"scriptId" gorm:"type:INT UNSIGNED REFERENCES files(id) ON DELETE RESTRICT ON UPDATE RESTRICT"`
 	Script       File       `json:"script"`
 }
