@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/tnyeanderson/pixie/config"
 	"github.com/tnyeanderson/pixie/db/queries"
+	"github.com/tnyeanderson/pixie/handlers"
 	"github.com/tnyeanderson/pixie/models"
 	"github.com/tnyeanderson/pixie/utils"
 )
@@ -52,5 +53,13 @@ func BootHandler(c *gin.Context) {
 
 	queries.LogLastAccessed(scriptPath)
 
-	c.File(scriptPath)
+	r := handlers.TextRender{}
+	r.TemplatePath = scriptPath
+	r.Data.PixieHost = c.Request.Host
+	// TODO: Set this to actual user data
+	//r.Data.UserData = map[string]string{
+	//	"woot": "tester",
+	//}
+
+	c.Render(http.StatusOK, &r)
 }
