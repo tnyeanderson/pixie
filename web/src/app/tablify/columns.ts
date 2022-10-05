@@ -88,7 +88,6 @@ export class ListColumns {
         this.idColumn,
         new Column('name', 'string', 'Name'),
         new Column('mac', 'string', 'Mac'),
-        new Column('groupName', 'string', 'Group'),
         new Column('scriptId', 'string', 'Script', ['script', 'name'], 'Default'),
         new Column('bootConfigId', 'string', 'Boot Config', ['bootConfig', 'name']),
         new Column('lastBootedAt', 'timestamp', 'Latest boot')

@@ -23,7 +23,6 @@ export class BootConfigItem extends BaseModel {
 export class DeviceItem extends BaseModel {
   name = ''
   mac = ''
-  groupName = ''
   lastBootedAt = ''
   bootConfigId = ''
   bootConfig = new BootConfigItem()
