@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, throwError } from 'rxjs';
-import { DeviceItem, FileItem } from 'src/types';
+import { BootConfigItem, DeviceItem, FileItem } from 'src/types';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +62,23 @@ export class ApiService {
 
   deleteFile(id: number) {
     return this.httpClient.delete(`${this.baseUrl}/files/${id}`).pipe(catchError(this.handleError))
+  }
+
+  getBootConfigs() {
+    return this.httpClient.get(`${this.baseUrl}/boot-configs`).pipe(catchError(this.handleError))
+  }
+
+  addBootConfig(bootConfig: BootConfigItem) {
+    return this.httpClient.post(`${this.baseUrl}/boot-configs`, bootConfig).pipe(catchError(this.handleError))
+  }
+
+  editBootConfig(id: number, bootConfig: BootConfigItem) {
+    console.log(bootConfig)
+    return this.httpClient.put(`${this.baseUrl}/boot-configs/${id}`, bootConfig).pipe(catchError(this.handleError))
+  }
+
+  deleteBootConfig(id: number) {
+    return this.httpClient.delete(`${this.baseUrl}/boot-configs/${id}`).pipe(catchError(this.handleError))
   }
 
   getDevices() {

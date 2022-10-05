@@ -44,6 +44,13 @@ func ListenHTTP() {
 		v1.DELETE("/files/:id", api.DeleteFileHandler)
 		v1.POST("/files/:id/upload", api.UploadFileHandler)
 
+		// boot configs
+		v1.GET("/boot-configs", api.GetAllBootConfigsHandler)
+		v1.POST("/boot-configs", api.AddBootConfigHandler)
+		v1.GET("/boot-configs/:id", api.GetAllBootConfigsHandler)
+		v1.PUT("/boot-configs/:id", api.UpdateBootConfigHandler)
+		v1.DELETE("/boot-configs/:id", api.DeleteBootConfigHandler)
+
 		// logs
 		v1.GET("/logs", api.GetLogsHandler)
 	}

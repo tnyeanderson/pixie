@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ApiService } from 'src/app/services/api.service';
-import { DeviceItem, FileItem } from 'src/types';
+import { BootConfigItem, DeviceItem, FileItem } from 'src/types';
 
 @Component({
   selector: 'app-add-device',
@@ -11,6 +11,7 @@ import { DeviceItem, FileItem } from 'src/types';
 export class AddDeviceComponent implements OnInit {
   model: DeviceItem = new DeviceItem()
   scripts: FileItem[] = []
+  bootConfigs: BootConfigItem[] = []
 
   constructor(public dialogRef: MatDialogRef<AddDeviceComponent>, private apiService: ApiService) { }
 
@@ -26,8 +27,13 @@ export class AddDeviceComponent implements OnInit {
     this.scripts = value as FileItem[]
   }
 
+  initializeBootConfigs = (value: any) => {
+    this.bootConfigs = value as BootConfigItem[]
+  }
+
   ngOnInit(): void {
     this.apiService.getFiles().subscribe(data => this.initializeScripts(data))
+    this.apiService.getBootConfigs().subscribe(data => this.initializeBootConfigs(data))
   }
 
 }

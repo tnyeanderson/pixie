@@ -1,0 +1,5 @@
+<h1 id="page-title">Boot Configs</h1>
+<app-reload-button [reload]="loadData"></app-reload-button>
+
+<app-table [columns]="columns" [dataSource]="dataSource" [edit]="editBootConfig" [add]="addBootConfig" [delete]="deleteBootConfig"
+	[editable]="true" [addable]="true" [deletable]="true"></app-table>

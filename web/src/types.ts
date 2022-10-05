@@ -15,12 +15,19 @@ export class FileItem extends BaseModel {
   lastAccessedAt = ''
 }
 
+export class BootConfigItem extends BaseModel {
+  name = ''
+  config = ''
+}
+
 export class DeviceItem extends BaseModel {
   name = ''
   mac = ''
   groupName = ''
   lastBootedAt = ''
-  scriptID = ''
+  bootConfigId = ''
+  bootConfig = new BootConfigItem()
+  scriptId = ''
   script = new FileItem()
 }
 

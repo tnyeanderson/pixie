@@ -22,6 +22,7 @@ func GetFiles() ([]models.File, error) {
 	return files, nil
 }
 
+// TODO: This is probably broken
 func GetDefaultFile() (*models.File, error) {
 	var file models.File
 	result := db.Get().Model(&models.File{}).Where("is_default = ?", true).First(&file)

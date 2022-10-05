@@ -78,12 +78,19 @@ export class ListColumns {
         this.lastAccessedColumn,
     ]
 
+    static bootConfigsColumns: Column[] = [
+        this.idColumn,
+        new Column('name', 'string', 'Name'),
+        new Column('config', 'string', 'Config (JSON)'),
+    ]
+
     static devicesColumns: Column[] = [
         this.idColumn,
         new Column('name', 'string', 'Name'),
         new Column('mac', 'string', 'Mac'),
         new Column('groupName', 'string', 'Group'),
-        new Column('scriptID', 'string', 'Script', ['Script', 'Name'], 'Default'),
+        new Column('scriptId', 'string', 'Script', ['script', 'name'], 'Default'),
+        new Column('bootConfigId', 'string', 'Boot Config', ['bootConfig', 'name']),
         new Column('lastBootedAt', 'timestamp', 'Latest boot')
     ]
 

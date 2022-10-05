@@ -12,11 +12,14 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormifyModule } from './formify/formify.module';
+import { AddBootConfigComponent } from './forms/add-boot-config/add-boot-config.component';
 import { AddDeviceComponent } from './forms/add-device/add-device.component';
 import { AddFileComponent } from './forms/add-file/add-file.component';
+import { EditBootConfigComponent } from './forms/edit-boot-config/edit-boot-config.component';
 import { EditDeviceComponent } from './forms/edit-device/edit-device.component';
 import { EditFileComponent } from './forms/edit-file/edit-file.component';
 import { ReloadButtonModule } from './fragments/reload-button/reload-button.module';
+import { BootConfigsListComponent } from './lists/boot-configs-list/boot-configs-list.component';
 import { DevicesListComponent } from './lists/devices-list/devices-list.component';
 import { FilesListComponent } from './lists/files-list/files-list.component';
 import { LogsListComponent } from './lists/logs-list/logs-list.component';
@@ -32,6 +35,9 @@ import { TablifyModule } from './tablify/tablify.module';
     AppComponent,
     FilesListComponent,
     DevicesListComponent,
+    BootConfigsListComponent,
+    AddBootConfigComponent,
+    EditBootConfigComponent,
     AddFileComponent,
     EditFileComponent,
     ConfirmationDialogComponent,

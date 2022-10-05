@@ -11,7 +11,7 @@ import (
 
 func GetDevices() ([]models.Device, error) {
 	var devices []models.Device
-	result := db.Get().Joins("Script").Find(&devices)
+	result := db.Get().Joins("Script").Joins("BootConfig").Find(&devices)
 
 	if result == nil {
 		return nil, errors.New("error fetching devices")

@@ -19,6 +19,7 @@ func Initialize() {
 
 	// Set up tables based on models
 	database.AutoMigrate(&models.Device{})
+	database.AutoMigrate(&models.BootConfig{})
 	database.AutoMigrate(&models.File{})
 	database.AutoMigrate(&models.Log{})
 	database.AutoMigrate(&models.Setting{})

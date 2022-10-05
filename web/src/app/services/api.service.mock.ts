@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http"
 import { of, throwError } from "rxjs"
-import { DeviceItem, FileItem, LogItem } from "src/types"
+import { BootConfigItem, DeviceItem, FileItem, LogItem } from "src/types"
 import { ApiService } from "./api.service"
 
 export const MOCK_BLOB_CONTENT = 'blobcontent'
@@ -33,6 +33,21 @@ export const MOCK_FILES = [
 
     }
 ] as FileItem[]
+
+export const MOCK_BOOT_CONFIGS = [
+    {
+        id: 3,
+        name: 'name1',
+        config: '{"test": "value"}',
+
+    },
+    {
+        id: 55,
+        name: 'name2',
+        config: '{"test2": "value2"}',
+
+    }
+] as BootConfigItem[]
 
 export const MOCK_LOGS = [
     {
