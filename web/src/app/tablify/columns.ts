@@ -81,7 +81,7 @@ export class ListColumns {
     static bootConfigsColumns: Column[] = [
         this.idColumn,
         new Column('name', 'string', 'Name'),
-        new Column('config', 'string', 'Config (JSON)'),
+        new Column('config', 'longtext', 'Config (JSON)'),
     ]
 
     static devicesColumns: Column[] = [
