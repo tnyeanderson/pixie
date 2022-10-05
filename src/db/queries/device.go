@@ -23,7 +23,7 @@ func GetDevices() ([]models.Device, error) {
 func GetDeviceByMac(mac string) (*models.Device, error) {
 	var device models.Device
 	// TODO: /src/db/queries/device.go:25 record not found
-	result := db.Get().Joins("Script").First(&device, "mac = ?", mac)
+	result := db.Get().Joins("Script").Joins("BootConfig").First(&device, "mac = ?", mac)
 
 	if result.Error != nil || device.ID == 0 {
 		return nil, result.Error

@@ -7,7 +7,7 @@ import (
 
 type TextRenderData struct {
 	PixieHost string
-	UserData  map[string]string
+	UserData  map[string]interface{}
 }
 
 type TextRender struct {

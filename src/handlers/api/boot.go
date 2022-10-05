@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"path/filepath"
@@ -56,10 +57,15 @@ func BootHandler(c *gin.Context) {
 	r := handlers.TextRender{}
 	r.TemplatePath = scriptPath
 	r.Data.PixieHost = c.Request.Host
-	// TODO: Set this to actual user data
-	//r.Data.UserData = map[string]string{
-	//	"woot": "tester",
-	//}
+	if device.BootConfig.Config != "" {
+		userData := make(map[string]interface{})
+		err = json.Unmarshal([]byte(device.BootConfig.Config), &userData)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse JSON boot config"})
+			return
+		}
+		r.Data.UserData = userData
+	}
 
 	c.Render(http.StatusOK, &r)
 }
