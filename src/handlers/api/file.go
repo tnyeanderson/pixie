@@ -8,8 +8,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/tnyeanderson/pixie/config"
-	"github.com/tnyeanderson/pixie/models"
 	"github.com/tnyeanderson/pixie/db/queries"
+	"github.com/tnyeanderson/pixie/models"
 	"github.com/tnyeanderson/pixie/utils"
 )
 
