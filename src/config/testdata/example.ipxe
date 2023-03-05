@@ -1,0 +1,11 @@
+#!ipxe
+
+set name {{.Name}}
+set ubuntu http://{{index .Vars "pixiehost"}}/static/ubuntu-22.04
+set docker http://{{index .Vars "pixiehost"}}/static/docker-hosts-test
+
+kernel ${ubuntu}/vmlinuz cloud-config-url=/dev/null url=${ubuntu}/ubuntu-22.04.1-live-server-amd64.iso initrd=initrd ip=dhcp toram autoinstall ds=nocloud-net;s={{index .Vars "cloudinit"}}
+
+initrd ${ubuntu}/initrd
+
+boot

@@ -1,88 +1,117 @@
 package config
 
 import (
-	_ "embed"
-	"errors"
-	"flag"
-	"fmt"
-	"io/ioutil"
 	"os"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
-var Pixie = ConfigModel{}
+type Config struct {
+	StaticRoot string   `yaml:"staticRoot,omitempty"`
+	Devices    []Device `yaml:",omitempty"`
+	Groups     []Group  `yaml:",omitempty"`
+	Scripts    []Script `yaml:",omitempty"`
+	Vars       *Vars    `yaml:",omitempty"`
+	Resolved   Devices  `yaml:"-"`
+}
 
-//go:embed default.yaml
-var defaultConfigYaml []byte
-
-func loadDefaults() {
-	err := parseConfigYaml(defaultConfigYaml)
+func (c *Config) Load(path string) error {
+	b, err := os.ReadFile(path)
 	if err != nil {
-		fmt.Println("Error parsing default config: ", err.Error())
-		os.Exit(1)
+		return err
 	}
-}
-
-func Initialize() {
-	loadConfig()
-	printConfig()
-	mustValidate()
-}
-
-func loadConfig() {
-	loadDefaults()
-	parseConfigFileFlag()
-	readUserConfig()
-}
-
-func parseConfigFileFlag() {
-	flag.StringVar(&Pixie.Paths.ConfigFile, "config-file", Pixie.Paths.ConfigFile, "path to config file")
-	flag.Parse()
-}
-
-func printConfig() {
-	fmt.Printf("%+v\n", Pixie)
-}
-
-func readUserConfig() {
-	configpath := Pixie.Paths.ConfigFile
-	content, err := readConfigFile(configpath)
+	err = yaml.Unmarshal(b, &c)
 	if err != nil {
-		fmt.Println("User config not found or could not be read: ", configpath)
-		fmt.Println("Using default config")
-	} else {
-		if err := parseConfigYaml(content); err != nil {
-			fmt.Println(err.Error())
-			fmt.Println("Using default config")
+		return err
+	}
+	c.resolveDevices()
+	return nil
+}
+
+func (c *Config) Export() ([]byte, error) {
+	return yaml.Marshal(c)
+}
+
+func (c *Config) resolveDevices() {
+	devices := Devices{}
+	for _, d := range c.Devices {
+		d.Script = c.lookupScript(d)
+		d.Vars = c.resolveVars(d)
+		devices[d.Mac] = d
+	}
+	c.Resolved = devices
+}
+
+func (c *Config) lookupGroup(d Device) *Group {
+	for _, g := range c.Groups {
+		for _, gd := range g.Devices {
+			if gd.Name == d.Name || gd.Mac == d.Mac {
+				return &g
+			}
 		}
 	}
+	return nil
 }
 
-func readConfigFile(file string) ([]byte, error) {
-	contents, err := ioutil.ReadFile(file)
-	if err != nil {
-		return nil, errors.New("Unable to read config file: " + err.Error())
+// Get a script that has a path from one that may not
+func (c *Config) resolveScript(s Script) *Script {
+	if s.Path != "" {
+		return &s
 	}
-	return contents, nil
-}
-
-func parseConfigYaml(content []byte) error {
-	err := yaml.UnmarshalStrict(content, &Pixie)
-	if err != nil {
-		return errors.New("Unable to parse config file: " + err.Error())
+	for _, cs := range c.Scripts {
+		if cs.Name == s.Name {
+			return &cs
+		}
 	}
 	return nil
 }
 
-func validateConfig() error {
-	// Put any required validation here
+func (c *Config) resolveVars(d Device) *Vars {
+	vars := Vars{}
+
+	// Top-level vars
+	if c.Vars != nil {
+		for k, v := range *c.Vars {
+			vars[k] = v
+		}
+	}
+
+	// Group vars
+	g := c.lookupGroup(d)
+	if g != nil {
+		for k, v := range *g.Vars {
+			vars[k] = v
+		}
+	}
+
+	// Device vars
+	if d.Vars != nil {
+		for k, v := range *d.Vars {
+			vars[k] = v
+		}
+	}
+
+	return &vars
+}
+
+func (c *Config) lookupScript(d Device) *Script {
+	if d.Script != nil {
+		if d.Script.Path != "" {
+			return d.Script
+		}
+		return c.resolveScript(*d.Script)
+	}
+	g := c.lookupGroup(d)
+	if g != nil {
+		return c.resolveScript(g.Script)
+	}
 	return nil
 }
 
-func mustValidate() {
-	if err := validateConfig(); err != nil {
-		fmt.Println("CONFIG ERROR: ", err.Error())
-		os.Exit(1)
+func (c *Config) GetScriptPath(mac string) string {
+	d, ok := c.Resolved[mac]
+	if !ok || d.Script == nil {
+		return ""
 	}
+	return d.Script.Path
 }

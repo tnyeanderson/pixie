@@ -1,25 +1,22 @@
 package main
 
 import (
-	"io/fs"
 	"os"
-	"path/filepath"
 	"sync"
 
-	"github.com/tnyeanderson/pixie/config"
-	"github.com/tnyeanderson/pixie/db"
+	"github.com/tnyeanderson/pixie/api"
 	"github.com/tnyeanderson/pixie/server"
 )
 
-func setupDirectories() {
-	dirs := []string{
-		filepath.Dir(config.Pixie.Paths.Database),
-		config.Pixie.Paths.FileServer,
-	}
-	for _, dir := range dirs {
-		_ = os.Mkdir(dir, fs.FileMode(config.Pixie.AccessModes.DirDefault))
-	}
-}
+//func setupDirectories() {
+//	dirs := []string{
+//		filepath.Dir(config.Pixie.Paths.Database),
+//		config.Pixie.Paths.FileServer,
+//	}
+//	for _, dir := range dirs {
+//		_ = os.Mkdir(dir, fs.FileMode(config.Pixie.AccessModes.DirDefault))
+//	}
+//}
 
 func start() {
 	wg := new(sync.WaitGroup)
@@ -31,7 +28,7 @@ func start() {
 	}()
 
 	go func() {
-		server.ListenTFTP()
+		//server.ListenTFTP()
 		wg.Done()
 	}()
 
@@ -39,11 +36,7 @@ func start() {
 }
 
 func main() {
-	config.Initialize()
-
-	setupDirectories()
-
-	db.Initialize()
-
+	api.ConfigPath = os.Args[1]
+	api.ReloadConfig()
 	start()
 }

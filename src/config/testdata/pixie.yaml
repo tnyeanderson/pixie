@@ -1,0 +1,51 @@
+---
+staticRoot: ./testdata
+
+# Define top-level variables, such as the IP/hostname of the pixie server
+vars:
+  pixiehost: 10.0.0.1:8880
+
+# Define ipxe boot scripts. Scripts have a name and a path. Scripts can contain
+# go text templates, to which the resolved device will be applied.  Device vars
+# override group vars. Use {{index .Vars "varname"}} to access a variable in a
+# template
+scripts:
+  - name: script1
+    path: myscript/boot.ipxe
+  - name: other
+    path: other/boot.ipxe
+
+# Groups can tell multiple devices to boot from the same script.
+groups:
+  - name: group1
+    script:
+      name: script1
+    devices:
+      - name: h1
+      - name: h2
+      - name: h3
+    vars:
+      cloudinit: mygroup/cloud-init/
+
+# Devices have a name and a MAC address. Optionally, set arbitrary variables or
+# set a boot script.
+devices:
+  - name: h1
+    mac: 00:00:00:00:01:01
+
+  - name: h2
+    mac: 00:00:00:00:01:02
+
+  - name: h3
+    mac: 00:00:00:00:01:03
+    script:
+      name: other
+
+  - name: h4
+    mac: 00:00:00:00:01:11
+    script:
+      # Set either a name or a path.
+      path: example.ipxe
+    vars:
+      cloudinit: testdata/cloud-init/
+

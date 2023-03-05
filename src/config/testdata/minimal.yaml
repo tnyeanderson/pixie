@@ -1,0 +1,10 @@
+# The absolute minimum possible config simply assigns MAC addresses to iPXE
+# boot scripts, served from the staticRoot directory
+staticRoot: ./testdata
+devices:
+  - mac: "11:22:33:44:55:66"
+    script:
+      path: testscript1
+  - mac: "66:55:44:33:22:11"
+    script:
+      path: testscript2

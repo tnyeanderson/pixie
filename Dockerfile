@@ -26,4 +26,4 @@ COPY --from=build-go /src/pixie ./pixie
 COPY --from=build-angular /web/dist ./web/dist
 COPY src/defaults ./defaults
 
-ENTRYPOINT [ "/app/pixie" ]
+ENTRYPOINT [ "/app/pixie", "/app/data/pixie.yaml" ]
