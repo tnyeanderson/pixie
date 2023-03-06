@@ -1,7 +1,11 @@
 package config
 
 import (
+	"fmt"
 	"os"
+	"path"
+	"strings"
+	"text/template"
 
 	"gopkg.in/yaml.v3"
 )
@@ -30,6 +34,38 @@ func (c *Config) Load(path string) error {
 
 func (c *Config) Export() ([]byte, error) {
 	return yaml.Marshal(c)
+}
+
+func (c *Config) RenderScript(d Device, staticRoot string) (string, error) {
+	out := strings.Builder{}
+	subpath := d.Script.Path
+	if subpath == "" {
+		if defaultScript := c.defaultScript(); defaultScript != nil {
+			subpath = defaultScript.Path
+		}
+	}
+	if subpath == "" {
+		return "", fmt.Errorf("path can not be empty: %s", subpath)
+	}
+	fullpath := path.Join(staticRoot, subpath)
+	tmpl, err := template.ParseFiles(fullpath)
+	if err != nil {
+		return "", err
+	}
+	err = tmpl.Execute(&out, d)
+	if err != nil {
+		return "", err
+	}
+	return out.String(), nil
+}
+
+func (c *Config) defaultScript() *Script {
+	for _, s := range c.Scripts {
+		if s.Name == "default" {
+			return &s
+		}
+	}
+	return nil
 }
 
 func (c *Config) resolveDevices() {

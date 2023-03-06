@@ -37,6 +37,5 @@ func start() {
 
 func main() {
 	api.ConfigPath = os.Args[1]
-	api.ReloadConfig()
 	start()
 }

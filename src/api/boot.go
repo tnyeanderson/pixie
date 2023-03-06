@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/tnyeanderson/pixie/config"
 	"github.com/tnyeanderson/pixie/utils"
 )
 
@@ -15,7 +16,13 @@ func BootHandler(c *gin.Context) {
 		return
 	}
 
-	d, ok := Config.Resolved[mac]
+	conf := config.Config{}
+	if err := conf.Load(ConfigPath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to load config"})
+		return
+	}
+
+	d, ok := conf.Resolved[mac]
 	if !ok {
 		// TODO
 		print("Adding device: " + mac)
@@ -23,7 +30,7 @@ func BootHandler(c *gin.Context) {
 		return
 	}
 
-	s, err := d.RenderScript(Config.StaticRoot)
+	s, err := conf.RenderScript(d, conf.StaticRoot)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render boot script."})

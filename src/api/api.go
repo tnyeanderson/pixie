@@ -1,9 +1,6 @@
 package api
 
 import (
-	"net/http"
-	"net/url"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,19 +8,17 @@ func NewRouter() *gin.Engine {
 	// Set up gin
 	r := gin.Default()
 
-	// Redirect to angular site from site root
-	r.GET("/", func(c *gin.Context) {
-		location := url.URL{Path: "/app"}
-		c.Redirect(http.StatusFound, location.RequestURI())
-	})
+	//// Redirect to angular site from site root
+	//r.GET("/", func(c *gin.Context) {
+	//	location := url.URL{Path: "/app"}
+	//	c.Redirect(http.StatusFound, location.RequestURI())
+	//})
 
 	// API
 	// Default base path: /api/v1
 	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/config", GetConfigHandler)
-		v1.PATCH("/config", ReloadConfigHandler)
-		v1.GET("/devices/boot", BootHandler)
+		v1.GET("/device/boot", BootHandler)
 
 		//// logs
 		//v1.GET("/logs", api.GetLogsHandler)
