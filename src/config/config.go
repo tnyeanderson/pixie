@@ -80,10 +80,8 @@ func (c *Config) resolveDevices() {
 
 func (c *Config) lookupGroup(d Device) *Group {
 	for _, g := range c.Groups {
-		for _, gd := range g.Devices {
-			if gd.Name == d.Name || gd.Mac == d.Mac {
-				return &g
-			}
+		if g.Name == d.Group {
+			return &g
 		}
 	}
 	return nil

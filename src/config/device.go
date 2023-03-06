@@ -3,6 +3,7 @@ package config
 type Device struct {
 	Name   string  `yaml:",omitempty"`
 	Mac    string  `yaml:",omitempty"`
+	Group  string  `yaml:",omitempty"`
 	Script *Script `yaml:",omitempty"`
 	Vars   *Vars   `yaml:",omitempty"`
 }

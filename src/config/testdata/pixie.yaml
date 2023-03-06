@@ -20,24 +20,23 @@ groups:
   - name: group1
     script:
       name: script1
-    devices:
-      - name: h1
-      - name: h2
-      - name: h3
     vars:
       cloudinit: mygroup/cloud-init/
 
-# Devices have a name and a MAC address. Optionally, set arbitrary variables or
-# set a boot script.
+# Devices have a name and a MAC address. Optionally, assign the device to a
+# group, set arbitrary variables or set a boot script.
 devices:
   - name: h1
     mac: 00:00:00:00:01:01
+    group: group1
 
   - name: h2
     mac: 00:00:00:00:01:02
+    group: group1
 
   - name: h3
     mac: 00:00:00:00:01:03
+    group: group1
     script:
       name: other
 

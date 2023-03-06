@@ -28,7 +28,7 @@ func start() {
 	}()
 
 	go func() {
-		//server.ListenTFTP()
+		server.ListenTFTP()
 		wg.Done()
 	}()
 

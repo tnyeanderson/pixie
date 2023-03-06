@@ -1,8 +1,7 @@
 package config
 
 type Group struct {
-	Name    string
-	Script  Script
-	Devices []Device `yaml:",omitempty"`
-	Vars    *Vars    `yaml:",omitempty"`
+	Name   string
+	Script Script
+	Vars   *Vars `yaml:",omitempty"`
 }
