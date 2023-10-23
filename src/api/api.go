@@ -17,15 +17,20 @@ func NewRouter() *gin.Engine {
 	// API
 	// Default base path: /api/v1
 	v1 := r.Group("/api/v1")
-	{
-		v1.GET("/device/boot", BootHandler)
 
-		//// logs
-		//v1.GET("/logs", api.GetLogsHandler)
-	}
+	// Always get the config for api calls
+	v1.Use(GetConfig)
+
+	v1.GET("/device/boot", BootHandler)
+
+	//// logs
+	//v1.GET("/logs", api.GetLogsHandler)
 
 	// File server
-	r.GET("/static/*path", StaticHandler)
+	r.GET("/static/*path", GetConfig, StaticHandler)
+
+	// Renderer
+	r.GET("/render/:mac/*path", GetConfig, StaticHandler)
 
 	//// Angular site
 	//r.Static("/app", config.Pixie.Paths.WebRoot)

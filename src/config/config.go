@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"strings"
-	"text/template"
 
 	"gopkg.in/yaml.v3"
 )
@@ -36,8 +34,7 @@ func (c *Config) Export() ([]byte, error) {
 	return yaml.Marshal(c)
 }
 
-func (c *Config) RenderScript(d Device, staticRoot string) (string, error) {
-	out := strings.Builder{}
+func (c *Config) RenderScript(d Device) (string, error) {
 	subpath := d.Script.Path
 	if subpath == "" {
 		if defaultScript := c.defaultScript(); defaultScript != nil {
@@ -47,16 +44,8 @@ func (c *Config) RenderScript(d Device, staticRoot string) (string, error) {
 	if subpath == "" {
 		return "", fmt.Errorf("path can not be empty: %s", subpath)
 	}
-	fullpath := path.Join(staticRoot, subpath)
-	tmpl, err := template.ParseFiles(fullpath)
-	if err != nil {
-		return "", err
-	}
-	err = tmpl.Execute(&out, d)
-	if err != nil {
-		return "", err
-	}
-	return out.String(), nil
+	fullpath := path.Join(c.StaticRoot, subpath)
+	return d.RenderFile(fullpath)
 }
 
 func (c *Config) defaultScript() *Script {

@@ -10,15 +10,14 @@ import (
 )
 
 func BootHandler(c *gin.Context) {
-	mac, err := utils.SanitizeMac(c.Query("mac"))
+	mac := c.Query("mac")
+
+	co, _ := c.Get("conf")
+	conf := co.(*config.Config)
+
+	mac, err := utils.SanitizeMac(mac)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MAC address"})
-		return
-	}
-
-	conf := config.Config{}
-	if err := conf.Load(ConfigPath); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to load config"})
 		return
 	}
 
@@ -26,11 +25,11 @@ func BootHandler(c *gin.Context) {
 	if !ok {
 		// TODO
 		print("Adding device: " + mac)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "device not found"})
 		return
 	}
 
-	s, err := conf.RenderScript(d, conf.StaticRoot)
+	s, err := conf.RenderScript(d)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render boot script."})
