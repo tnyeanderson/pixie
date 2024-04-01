@@ -1,27 +1,29 @@
 package pixie
 
 import (
-	"fmt"
 	"maps"
-	"path"
 	"strings"
 	"text/template"
 )
 
-type Vars map[string]string
-
+// Device is a device that will be booted using pixie.
 type Device struct {
 	Name string
 	Mac  string
-	Vars Vars
+	Vars map[string]string
 }
 
-func (d *Device) renderFile(path string, baseVars Vars) (string, error) {
-	// Make a copy of the device so we can resolve the vars
-	dev := d
-	v := maps.Clone(baseVars)
-	maps.Copy(v, d.Vars)
-	dev.Vars = v
+// Boot is an iPXE script, templatable with [Vars], that will be used for
+// [Devices].
+type Boot struct {
+	Name    string
+	Devices []Device
+	Script  string
+	Vars    map[string]string
+}
+
+func (b *Boot) renderFile(path string, device *Device) (string, error) {
+	renderConfig := NewRenderConfig(b, device)
 
 	out := strings.Builder{}
 	tmpl, err := template.ParseFiles(path)
@@ -29,30 +31,29 @@ func (d *Device) renderFile(path string, baseVars Vars) (string, error) {
 		return "", err
 	}
 	tmpl.Option("missingkey=error")
-	if err := tmpl.Execute(&out, *dev); err != nil {
+	if err := tmpl.Execute(&out, *renderConfig); err != nil {
 		return "", err
 	}
 	return out.String(), nil
 }
 
-type Boot struct {
-	Name    string
-	Devices []Device
-	Script  string
-	Vars    Vars
+// RenderConfig is what will be passed to [text/template] when a file is
+// rendered.
+type RenderConfig struct {
+	Boot   *Boot
+	Device *Device
+	Vars   map[string]string
 }
 
-func (b *Boot) renderScript(staticRoot string, device Device) (string, error) {
-	subpath := b.Script
-	// TODO:
-	//if subpath == "" {
-	//	if defaultScript := c.defaultScript(); defaultScript != nil {
-	//		subpath = defaultScript.Path
-	//	}
-	//}
-	if subpath == "" {
-		return "", fmt.Errorf("path can not be empty: %s", subpath)
+// NewRenderConfig returns a RenderConfig containing the boot and device, as
+// well as the merged Vars map.
+func NewRenderConfig(boot *Boot, device *Device) *RenderConfig {
+	// Overlay the variables from device onto boot
+	vars := maps.Clone(boot.Vars)
+	maps.Copy(vars, device.Vars)
+	return &RenderConfig{
+		Boot:   boot,
+		Device: device,
+		Vars:   vars,
 	}
-	fullpath := path.Join(staticRoot, subpath)
-	return device.renderFile(fullpath, b.Vars)
 }

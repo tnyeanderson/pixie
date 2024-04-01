@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"net/http"
 	"os"
 	"path"
 	"strings"
@@ -19,6 +20,7 @@ const (
 	DefaultTFTPListener = ":69"
 )
 
+// Server is a pixie server configuration.
 type Server struct {
 	Boots        []Boot
 	StaticRoot   string
@@ -26,6 +28,8 @@ type Server struct {
 	TFTPListener string
 }
 
+// Listen starts an HTTP server (for the API) and a TFTP server, and blocks
+// until either of them exit.
 func (s *Server) Listen() error {
 	// If any exits, end the program
 	wg := sync.WaitGroup{}
@@ -51,6 +55,24 @@ func (s *Server) Listen() error {
 
 	wg.Wait()
 	return out
+}
+
+// RenderScript will render the script associated with the provided MAC address
+// using [text/template].  [Device.Vars] will be merged with [Boot.Vars] at the
+// Boot level. [Device.Vars] values have precedent.
+func (s *Server) RenderScript(mac string) (string, error) {
+	boot, device := s.getBootAndDevice(mac)
+	if boot == nil {
+		return "", fmt.Errorf("mac address not found in configured boots/devices: %s", mac)
+	}
+
+	subpath := boot.Script
+	if subpath == "" {
+		return "", fmt.Errorf("script not set for mac: %s", mac)
+	}
+	fullpath := path.Join(s.StaticRoot, subpath)
+
+	return boot.renderFile(fullpath, device)
 }
 
 func (s *Server) listenHTTP() error {
@@ -122,7 +144,6 @@ func (s *Server) tftpReadHandler() func(filename string, rf io.ReaderFrom) error
 	}
 }
 
-// writeHandler is called when client starts file upload to server
 func (s *Server) tftpWriteHandler() func(filename string, wt io.WriterTo) error {
 	return func(filename string, wt io.WriterTo) error {
 		staticRoot := s.StaticRoot
@@ -144,14 +165,6 @@ func (s *Server) tftpWriteHandler() func(filename string, wt io.WriterTo) error 
 	}
 }
 
-func (s *Server) renderScript(mac string) (string, error) {
-	boot, device := s.getBootAndDevice(mac)
-	if boot == nil {
-		return "", fmt.Errorf("mac address not found in configured boots/devices: %s", mac)
-	}
-	return boot.renderScript(s.StaticRoot, *device)
-}
-
 func (s *Server) getBootAndDevice(mac string) (*Boot, *Device) {
 	if s.Boots != nil {
 		for _, boot := range s.Boots {
@@ -165,4 +178,64 @@ func (s *Server) getBootAndDevice(mac string) (*Boot, *Device) {
 		}
 	}
 	return nil, nil
+}
+
+func (s *Server) bootHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		mac := c.Query("mac")
+
+		mac, err := sanitizeMac(mac)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MAC address"})
+			return
+		}
+
+		s, err := s.RenderScript(mac)
+		if err != nil {
+			slog.Error(err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render boot script."})
+			return
+		}
+
+		c.String(http.StatusOK, "%s", s)
+	}
+}
+
+func (s *Server) staticHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		mac := c.Param("mac")
+		subpath := c.Param("path")
+
+		fullpath := path.Join(s.StaticRoot, subpath)
+
+		if mac == "" {
+			// Render the file normally
+			c.File(fullpath)
+			return
+		}
+
+		// Render the file as a template
+
+		mac, err := sanitizeMac(mac)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MAC address"})
+			return
+		}
+
+		b, d := s.getBootAndDevice(mac)
+		if d == nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "device not found"})
+			return
+		}
+
+		s, err := b.renderFile(fullpath, d)
+		if err != nil {
+			slog.Error(err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render file."})
+			return
+		}
+
+		c.String(http.StatusOK, "%s", s)
+		return
+	}
 }
