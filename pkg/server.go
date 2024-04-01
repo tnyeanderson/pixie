@@ -66,9 +66,6 @@ func (s *Server) listenHTTP() error {
 
 	v1.GET("/device/boot", s.bootHandler())
 
-	//// logs
-	//v1.GET("/logs", api.GetLogsHandler)
-
 	// File server
 	r.GET("/static/*path", s.staticHandler())
 
@@ -100,7 +97,7 @@ func (s *Server) listenTFTP() error {
 
 func (s *Server) tftpReadHandler() func(filename string, rf io.ReaderFrom) error {
 	return func(filename string, rf io.ReaderFrom) error {
-		fmt.Printf("TFTP get: %s\n", filename)
+		slog.Info("getting file with TFTP", "name", filename)
 		staticRoot := s.StaticRoot
 		if filename == "pixie.kpxe" {
 			// For compatibility reasons, allow loading pixie.kpxe from the root path
@@ -112,16 +109,15 @@ func (s *Server) tftpReadHandler() func(filename string, rf io.ReaderFrom) error
 		// TODO: This should add the FileServer prefix, skip the above check
 		file, err := os.Open(filename)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			slog.Error(err.Error())
 			return err
 		}
 		n, err := rf.ReadFrom(file)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			slog.Error(err.Error())
 			return err
 		}
-		fmt.Printf("%d bytes sent\n", n)
-		//queries.LogLastAccessed(filename)
+		slog.Info("completed TFTP transfer", "sent", n)
 		return nil
 	}
 }
@@ -135,15 +131,15 @@ func (s *Server) tftpWriteHandler() func(filename string, wt io.WriterTo) error 
 		}
 		file, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0644)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			slog.Error(err.Error())
 			return err
 		}
 		n, err := wt.WriteTo(file)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%v\n", err)
+			slog.Error(err.Error())
 			return err
 		}
-		fmt.Printf("%d bytes received\n", n)
+		slog.Info("completed TFTP transfer", "received", n)
 		return nil
 	}
 }

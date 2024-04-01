@@ -10,11 +10,6 @@ import (
 
 type Vars map[string]string
 
-type Script struct {
-	Name string
-	Path string
-}
-
 type Device struct {
 	Name string
 	Mac  string
@@ -30,12 +25,11 @@ func (d *Device) renderFile(path string, baseVars Vars) (string, error) {
 
 	out := strings.Builder{}
 	tmpl, err := template.ParseFiles(path)
-	tmpl.Option("missingkey=error")
 	if err != nil {
 		return "", err
 	}
-	err = tmpl.Execute(&out, *dev)
-	if err != nil {
+	tmpl.Option("missingkey=error")
+	if err := tmpl.Execute(&out, *dev); err != nil {
 		return "", err
 	}
 	return out.String(), nil
@@ -44,12 +38,12 @@ func (d *Device) renderFile(path string, baseVars Vars) (string, error) {
 type Boot struct {
 	Name    string
 	Devices []Device
-	Script  Script
+	Script  string
 	Vars    Vars
 }
 
 func (b *Boot) renderScript(staticRoot string, device Device) (string, error) {
-	subpath := b.Script.Path
+	subpath := b.Script
 	// TODO:
 	//if subpath == "" {
 	//	if defaultScript := c.defaultScript(); defaultScript != nil {
