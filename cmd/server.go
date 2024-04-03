@@ -15,6 +15,16 @@ import (
 var serverCmd = &cobra.Command{
 	Use:   "server",
 	Short: "Start a pixie HTTP server and TFTP server.",
+	Long: `Start a pixie HTTP server and TFTP server.
+
+Set PIXIE_CONFIG_FILE=/path/to/config.yaml to load the server definition from a
+YAML file.
+
+Send a SIGUSR1 signal to reload the Boots and Devices fields from the config
+file. The existing runtime values for these fields are replaced with the values
+from the config file. Other fields are not reloaded, since they are immutable
+at runtime.
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		s, err := loadConfig()
 		if err != nil {
@@ -63,10 +73,8 @@ func reloadConfig(s *pixie.Server) error {
 func reloadConfigOnSIGUSR1(s *pixie.Server) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGUSR1)
-	//signal.Notify(c)
 	go func() {
 		for {
-			slog.Info("listening")
 			sig := <-c // block until SIGUSR1 received
 			slog.Info(fmt.Sprintf("got signal: %s", sig))
 			if err := reloadConfig(s); err != nil {
