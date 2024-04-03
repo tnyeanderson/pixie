@@ -2,39 +2,26 @@ package pixie
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/go-test/deep"
 	"gopkg.in/yaml.v3"
 )
 
-func getTestServerYAML() string {
-	return `---
-staticroot: testdata
-httplistener: ":1234"
-tftplistener: ":6969"
-vars:
-  basevar: baseval
-boots:
-- script: testscript.ipxe
-  devices:
-  - mac: 99:88:77:66:55:44
-- script: testscript.ipxe
-  vars:
-    myvar1: hello
-    myvar2: earth
-  devices:
-  - mac: 11:22:33:44:55:66
-    vars:
-      myvar2: mars
-      basevar: newval
-`
+var serverYAML []byte
+
+func init() {
+	b, err := os.ReadFile("testdata/server.yaml")
+	if err != nil {
+		panic("cannot read example server.yaml file")
+	}
+	serverYAML = b
 }
 
 func TestUnmarshalServer(t *testing.T) {
 	s := &Server{}
-	b := []byte(getTestServerYAML())
-	if err := yaml.Unmarshal(b, s); err != nil {
+	if err := yaml.Unmarshal(serverYAML, s); err != nil {
 		t.Fatal(err)
 	}
 	expected := &Server{
@@ -79,9 +66,8 @@ func TestUnmarshalServer(t *testing.T) {
 
 func ExampleRenderScript() {
 	s := &Server{}
-	b := []byte(getTestServerYAML())
 	// tested above
-	yaml.Unmarshal(b, s)
+	yaml.Unmarshal(serverYAML, s)
 	for _, mac := range []string{"99:88:77:66:55:44", "11:22:33:44:55:66"} {
 		out, err := s.RenderScript(mac)
 		if err != nil {
