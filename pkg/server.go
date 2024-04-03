@@ -13,6 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/pin/tftp"
+	sloggin "github.com/samber/slog-gin"
 )
 
 const (
@@ -87,8 +88,12 @@ func (s *Server) NewRenderConfig(mac string) (*RenderConfig, error) {
 }
 
 func (s *Server) listenHTTP() error {
+	gin.SetMode(gin.ReleaseMode)
+
 	// Set up gin
-	r := gin.Default()
+	r := gin.New()
+	r.Use(sloggin.New(slog.Default()))
+	r.Use(gin.Recovery())
 
 	// API
 	// Default base path: /api/v1
