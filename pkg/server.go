@@ -23,6 +23,7 @@ const (
 // Server is a pixie server configuration.
 type Server struct {
 	Boots        []Boot
+	Vars         map[string]string
 	StaticRoot   string
 	HTTPListener string
 	TFTPListener string
@@ -58,21 +59,31 @@ func (s *Server) Listen() error {
 }
 
 // RenderScript will render the script associated with the provided MAC address
-// using [text/template].  [Device.Vars] will be merged with [Boot.Vars] at the
-// Boot level. [Device.Vars] values have precedent.
+// using [text/template]. A [RenderConfig] is created and used when rendering
+// the template.
 func (s *Server) RenderScript(mac string) (string, error) {
-	boot, device := s.getBootAndDevice(mac)
-	if boot == nil {
-		return "", fmt.Errorf("mac address not found in configured boots/devices: %s", mac)
+	rc, err := s.NewRenderConfig(mac)
+	if err != nil {
+		return "", err
 	}
 
-	subpath := boot.Script
+	subpath := rc.Boot.Script
 	if subpath == "" {
 		return "", fmt.Errorf("script not set for mac: %s", mac)
 	}
 	fullpath := path.Join(s.StaticRoot, subpath)
 
-	return boot.renderFile(fullpath, device)
+	return rc.RenderFile(fullpath)
+}
+
+// NewRenderConfig will return a [RenderConfig] for the boot/device associated
+// with the given MAC address.
+func (s *Server) NewRenderConfig(mac string) (*RenderConfig, error) {
+	b, d := s.getBootAndDevice(mac)
+	if b == nil {
+		return nil, fmt.Errorf("no boot defined for mac: %s", mac)
+	}
+	return NewRenderConfig(s.Vars, b, d), nil
 }
 
 func (s *Server) listenHTTP() error {
@@ -222,20 +233,20 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 			return
 		}
 
-		b, d := s.getBootAndDevice(mac)
-		if d == nil {
+		rc, err := s.NewRenderConfig(mac)
+		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "device not found"})
 			return
 		}
 
-		s, err := b.renderFile(fullpath, d)
+		out, err := rc.RenderFile(fullpath)
 		if err != nil {
 			slog.Error(err.Error())
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render file."})
 			return
 		}
 
-		c.String(http.StatusOK, "%s", s)
+		c.String(http.StatusOK, "%s", out)
 		return
 	}
 }

@@ -1,0 +1,3 @@
+non-working ipxe test script
+{{ index .Vars "myvar1" }}
+{{ index .Vars "myvar2" }}
