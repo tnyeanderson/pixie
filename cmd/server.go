@@ -42,7 +42,7 @@ at runtime.
 func loadConfig() (*pixie.Server, error) {
 	confFile := os.Getenv("PIXIE_CONFIG_FILE")
 	if confFile == "" {
-		return nil, nil
+		return &pixie.Server{}, nil
 	}
 
 	slog.Info("loading config file", "path", confFile)
