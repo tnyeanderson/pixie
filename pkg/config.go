@@ -19,10 +19,10 @@ type Device struct {
 // Boot is an iPXE script, templatable with [Vars], that will be used for
 // [Devices].
 type Boot struct {
-	Name    string
-	Devices []Device
-	Script  string
-	Vars    Vars
+	Name       string
+	Devices    []Device
+	ScriptPath string
+	Vars       Vars
 }
 
 // RenderConfig is what will be passed to [text/template] when a file is
@@ -48,16 +48,15 @@ func NewRenderConfig(baseVars map[string]string, boot *Boot, device *Device) *Re
 	}
 }
 
-// RenderFile renders the template at the path, providing the [r] to the
-// template.
-func (r *RenderConfig) RenderFile(path string) (string, error) {
+// Render renders the template content tmpl, providing the [r] as data.
+func (r *RenderConfig) Render(tmpl []byte) (string, error) {
 	out := strings.Builder{}
-	tmpl, err := template.ParseFiles(path)
-	if err != nil {
+	t := template.New("t")
+	if _, err := t.Parse(string(tmpl)); err != nil {
 		return "", err
 	}
-	tmpl.Option("missingkey=error")
-	if err := tmpl.Execute(&out, *r); err != nil {
+	t.Option("missingkey=error")
+	if err := t.Execute(&out, *r); err != nil {
 		return "", err
 	}
 	return out.String(), nil

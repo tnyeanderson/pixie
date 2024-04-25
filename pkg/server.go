@@ -68,13 +68,18 @@ func (s *Server) RenderScript(mac string) (string, error) {
 		return "", err
 	}
 
-	subpath := rc.Boot.Script
+	subpath := rc.Boot.ScriptPath
 	if subpath == "" {
 		return "", fmt.Errorf("script not set for mac: %s", mac)
 	}
 	fullpath := path.Join(s.StaticRoot, subpath)
 
-	return rc.RenderFile(fullpath)
+	b, err := os.ReadFile(fullpath)
+	if err != nil {
+		return "", err
+	}
+
+	return rc.Render(b)
 }
 
 // NewRenderConfig will return a [RenderConfig] for the boot/device associated
@@ -234,7 +239,7 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 
 		mac, err := sanitizeMac(mac)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MAC address"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
 			return
 		}
 
@@ -244,7 +249,13 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 			return
 		}
 
-		out, err := rc.RenderFile(fullpath)
+		b, err := os.ReadFile(fullpath)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("file not found: %s", fullpath)})
+			return
+		}
+
+		out, err := rc.Render(b)
 		if err != nil {
 			slog.Error(err.Error())
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render file."})

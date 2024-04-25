@@ -5,10 +5,10 @@ tftplistener: ":6969"
 vars:
   basevar: baseval
 boots:
-- script: testscript.ipxe
+- scriptpath: testscript.ipxe
   devices:
   - mac: 99:88:77:66:55:44
-- script: testscript.ipxe
+- scriptpath: testscript.ipxe
   vars:
     myvar1: hello
     myvar2: earth

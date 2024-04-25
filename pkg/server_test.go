@@ -33,7 +33,7 @@ func TestUnmarshalServer(t *testing.T) {
 		},
 		Boots: []Boot{
 			Boot{
-				Script: "testscript.ipxe",
+				ScriptPath: "testscript.ipxe",
 				Devices: []Device{
 					Device{
 						Mac: "99:88:77:66:55:44",
@@ -41,7 +41,7 @@ func TestUnmarshalServer(t *testing.T) {
 				},
 			},
 			Boot{
-				Script: "testscript.ipxe",
+				ScriptPath: "testscript.ipxe",
 				Vars: Vars{
 					"myvar1": "hello",
 					"myvar2": "earth",
