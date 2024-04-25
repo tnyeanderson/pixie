@@ -68,6 +68,12 @@ func (s *Server) RenderScript(mac string) (string, error) {
 		return "", err
 	}
 
+	// Boot from inline Script
+	if len(rc.Boot.Script) > 0 {
+		return rc.Render([]byte(rc.Boot.Script))
+	}
+
+	// Boot from ScriptPath
 	subpath := rc.Boot.ScriptPath
 	if subpath == "" {
 		return "", fmt.Errorf("script not set for mac: %s", mac)

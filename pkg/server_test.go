@@ -33,6 +33,15 @@ func TestUnmarshalServer(t *testing.T) {
 		},
 		Boots: []Boot{
 			Boot{
+				Script:     "inline test {{ .Device.Mac }}\n",
+				ScriptPath: "/this/will/be/ignored",
+				Devices: []Device{
+					Device{
+						Mac: "33:33:33:33:33:33",
+					},
+				},
+			},
+			Boot{
 				ScriptPath: "testscript.ipxe",
 				Devices: []Device{
 					Device{
@@ -68,7 +77,12 @@ func ExampleRenderScript() {
 	s := &Server{}
 	// tested above
 	yaml.Unmarshal(serverYAML, s)
-	for _, mac := range []string{"99:88:77:66:55:44", "11:22:33:44:55:66"} {
+	macs := []string{
+		"33:33:33:33:33:33",
+		"99:88:77:66:55:44",
+		"11:22:33:44:55:66",
+	}
+	for _, mac := range macs {
 		out, err := s.RenderScript(mac)
 		if err != nil {
 			panic(err.Error())
@@ -77,6 +91,8 @@ func ExampleRenderScript() {
 	}
 
 	// Output:
+	// inline test 33:33:33:33:33:33
+	//
 	// non-working ipxe test script
 	// mac     = 99:88:77:66:55:44
 	// basevar = "baseval"

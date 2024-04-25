@@ -17,10 +17,12 @@ type Device struct {
 }
 
 // Boot is an iPXE script, templatable with [Vars], that will be used for
-// [Devices].
+// [Devices]. If Script is not empty, its contents will be used. Otherwise, the
+// contents are loaded from ScriptPath.
 type Boot struct {
 	Name       string
 	Devices    []Device
+	Script     string
 	ScriptPath string
 	Vars       Vars
 }

@@ -5,6 +5,11 @@ tftplistener: ":6969"
 vars:
   basevar: baseval
 boots:
+- script: |
+    inline test {{ .Device.Mac }}
+  scriptpath: /this/will/be/ignored
+  devices:
+  - mac: 33:33:33:33:33:33
 - scriptpath: testscript.ipxe
   devices:
   - mac: 99:88:77:66:55:44
