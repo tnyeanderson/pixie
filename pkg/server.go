@@ -142,7 +142,7 @@ func (s *Server) tftpReadHandler() func(filename string, rf io.ReaderFrom) error
 			filename = path.Join(staticRoot, filename)
 		}
 		if !strings.HasPrefix(filename, staticRoot) {
-			return errors.New("Path must begin with " + staticRoot)
+			return errors.New("path must begin with " + staticRoot)
 		}
 		// TODO: This should add the FileServer prefix, skip the above check
 		file, err := os.Open(filename)
