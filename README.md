@@ -3,7 +3,7 @@
 Pixie is a YAML-based utility for managing and auditing PXE booted clients.
 Easily create Go templates for iPXE scripts, then render them using arbitrary
 variables associated with a boot or device. Requests to the server are logged
-using JSON for easy audit ingestion.
+using JSON for easy auditing.
 
 Please feel free to open an issue or pull request!
 
@@ -34,10 +34,10 @@ of the container:
 # Create the local directory that the generated file will be copied into
 mkdir -p data/files
 # Change the pixiehost address below your Pixie server!
-docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://pixiehost:8880'
+docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://pixiehost:8989'
 ```
 
-Then, set up your DHCP server:
+Then, set up your DHCP server (see `man dhcpd.conf`):
 
 - Set `next-server` to the IP to your Pixie server
 - Set `filename` to the `pixie.kpxe`
@@ -54,16 +54,16 @@ tftplistener: ":6969"
 
 # Server level variables
 vars:
-  pixiehost: pixiehost:8880
+  pixiehost: pixiehost:8989
 
 # Define boots, which associate a boot script to a list of devices.
 boots:
 - name: ubuntu-22-static
-  scriptpath: prod/ubuntu-22-static/boot.ipxe
+  scriptpath: boots/ubuntu/boot.ipxe
 
   # Boot level variables
   vars:
-    cloudinit: prod/ubuntu-22-static/cloud-init/
+    cloudinit: boots/ubuntu/cloud-init/
     eth_interface: enp0s31f6
 
   devices:
@@ -87,16 +87,21 @@ your config:
 
 ```
 data/
-├── pixie.yaml
-└── files
-    ├── pixie.kpxe
-    └── prod
-        └── ubuntu-22-static
-            ├── boot.ipxe
-            └── cloud-init
-                ├── meta-data
-                ├── user-data
-                └── vendor-data
+├── files
+│   ├── pixie.kpxe
+│   ├── boots
+│   │   └── ubuntu
+│   │       ├── boot.ipxe
+│   │       └── cloud-init
+│   │           ├── meta-data
+│   │           ├── user-data
+│   │           └── vendor-data
+│   └── ubuntu-22.04
+│       ├── initrd
+│       ├── ubuntu-22.04.1-live-server-amd64.iso
+│       ├── user-data
+│       └── vmlinuz
+└── pixie.yaml
 ```
 
 Then run it!
@@ -104,3 +109,45 @@ Then run it!
 ```bash
 PIXIE_CONFIG_FILE=data/pixie.yaml go run .
 ```
+
+## How it works
+
+In the above example, let's say `data/files/boots/ubuntu/boot.ipxe` looks like
+this:
+
+```
+#!ipxe
+
+set name {{.Device.Name}}
+set render http://{{.Vars.pixiehost}}/render/{{.Device.Mac}}
+set ubuntu http://{{.Vars.pixiehost}}/static/ubuntu-22.04
+
+kernel ${ubuntu}/vmlinuz cloud-config-url=/dev/null url=${ubuntu}/ubuntu-22.04.1-live-server-amd64.iso initrd=initrd ip=dhcp toram autoinstall ds=nocloud-net;s=${render}/{{.Vars.cloudinit}}
+
+initrd ${ubuntu}/initrd
+
+boot
+```
+
+When `11:11:11:11:11:11` goes to netboot, the `pixie.kpxe` script will be
+booted, which will chainload the script at
+`/api/v1/device/boot?mac=11:11:11:11:11:11`. That templated script will look
+like:
+
+```
+#!ipxe
+
+set name h1
+set render http://pixiehost:8989/render/11:11:11:11:11:11
+set ubuntu http://pixiehost:8989/static/ubuntu-22.04
+
+kernel ${ubuntu}/vmlinuz cloud-config-url=/dev/null url=${ubuntu}/ubuntu-22.04.1-live-server-amd64.iso initrd=initrd ip=dhcp toram autoinstall ds=nocloud-net;s=${render}/{{.Vars.cloudinit}}
+
+initrd ${ubuntu}/initrd
+
+boot
+```
+
+That script will netboot using the provided Ubuntu 22 artifacts, and the
+cloud-init files from `data/files/boots/ubuntu/cloud-init` will be rendered
+using Go templates and provided to the machine for initialization. Done!
