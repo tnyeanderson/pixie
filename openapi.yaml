@@ -1,431 +1,66 @@
-openapi: 3.0.1
-servers:
-  - url: /api/v1
+---
+openapi: 3.1.0
 info:
-  description: >-
-    The specification for the Pixie API. Pixie is a web utility for managing
-    PXE booted machines.
-
-    [Pixie Github](https://github.com/tnyeanderson/pixie)
-  version: 0.0.1
   title: Pixie API
   license:
     name: MIT
-tags:
-  - name: devices
-    description: Devices attempting PXE boots
-  - name: files
-    description: >-
-      Files that are served over HTTP or TFTP. Can include boot images,
-      automatic server configurations (ignition, cloud-init, autoyast, etc),
-      PXE boot scripts, or any arbitrary file.
-  - name: logs
-    description: Audit log of everything Pixie has done
 paths:
-  /devices:
-    post:
-      tags:
-        - devices
-      summary: Add a new device
-      operationId: CreateDevice
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Device'
-        '405':
-          description: Invalid input
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Device'
+  /api/v1/device/boot:
     get:
-      tags:
-        - devices
-      summary: List all devices
-      operationId: GetDevices
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Device'
-  /devices/boot:
-    get:
-      tags:
-        - devices
-      summary: >-
-        Retrieve the boot script for the device with the provided MAC address.
-        As a side effect, if the MAC address doesn't correlate to a known
-        device, the device is added to the database. If no boot script is
-        associated with the device, the default script (or a fallback to an
-        iPXE prompt) will be returned.
-      operationId: GetScriptForDevice
+      description: Get the rendered iPXE boot script for a device
       parameters:
         - name: mac
           in: query
-          description: >-
-            Mac address for the device. A variety of formats are accepted.
-          required: true
+          description: MAC address of the device to boot
           schema:
-            $ref: '#/components/schemas/mac'
+            type: string
+            example: 11:22:33:44:55:66
       responses:
         '200':
-          description: The iPXE boot script
+          description: Success
           content:
             text/plain:
               schema:
                 type: string
-                example: |
-                  #!ipxe
-                  
-                  echo No script associated with device. Use the shell below.
-                  
-                  shell
-  '/devices/{id}':
-    parameters:
-      - name: id
-        in: path
-        description: ID of device to return
-        required: true
-        schema:
-          type: integer
-          format: int64
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+  /static/{path}:
     get:
-      tags:
-        - devices
-      summary: Find device by ID
-      description: Returns a single device
-      operationId: GetDeviceById
+      description: Get a static file
+      parameters:
+        - name: path
+          in: path
+          description: File path including slashes
+          schema:
+            type: string
       responses:
         '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Device'
-        '400':
-          description: Invalid ID supplied
+          description: Success
         '404':
-          description: Device not found
-    put:
-      tags:
-        - devices
-      summary: Update an existing device
-      operationId: UpdateDevice
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Device'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Device not found
-        '405':
-          description: Validation exception
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Device'
-    delete:
-      tags:
-        - devices
-      summary: Delete a device
-      operationId: DeleteDevice
-      responses:
-        '400':
-          description: Invalid ID supplied
-  /files:
-    post:
-      tags:
-        - files
-      summary: Add a new file
-      operationId: CreateFile
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/File'
-        '405':
-          description: Invalid input
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/File'
+          description: Not Found
+        '500':
+          description: Internal server error
+  /render/{mac}/{path}:
     get:
-      tags:
-        - files
-      summary: List all files
-      operationId: GetFiles
+      description: Render a file which contains Go templates
+      parameters:
+        - name: mac
+          in: path
+          description: MAC address of the device to use when rendering the template
+          schema:
+            type: string
+            example: 11:22:33:44:55:66
+        - name: path
+          in: path
+          description: File path to the template including slashes
+          schema:
+            type: string
       responses:
         '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/File'
-  /files/sync:
-    post:
-      tags:
-        - files
-      summary: >-
-        Sync the files table in the database to reflect what is actually on the
-        filesystem.
-      operationId: SyncFiles
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-        '405':
-          description: Invalid input
-  '/files/{id}':
-    parameters:
-      - name: id
-        in: path
-        description: ID of file to return
-        required: true
-        schema:
-          type: integer
-          format: int64
-    get:
-      tags:
-        - files
-      summary: Find file by ID
-      description: Returns a single file
-      operationId: GetFileById
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/File'
-        '400':
-          description: Invalid ID supplied
+          description: Success
         '404':
-          description: File not found
-    put:
-      tags:
-        - files
-      summary: Update an existing file
-      operationId: UpdateFile
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/File'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: File not found
-        '405':
-          description: Validation exception
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/File'
-    delete:
-      tags:
-        - files
-      summary: Delete a file
-      operationId: DeleteFile
-      responses:
-        '400':
-          description: Invalid ID supplied
-  '/files/{id}/upload':
-    parameters:
-      - name: id
-        in: path
-        description: ID of file to upload
-        required: true
-        schema:
-          type: integer
-          format: int64
-    post:
-      tags:
-        - files
-      summary: Upload a file
-      operationId: UploadFile
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: "uploaded 'relative/path/to/file.txt'"
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: File not found
-        '405':
-          description: Validation exception
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/File'
-  /logs:
-    get:
-      tags:
-        - logs
-      summary: Gets the audit logs.
-      operationId: GetLogs
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Log'
-components:
-  schemas:
-    mac:
-      description: MAC address, all caps, colon-delimited
-      type: string
-      pattern: "^[0-9A-F]{2}(:[0-9A-F]{2}){5}$"
-      example: "A3:B3:2D:3F:4C:91"
-    BaseModel:
-      description: All resources have these properties
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        deletedAt:
-          type: string
-          format: date-time
-          nullable: true
-        type:
-          type: string
-          enum:
-            - Device
-            - File
-            - Log
-    Device:
-      description: Device attempting PXE boot
-      allOf:
-        - $ref: '#/components/schemas/BaseModel'
-        - type: object
-          properties:
-            mac:
-              $ref: '#/components/schemas/mac'
-            name:
-              type: string
-              example: My super cool device
-            lastBootedAt:
-              type: string
-              format: date-time
-      discriminator:
-        propertyName: type
-    File:
-      description: PXE scripts, boot images, cloud-config/ignition/autoyast, etc.
-      allOf:
-        - $ref: '#/components/schemas/BaseModel'
-        - type: object
-          properties:
-            name:
-              type: string
-              example: My super cool file
-            path:
-              type: string
-              example: relative/file/path.ext
-            lastAccessedAt:
-              type: string
-              format: date-time
-            fileType:
-              type: string
-              enum:
-                - Image
-                - Config
-                - Script
-                - Binary
-                - Plain
-      discriminator:
-        propertyName: fileType
-    Log:
-      description: Audit logs for everything Pixie does.
-      allOf:
-        - $ref: '#/components/schemas/BaseModel'
-        - type: object
-          properties:
-            event:
-              type: string
-              enum:
-                - CREATE
-                - UPDATE
-                - DELETE
-                - BOOT
-            summary:
-              type: string
-              example: A short summary of what happened.
-            detail:
-              type: string
-              example: >-
-                A much longer explanation of what happened. Might include the
-                resulting object, detailed information, or other relevant
-                stuff.
-      discriminator:
-        propertyName: type
-    Setting:
-      description: Pixie settings
-      allOf:
-        - $ref: '#/components/schemas/BaseModel'
-        - type: object
-          properties:
-            key:
-              type: string
-              enum:
-                - defaultBootScript
-            value:
-              description: >-
-                The user-provided value for a setting. Always a string. Parse
-                values on the client side.
-              type: string
-              example: "15"
-            defaultValue:
-              description: >-
-                The default value for the setting. Always a string. Parse
-                values on the client side. Can be empty.
-              type: string
-              example: ""
-      discriminator:
-        propertyName: key
-
+          description: Not Found
+        '500':
+          description: Internal server error
