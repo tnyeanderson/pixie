@@ -3,7 +3,7 @@
 read -rd '' USAGE <<EOF
 
 Generate a chainloaded iPXE BIOS image to boot by default.
-Sends clients to Pixie to retrieve their boot script.
+Sends clients to pixie to retrieve their boot script.
 This might take a while!
 
 Usage: ${0} <OUTPUT_DIR> <PIXIE_HOST>

@@ -1,6 +1,6 @@
-# Pixie
+# pixie
 
-Pixie is a YAML-based utility for managing and auditing PXE booted clients.
+`pixie` is a YAML-based utility for managing and auditing PXE booted clients.
 Easily create Go templates for iPXE scripts, then render them using arbitrary
 variables associated with a boot or device. Requests to the server are logged
 using JSON for easy auditing.
@@ -9,7 +9,9 @@ Please feel free to open an issue or pull request!
 
 ## Getting started
 
-Pixie works by creating a static initial boot image for all PXE booted clients.
+>NOTE: By default, pixie listens on ports 8880 (HTTP) and 69 (TFTP).
+
+pixie works by creating a static initial boot image for all PXE booted clients.
 This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the
 script located at `<PIXIEHOST>/api/v1/device/boot?mac=<MACADDRESS>`, which
 resolves to the configured boot script for the device with the provided MAC
@@ -33,13 +35,13 @@ of the container:
 ```bash
 # Create the local directory that the generated file will be copied into
 mkdir -p data/files
-# Change the pixiehost address below your Pixie server!
-docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://pixiehost:8989'
+# Change the pixiehost address below your pixie server!
+docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://pixiehost:8880'
 ```
 
 Then, set up your DHCP server (see `man dhcpd.conf`):
 
-- Set `next-server` to the IP to your Pixie server
+- Set `next-server` to the IP to your pixie server
 - Set `filename` to the `pixie.kpxe`
 
 Set up your router or DHCP server to boot hosts from `pixie.kpxe`.
@@ -49,12 +51,14 @@ Create a YAML config, for example:
 ```yaml
 ---
 staticroot: "data/files"
-httplistener: ":8989"
-tftplistener: ":6969"
+
+# These are the default values
+#httplistener: ":8880"
+#tftplistener: ":69"
 
 # Server level variables
 vars:
-  pixiehost: pixiehost:8989
+  pixiehost: pixiehost:8880
 
 # Define boots, which associate a boot script to a list of devices.
 boots:
@@ -138,8 +142,8 @@ like:
 #!ipxe
 
 set name h1
-set render http://pixiehost:8989/render/11:11:11:11:11:11
-set ubuntu http://pixiehost:8989/static/ubuntu-22.04
+set render http://pixiehost:8880/render/11:11:11:11:11:11
+set ubuntu http://pixiehost:8880/static/ubuntu-22.04
 
 kernel ${ubuntu}/vmlinuz cloud-config-url=/dev/null url=${ubuntu}/ubuntu-22.04.1-live-server-amd64.iso initrd=initrd ip=dhcp toram autoinstall ds=nocloud-net;s=${render}/{{.Vars.cloudinit}}
 
