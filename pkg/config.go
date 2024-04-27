@@ -16,9 +16,9 @@ type Device struct {
 	Vars Vars
 }
 
-// Boot is an iPXE script, templatable with [Vars], that will be used for
-// [Devices]. If Script is not empty, its contents will be used. Otherwise, the
-// contents are loaded from ScriptPath.
+// Boot is an iPXE script, templatable with Vars, that will be used for each of
+// the Devices.  If Script is not empty, its contents will be used.  Otherwise,
+// the contents are loaded from ScriptPath.
 type Boot struct {
 	Name       string
 	Devices    []Device
@@ -38,8 +38,8 @@ type RenderConfig struct {
 }
 
 // NewRenderConfig returns a RenderConfig containing the boot and device, as
-// well as the merged Vars map. Values in [device.Vars] override values in
-// [boot.Vars], which override values in [baseVars].
+// well as the merged Vars map. Values in device.Vars override values in
+// boot.Vars, which override values in baseVars.
 func NewRenderConfig(baseVars map[string]string, boot *Boot, device *Device) *RenderConfig {
 	vars := Vars{}
 	mergeMaps(vars, baseVars, boot.Vars, device.Vars)
@@ -50,7 +50,7 @@ func NewRenderConfig(baseVars map[string]string, boot *Boot, device *Device) *Re
 	}
 }
 
-// Render renders the template content tmpl, providing the [r] as data.
+// Render renders the template content tmpl, providing the r as data.
 func (r *RenderConfig) Render(tmpl []byte) (string, error) {
 	out := strings.Builder{}
 	t := template.New("t")
