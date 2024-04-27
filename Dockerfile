@@ -15,4 +15,4 @@ COPY --from=build-go /src/pixie ./pixie
 
 ENV PIXIE_CONFIG_FILE="/app/data/pixie.yaml"
 
-ENTRYPOINT [ "/app/pixie" ]
+ENTRYPOINT [ "/app/pixie", "server" ]
