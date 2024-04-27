@@ -9,7 +9,7 @@ Please feel free to open an issue or pull request!
 
 ## Getting started
 
->NOTE: By default, pixie listens on ports 8880 (HTTP) and 69 (TFTP).
+> NOTE: By default, pixie listens on ports 8880 (HTTP) and 69 (TFTP).
 
 pixie works by creating a static initial boot image for all PXE booted clients.
 This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the
@@ -133,8 +133,12 @@ initrd ${ubuntu}/initrd
 boot
 ```
 
-When `11:11:11:11:11:11` goes to netboot, the `pixie.kpxe` script will be
-booted, which will chainload the script at
+> NOTE: The `set` directives assign iPXE variables based on rendered values
+from the Go template. These variables are then used later in the boot script,
+for example `${ubuntu}`.
+
+When `11:11:11:11:11:11` goes to boot from the network, the `pixie.kpxe` script
+will be booted, which will chainload the script at
 `/api/v1/device/boot?mac=11:11:11:11:11:11`. That templated script will look
 like:
 
@@ -152,6 +156,6 @@ initrd ${ubuntu}/initrd
 boot
 ```
 
-That script will netboot using the provided Ubuntu 22 artifacts, and the
-cloud-init files from `data/files/boots/ubuntu/cloud-init` will be rendered
-using Go templates and provided to the machine for initialization. Done!
+That script will boot over the network using the provided Ubuntu 22 artifacts,
+and the cloud-init files from `data/files/boots/ubuntu/cloud-init` will be
+rendered using Go templates and provided to the machine for initialization.
