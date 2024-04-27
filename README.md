@@ -22,7 +22,7 @@ amount of dependencies. A docker image is defined here for convenience:
 
 ```bash
 # Build the docker image used to generate the kpxe file
-docker build -f Dockerfile.generate-kpxe -t pixie-kpxe-generator .
+docker build -t pixie-kpxe-generator tools/generate-chainload-kpxe
 ```
 
 The generated file will be placed inside the container at `/output/pixie.kpxe`,
@@ -112,6 +112,14 @@ Then run it!
 
 ```bash
 PIXIE_CONFIG_FILE=data/pixie.yaml go run .
+```
+
+Alternatively, use `docker compose`:
+
+```bash
+# Be sure to set staticpath to /app/data/files
+docker compose build
+docker compose up
 ```
 
 ## How it works

@@ -10,7 +10,7 @@ RUN apt-get update && \
         perl \
         liblzma-dev \
         mtools
-COPY ./tools/generate-chainload-kpxe.sh ./entrypoint.sh
+COPY entrypoint.sh ./
 RUN chmod +x ./entrypoint.sh
 RUN mkdir /output
 ENTRYPOINT [ "/build/entrypoint.sh", "/output" ]
