@@ -263,7 +263,7 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 
 		b, err := os.ReadFile(fullpath)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("file not found: %s", fullpath)})
+			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("file not found: %s", fullpath)})
 			return
 		}
 
