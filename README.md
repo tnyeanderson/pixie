@@ -159,3 +159,7 @@ boot
 That script will boot over the network using the provided Ubuntu 22 artifacts,
 and the cloud-init files from `data/files/boots/ubuntu/cloud-init` will be
 rendered using Go templates and provided to the machine for initialization.
+
+If the MAC address isn't configured in pixie, the default iPXE script will be
+sent, which simply opens a shell. The request will appear in the logs so you
+can easily add it to your config.

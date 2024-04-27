@@ -2,16 +2,17 @@
 FROM golang AS build-go
 RUN mkdir -p /src
 WORKDIR /src
-COPY src/go.mod src/go.sum ./
+COPY go.mod go.sum ./
 RUN go mod download
-COPY src/ ./
-RUN go build
+COPY . ./
+RUN CGO_ENABLED=0 go build .
 
 # Final image
 FROM golang
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=build-go /src/pixie ./pixie
-COPY src/defaults ./defaults
 
-ENTRYPOINT [ "/app/pixie", "/app/data/pixie.yaml" ]
+ENV PIXIE_CONFIG_FILE="/app/data/pixie.yaml"
+
+ENTRYPOINT [ "/app/pixie" ]

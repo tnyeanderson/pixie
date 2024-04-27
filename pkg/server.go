@@ -1,6 +1,7 @@
 package pixie
 
 import (
+	_ "embed"
 	"errors"
 	"fmt"
 	"io"
@@ -15,6 +16,9 @@ import (
 	"github.com/pin/tftp"
 	sloggin "github.com/samber/slog-gin"
 )
+
+//go:embed defaults/shell.ipxe
+var defaultScript string
 
 const (
 	DefaultHTTPListener = ":8880"
@@ -65,7 +69,8 @@ func (s *Server) Listen() error {
 func (s *Server) RenderScript(mac string) (string, error) {
 	rc, err := s.NewRenderConfig(mac)
 	if err != nil {
-		return "", err
+		slog.Error(fmt.Sprintf("device not configured in pixie, using default script: %s", mac))
+		return defaultScript, nil
 	}
 
 	// Boot from inline Script
@@ -76,7 +81,8 @@ func (s *Server) RenderScript(mac string) (string, error) {
 	// Boot from ScriptPath
 	subpath := rc.Boot.ScriptPath
 	if subpath == "" {
-		return "", fmt.Errorf("script not set for mac: %s", mac)
+		slog.Error(fmt.Sprintf("script not set for mac, using default script: %s", mac))
+		return defaultScript, nil
 	}
 	fullpath := path.Join(s.StaticRoot, subpath)
 
@@ -175,7 +181,7 @@ func (s *Server) tftpWriteHandler() func(filename string, wt io.WriterTo) error 
 	return func(filename string, wt io.WriterTo) error {
 		staticRoot := s.StaticRoot
 		if !strings.HasPrefix(filename, staticRoot) {
-			return errors.New("Path must begin with " + staticRoot)
+			return errors.New("path must begin with " + staticRoot)
 		}
 		file, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0644)
 		if err != nil {
@@ -213,14 +219,14 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 
 		mac, err := sanitizeMac(mac)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MAC address"})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
 			return
 		}
 
 		s, err := s.RenderScript(mac)
 		if err != nil {
 			slog.Error(err.Error())
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render boot script."})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to render boot script."})
 			return
 		}
 
@@ -264,7 +270,7 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 		out, err := rc.Render(b)
 		if err != nil {
 			slog.Error(err.Error())
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to render file."})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to render file."})
 			return
 		}
 
