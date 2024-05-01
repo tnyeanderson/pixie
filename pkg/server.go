@@ -112,20 +112,14 @@ func (s *Server) listenHTTP() error {
 	r.Use(sloggin.New(slog.Default()))
 	r.Use(gin.Recovery())
 
-	// API
-	// Default base path: /api/v1
-	v1 := r.Group("/api/v1")
-
-	// Always get the config for api calls
-	v1.Use()
-
-	v1.GET("/device/boot", s.bootHandler())
-
-	// File server
+	// Get static file contents
 	r.GET("/static/*path", s.staticHandler())
 
-	// Renderer
+	// Render template file
 	r.GET("/render/:mac/*path", s.staticHandler())
+
+	// Render the boot script for a device
+	r.GET("/boot/:mac", s.bootHandler())
 
 	// Start the server
 	return r.Run(s.getHTTPListener())
@@ -215,7 +209,7 @@ func (s *Server) getBootAndDevice(mac string) (*Boot, *Device) {
 
 func (s *Server) bootHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		mac := c.Query("mac")
+		mac := c.Param("mac")
 
 		mac, err := sanitizeMac(mac)
 		if err != nil {

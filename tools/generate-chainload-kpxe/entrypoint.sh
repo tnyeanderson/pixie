@@ -44,7 +44,7 @@ tee chain.ipxe <<EOF
 #!ipxe
   
 dhcp
-chain ${PIXIE_HOST}/api/v1/device/boot?mac=\${net0/mac}
+chain ${PIXIE_HOST}/boot/\${net0/mac}
 EOF
 
 echo '========================='

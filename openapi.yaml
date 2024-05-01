@@ -1,12 +1,12 @@
 ---
 openapi: 3.1.0
 info:
-  title: API for pixie
-  description: Tool for managing network booted devices.
+  title: pixie
+  description: API for managing network booted devices.
   license:
     name: MIT
 paths:
-  /api/v1/device/boot:
+  /boot/{mac}:
     get:
       description: Get the rendered iPXE boot script for a device
       parameters:
@@ -39,6 +39,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
         '400':
           description: Bad request
         '404':
@@ -47,7 +51,7 @@ paths:
           description: Internal server error
   /render/{mac}/{path}:
     get:
-      description: Render a file which contains Go templates
+      description: Render a file which contains a Go template
       parameters:
         - name: mac
           in: path
@@ -63,6 +67,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
         '400':
           description: Bad request
         '404':

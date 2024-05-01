@@ -13,7 +13,7 @@ Please feel free to open an issue or pull request!
 
 pixie works by creating a static initial boot image for all PXE booted clients.
 This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the
-script located at `<PIXIEHOST>/api/v1/device/boot?mac=<MACADDRESS>`, which
+script located at `<PIXIEHOST>/boot/<MACADDRESS>`, which
 resolves to the configured boot script for the device with the provided MAC
 address.
 
@@ -147,7 +147,7 @@ for example `${ubuntu}`.
 
 When `11:11:11:11:11:11` goes to boot from the network, the `pixie.kpxe` script
 will be booted, which will chainload the script at
-`/api/v1/device/boot?mac=11:11:11:11:11:11`. That templated script will look
+`/boot/11:11:11:11:11:11`. That templated script will look
 like:
 
 ```
