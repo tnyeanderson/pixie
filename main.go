@@ -10,5 +10,6 @@ import (
 func main() {
 	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
 
+	cmd.SetVersion(version())
 	cmd.Execute()
 }

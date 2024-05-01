@@ -17,3 +17,7 @@ func Execute() {
 		os.Exit(1)
 	}
 }
+
+func SetVersion(version string) {
+	rootCmd.Version = version
+}
