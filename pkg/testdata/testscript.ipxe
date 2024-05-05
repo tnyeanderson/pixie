@@ -1,0 +1,6 @@
+non-working ipxe test script
+mac     = {{ .Device.Mac }}
+basevar = "{{ index .Vars "basevar" }}"
+myvar1  = "{{ index .Vars "myvar1" }}"
+myvar2  = "{{ index .Vars "myvar2" }}"
+end of script

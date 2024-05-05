@@ -1,131 +1,173 @@
-# Pixie
+# pixie
 
-Pixie is a web interface for managing and auditing PXE booted clients. Boot
-scripts, images, and cloud config files can be easily assigned to different
-devices on the fly. Every boot and every configuration change can be inspected
-via an audit log.
-
-When a device that isn't recognized by Pixie tries to network boot, it
-immediately appears in Pixie where it can be assigned a boot script. Until
-then, an iPXE shell prompt is started on the device (or the user-assigned
-default script is loaded). Once assigned, the device can simply be restarted to
-have it boot to the assigned script.
-
-PROJECT IS IN ALPHA. MORE DOCUMENTATION AND FUNCTIONALITY TO COME... BUT IT
-WORKS! :)
-
-The `main` branch is considered stable (or as stable as possible for alpha
-sofware).
+`pixie` is a YAML-based utility for managing and auditing PXE booted clients.
+Easily create Go templates for iPXE scripts, then render them using arbitrary
+variables associated with a boot or device. Requests to the server are logged
+using JSON for easy auditing.
 
 Please feel free to open an issue or pull request!
 
-## Features
-
-- [x] TFTP server (no docker support yet)
-- [x] Web interface & HTTP API
-- [x] Chainload iPXE boot image generator
-- [x] Upload/manage scripts and boot images
-- [x] Add scripts, cloud configs, and images in bulk directly from the
-      filesystem
-- [x] Devices which try to network boot are added to the database
-- [x] Assign a default boot script
-- [x] Assign scripts to devices
-- [x] Logging (audit trail)
-- [x] Upload/manage config files (ignition, cloud-init, etc)
-- [ ] Config file (ignition, cloud-init, etc) handlebars templating
-- [ ] Build a boot script (select images, config) with a GUI
-- [ ] Authentication (RBAC?)
-- [ ] Groups (assign a script/config to a group of devices)
-- [ ] Boot script handlebars templating
-- [ ] Library of boots (ex: ubuntu, debian, coreos, etc) that can be "imported"
-      and modified
-- [ ] Temporarily boot another script for testing/debugging (for x number of
-      boots, or y seconds, etc)
-- [ ] Disable TFTP server? (use your own)
-
-## Screenshots
-
-![Device list](screenshots/devices.png)
-![Edit device](screenshots/device-edit.png)
-![Scripts list](screenshots/scripts.png)
-![Audit log](screenshots/audit-log.png)
-
 ## Getting started
 
-Pixie works by creating a static initial boot image for all PXE booted clients.
-This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the
-script located at `<PIXIEHOST>/boot.ipxe?mac=<MACADDRESS>`, which resolves to
-the appropriate boot script for the device with the provided MAC address.
+> NOTE: By default, pixie listens on ports 8880 (HTTP) and 69 (TFTP).
 
-For example, the call may look like:
-`http://pixiehost:8880/boot.ipxe?mac=112233445566`, which would load the script
-that Pixie has associated to the device with MAC address `112233445566`.
+pixie works by creating a static initial boot image for all PXE booted clients.
+This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the
+script located at `<PIXIEHOST>/boot/<MACADDRESS>`, which
+resolves to the configured boot script for the device with the provided MAC
+address.
 
 Generating the `pixie.kpxe` file requires building iPXE, which requires a fair
 amount of dependencies. A docker image is defined here for convenience:
+
 ```bash
 # Build the docker image used to generate the kpxe file
-docker build -f Dockerfile.generate-kpxe -t pixie-kpxe-generator .
+docker build -t pixie-kpxe-generator tools/generate-chainload-kpxe
 ```
 
 The generated file will be placed inside the container at `/output/pixie.kpxe`,
 and it needs to be placed in the TFTP root directory using volume mounts.
 
-As an example, if using the default configuration, `Paths.FileServer` (the TFTP
-root) is `data/files`:
+As an example, `data/files` can be used as the `staticroot` path of the
+webserver. In this case, bind mount that directory to the `/output` directory
+of the container:
+
 ```bash
 # Create the local directory that the generated file will be copied into
 mkdir -p data/files
-# Change the pixiehost address below to a host that will resolve to Pixie!
+# Change the pixiehost address below your pixie server!
 docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://pixiehost:8880'
 ```
 
-Then, run the app!
+Then, set up your DHCP server (see `man dhcpd.conf`):
 
-## Run using docker
-This is the recommended method:
-```bash
-docker-compose up -d
+- Set `next-server` to the IP to your pixie server
+- Set `filename` to the `pixie.kpxe`
+
+Set up your router or DHCP server to boot hosts from `pixie.kpxe`.
+
+Create a YAML config, for example:
+
+```yaml
+---
+staticroot: "data/files"
+
+# These are the default values
+#httplistener: ":8880"
+#tftplistener: ":69"
+
+# Server level variables
+vars:
+  pixiehost: pixiehost:8880
+
+# Define boots, which associate a boot script to a list of devices.
+boots:
+- name: ubuntu-22-static
+  scriptpath: boots/ubuntu/boot.ipxe
+
+  # Boot level variables
+  vars:
+    cloudinit: boots/ubuntu/cloud-init/
+    eth_interface: enp0s31f6
+
+  devices:
+  - name: h1
+    mac: 11:11:11:11:11:11
+    vars:
+      ip: 10.0.0.10
+      hostname: h2
+
+  - name: h2
+    mac: 22:22:22:22:22:22
+    vars:
+      ip: 10.0.0.20
+      hostname: h2
+      # Overrides the boot level variable
+      eth_interface: ens18
 ```
 
-Then navigate to `localhost:8880` in a browser.
+Then set up your artifacts using whatever structure you prefer, according to
+your config:
 
->NOTE: The image can be rebuilt/updated with `docker-compose build`
-
-## Run locally
-To run the app without docker, first build the components:
-```bash
-# Build the web interface
-(cd web/ && ng build)
-# Build the app
-(cd src/ && go build -o ../pixie)
+```
+data/
+├── files
+│   ├── pixie.kpxe
+│   ├── boots
+│   │   └── ubuntu
+│   │       ├── boot.ipxe
+│   │       └── cloud-init
+│   │           ├── meta-data
+│   │           ├── user-data
+│   │           └── vendor-data
+│   └── ubuntu-22.04
+│       ├── initrd
+│       ├── ubuntu-22.04.1-live-server-amd64.iso
+│       ├── user-data
+│       └── vmlinuz
+└── pixie.yaml
 ```
 
-Then run the app:
+Then run it!
+
 ```bash
-# TFTP server (running on a privileged port) is included
-# Therefore sudo must be used.
-sudo ./pixie
+PIXIE_CONFIG_FILE=data/pixie.yaml go run .
 ```
 
-Then navigate to `localhost:8880` in a browser.
+Alternatively, use `docker compose`:
 
-## Configuration
-
-**The default configuration should be sufficient for most users.**
-
-To show configuration options and their explanations, see the [default
-config](src/config/default.yaml)
-
-To tweak the config, use the default as a template:
 ```bash
-# By default, the user config file is loaded from `data/pixie.yaml`
-cp src/config/default.yaml data/pixie.yaml
+# Be sure to set staticpath to /app/data/files
+docker compose build
+docker compose up
 ```
 
-Then edit `data/pixie.yaml` as needed.
+## How it works
 
-Or, load a different config file:
-```bash
-./pixie --config-file /path/to/config
+In the above example, let's say `data/files/boots/ubuntu/boot.ipxe` looks like
+this:
+
 ```
+#!ipxe
+
+set name {{.Device.Name}}
+set render http://{{.Vars.pixiehost}}/render/{{.Device.Mac}}
+set ubuntu http://{{.Vars.pixiehost}}/static/ubuntu-22.04
+
+kernel ${ubuntu}/vmlinuz cloud-config-url=/dev/null url=${ubuntu}/ubuntu-22.04.1-live-server-amd64.iso initrd=initrd ip=dhcp toram autoinstall ds=nocloud-net;s=${render}/{{.Vars.cloudinit}}
+
+initrd ${ubuntu}/initrd
+
+boot
+```
+
+> NOTE: The `set` directives assign iPXE variables based on rendered values
+from the Go template. These variables are then used later in the boot script,
+for example `${ubuntu}`.
+
+When `11:11:11:11:11:11` goes to boot from the network, the `pixie.kpxe` script
+will be booted, which will chainload the script at
+`/boot/11:11:11:11:11:11`. That templated script will look
+like:
+
+```
+#!ipxe
+
+set name h1
+set render http://pixiehost:8880/render/11:11:11:11:11:11
+set ubuntu http://pixiehost:8880/static/ubuntu-22.04
+
+kernel ${ubuntu}/vmlinuz cloud-config-url=/dev/null url=${ubuntu}/ubuntu-22.04.1-live-server-amd64.iso initrd=initrd ip=dhcp toram autoinstall ds=nocloud-net;s=${render}/{{.Vars.cloudinit}}
+
+initrd ${ubuntu}/initrd
+
+boot
+```
+
+That script will boot over the network using the provided Ubuntu 22 artifacts,
+and the cloud-init files from `data/files/boots/ubuntu/cloud-init` will be
+rendered using Go templates and provided to the machine for initialization.
+
+If the MAC address isn't configured in pixie, the default iPXE script will be
+sent, which simply opens a shell. The request will appear in the logs so you
+can easily add it to your config.

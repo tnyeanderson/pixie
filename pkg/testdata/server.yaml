@@ -1,0 +1,24 @@
+---
+staticroot: testdata
+httplistener: ":1234"
+tftplistener: ":6969"
+vars:
+  basevar: baseval
+boots:
+- script: |
+    inline test {{ .Device.Mac }}
+  scriptpath: /this/will/be/ignored
+  devices:
+  - mac: 33:33:33:33:33:33
+- scriptpath: testscript.ipxe
+  devices:
+  - mac: 99:88:77:66:55:44
+- scriptpath: testscript.ipxe
+  vars:
+    myvar1: hello
+    myvar2: earth
+  devices:
+  - mac: 11:22:33:44:55:66
+    vars:
+      myvar2: mars
+      basevar: newval

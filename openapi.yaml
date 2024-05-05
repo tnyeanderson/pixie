@@ -1,0 +1,79 @@
+---
+openapi: 3.1.0
+info:
+  title: pixie
+  description: API for managing network booted devices.
+  license:
+    name: MIT
+paths:
+  /boot/{mac}:
+    get:
+      description: Get the rendered iPXE boot script for a device
+      parameters:
+        - name: mac
+          in: query
+          description: MAC address of the device to boot
+          schema:
+            type: string
+            example: 11:22:33:44:55:66
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+  /static/{path}:
+    get:
+      description: Get a static file
+      parameters:
+        - name: path
+          in: path
+          description: File path including slashes
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
+  /render/{mac}/{path}:
+    get:
+      description: Render a file which contains a Go template
+      parameters:
+        - name: mac
+          in: path
+          description: MAC address of the device to use when rendering the template
+          schema:
+            type: string
+            example: 11:22:33:44:55:66
+        - name: path
+          in: path
+          description: File path to the template including slashes
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error

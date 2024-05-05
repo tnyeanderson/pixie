@@ -1,3 +1,6 @@
+go.work
+go.work.sum
+
 # Project
 data/
 .vscode/
@@ -21,3 +24,5 @@ hack/
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+dist/

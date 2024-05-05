@@ -1,5 +1,0 @@
-<div class="form-buttons">
-    <button mat-button class="delete-button" *ngIf="deleteAllowed()" (click)="doDelete()">Delete</button>
-    <button mat-button (click)="doClose()">Cancel</button>
-    <button mat-button (click)="doSubmit()" color="primary" type="submit" [disabled]="!validate()">{{ action }}</button>
-</div>
