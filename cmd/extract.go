@@ -11,12 +11,12 @@ import (
 )
 
 var extractCmd = &cobra.Command{
-	Use:   "extract path",
+	Use:   "extract isofile",
 	Args:  cobra.ExactArgs(1),
 	Short: "Extract initrd and vmlinuz from an Ubuntu Server ISO image.",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		path := args[0]
-		return extract(path, filepath.Dir(path))
+		isofile := args[0]
+		return extract(path, filepath.Dir(isofile))
 	},
 }
 
