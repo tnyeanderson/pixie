@@ -53,14 +53,18 @@ echo
 echo "Starting build... this could take a while!"
 echo
 
+make bin-x86_64-efi/snponly.efi EMBED=chain.ipxe || exit 3
 make bin/undionly.kpxe EMBED=chain.ipxe || exit 3
 
 echo
 echo "Successfully generated iPXE chainload image"
 
-OUTPUT_FILE="${OUTPUT_DIR}/pixie.kpxe"
-cp bin/undionly.kpxe "${OUTPUT_FILE}"
+OUTPUT_EFI="${OUTPUT_DIR}/pixie.efi"
+OUTPUT_KPXE="${OUTPUT_DIR}/pixie.kpxe"
+cp bin-x86_64-efi/snponly.efi "${OUTPUT_EFI}"
+cp bin/undionly.kpxe "${OUTPUT_KPXE}"
 
 echo
-echo "${OUTPUT_FILE}"
+echo "${OUTPUT_EFI}"
+echo "${OUTPUT_KPXE}"
 echo
