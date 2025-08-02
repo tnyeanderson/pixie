@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -e
+
+pixie_domain=$1
+pixie_port="${2:-8880}"
+
+read -rd '' usage <<EOF || true
+Generate boot artifacts (and TLS certificates) which will
+be used to chainload configured boots from pixie.
+
+USAGE
+
+  $0 <pixie_domain> [<pixie_port>]
+
+ENVIRONMENT VARIABLES
+
+  PIXIE_CERT_PATH
+
+    Path to the certificate which will be used by the pixie
+    server. Will be trusted by the generated boot artifacts.
+    If not set, a certificate/key pair will be automatically
+    generated and saved to the output directory.
+
+EOF
+
+if [[ -z "$pixiehost" ]]; then
+	echo "$usage" >&2
+	echo "error: missing required argument pixiehost" >&2
+	exit 1
+fi
+
+docker build -t pixie-kpxe-generator tools/generate-chainload-kpxe
+
+mkdir -p data/files
+
+docker run -it \
+	-v "$(pwd)/data/files:/output" \
+	-e "PIXIE_CERT_PATH=$PIXIE_CERT_PATH" \
+	pixie-kpxe-generator \
+	/output "$pixie_domain" "$pixie_port"

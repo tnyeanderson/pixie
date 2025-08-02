@@ -171,3 +171,29 @@ rendered using Go templates and provided to the machine for initialization.
 If the MAC address isn't configured in pixie, the default iPXE script will be
 sent, which simply opens a shell. The request will appear in the logs so you
 can easily add it to your config.
+
+## Passthrough mode
+
+To enable passthrough mode, set it in the config:
+
+```yaml
+passthroughmode: true
+```
+
+When passthrough mode is enabled, iPXE will immediately exit by default during
+boot, ideally "passing through" to the next configured boot option on the node
+(usually the disk).
+
+To force a node to boot to the configured option in pixie the next time the
+node boots, make an API call:
+
+```sh
+curl -X POST -H "Authorization: Bearer $token" \
+  "http://$pixiehost:8880/admin/device/$mac/nextboot"
+```
+
+This allows you to configure your nodes to always network boot first, and they
+will skip it by default. If you need to actually boot from the network (for
+example, to rebuild the node), you simply make the above request and reboot the
+device. This avoids the need to edit BIOS settings or catch the boot menu just
+to rebuild a node.

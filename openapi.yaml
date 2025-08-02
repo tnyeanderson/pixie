@@ -6,6 +6,29 @@ info:
   license:
     name: MIT
 paths:
+  /admin/device/{mac}/nextboot:
+    get:
+      description: Set the device to skip passthrough mode on its next boot
+      parameters:
+        - name: mac
+          in: query
+          description: MAC address of the device
+          schema:
+            type: string
+            example: 11:22:33:44:55:66
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
   /boot/{mac}:
     get:
       description: Get the rendered iPXE boot script for a device

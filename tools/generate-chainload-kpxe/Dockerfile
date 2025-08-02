@@ -7,10 +7,11 @@ RUN apt-get update && \
         gcc \
         binutils \
         make \
+        openssl \
         perl \
         liblzma-dev \
         mtools
 COPY entrypoint.sh ./
 RUN chmod +x ./entrypoint.sh
 RUN mkdir /output
-ENTRYPOINT [ "/build/entrypoint.sh", "/output" ]
+ENTRYPOINT [ "/build/entrypoint.sh" ]

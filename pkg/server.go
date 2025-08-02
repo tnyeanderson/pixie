@@ -27,11 +27,15 @@ const (
 
 // Server is a pixie server configuration.
 type Server struct {
-	Boots        []Boot
-	Vars         map[string]string
-	StaticRoot   string
-	HTTPListener string
-	TFTPListener string
+	AdminAPIKey     string
+	Boots           []Boot
+	Vars            map[string]string
+	StaticRoot      string
+	HTTPListener    string
+	TFTPListener    string
+	PassthroughMode bool
+
+	nextBoots map[string]Boot
 }
 
 // Listen starts an HTTP server (for the API) and a TFTP server, and blocks
@@ -120,6 +124,9 @@ func (s *Server) listenHTTP() error {
 
 	// Render the boot script for a device
 	r.GET("/boot/:mac", s.bootHandler())
+
+	// Set a device to skip passthrough on next boot
+	r.POST("/admin/device/:mac/nextboot", s.auth(), s.nextBootHandler())
 
 	// Start the server
 	return r.Run(s.getHTTPListener())
@@ -217,6 +224,13 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 			return
 		}
 
+		if s.PassthroughMode {
+			if _, ok := s.nextBoots[mac]; !ok {
+				c.String(http.StatusOK, "exit")
+				return
+			}
+		}
+
 		s, err := s.RenderScript(mac)
 		if err != nil {
 			slog.Error(err.Error())
@@ -269,6 +283,35 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 		}
 
 		c.String(http.StatusOK, "%s", out)
-		return
+	}
+}
+
+func (s *Server) nextBootHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		mac := c.Param("mac")
+		mac, err := sanitizeMac(mac)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
+			return
+		}
+		boot, _ := s.getBootAndDevice(mac)
+		if boot == nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "device has no boot configured"})
+			return
+		}
+		s.nextBoots[mac] = *boot
+	}
+}
+
+func (s *Server) auth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if s.AdminAPIKey == "" {
+			return
+		}
+		token := strings.TrimPrefix(c.Request.Header.Get("Authorization"), "Bearer ")
+		if token != s.AdminAPIKey {
+			c.JSON(http.StatusUnauthorized, gin.H{})
+			return
+		}
 	}
 }
