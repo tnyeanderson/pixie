@@ -29,7 +29,10 @@ for var in output_dir pixie_domain pixie_port; do
 done
 
 if [[ -z "$PIXIE_CERT_PATH" ]]; then
-	openssl req -x509 -newkey rsa:4096 -keyout "$output_dir/server.key" -out "$output_dir/server.crt" -days 3650 -nodes
+	openssl req -x509 -newkey rsa:4096 \
+		-keyout "$output_dir/server.key" -out "$output_dir/server.crt" \
+		-days 3650 -nodes -batch \
+		-subj "/CN=$pixie_domain"
 	PIXIE_CERT_PATH="$output_dir/server.crt"
 fi
 

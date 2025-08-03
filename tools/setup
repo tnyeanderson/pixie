@@ -24,9 +24,9 @@ ENVIRONMENT VARIABLES
 
 EOF
 
-if [[ -z "$pixiehost" ]]; then
+if [[ -z "$pixie_domain" ]]; then
 	echo "$usage" >&2
-	echo "error: missing required argument pixiehost" >&2
+	echo "error: missing required argument pixie_domain" >&2
 	exit 1
 fi
 

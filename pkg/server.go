@@ -34,8 +34,11 @@ type Server struct {
 	HTTPListener    string
 	TFTPListener    string
 	PassthroughMode bool
+	TLSCertPath     string
+	TLSKeyPath      string
 
-	nextBoots map[string]Boot
+	// nextBoots is a map of MAC addresses and rendered boot scripts.
+	nextBoots map[string]string
 }
 
 // Listen starts an HTTP server (for the API) and a TFTP server, and blocks
@@ -109,6 +112,10 @@ func (s *Server) NewRenderConfig(mac string) (*RenderConfig, error) {
 }
 
 func (s *Server) listenHTTP() error {
+	if s.TLSCertPath == "" || s.TLSKeyPath == "" {
+		return fmt.Errorf("must provide a TLS certificate")
+	}
+
 	gin.SetMode(gin.ReleaseMode)
 
 	// Set up gin
@@ -128,8 +135,13 @@ func (s *Server) listenHTTP() error {
 	// Set a device to skip passthrough on next boot
 	r.POST("/admin/device/:mac/nextboot", s.auth(), s.nextBootHandler())
 
+	listener := s.HTTPListener
+	if listener == "" {
+		listener = DefaultHTTPListener
+	}
+
 	// Start the server
-	return r.Run(s.getHTTPListener())
+	return r.RunTLS(listener, s.TLSCertPath, s.TLSKeyPath)
 }
 
 func (s *Server) getTFTPListener() string {
@@ -137,13 +149,6 @@ func (s *Server) getTFTPListener() string {
 		return DefaultTFTPListener
 	}
 	return s.TFTPListener
-}
-
-func (s *Server) getHTTPListener() string {
-	if s.HTTPListener == "" {
-		return DefaultHTTPListener
-	}
-	return s.HTTPListener
 }
 
 func (s *Server) listenTFTP() error {
@@ -225,20 +230,20 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 		}
 
 		if s.PassthroughMode {
-			if _, ok := s.nextBoots[mac]; !ok {
-				c.String(http.StatusOK, "exit")
+			if script, ok := s.nextBoots[mac]; ok {
+				c.String(http.StatusOK, "%s", script)
 				return
 			}
 		}
 
-		s, err := s.RenderScript(mac)
+		script, err := s.RenderScript(mac)
 		if err != nil {
 			slog.Error(err.Error())
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to render boot script."})
 			return
 		}
 
-		c.String(http.StatusOK, "%s", s)
+		c.String(http.StatusOK, "%s", script)
 	}
 }
 
@@ -288,18 +293,26 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 
 func (s *Server) nextBootHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if !s.PassthroughMode {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "passthrough mode not enabled"})
+			return
+		}
+
 		mac := c.Param("mac")
 		mac, err := sanitizeMac(mac)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
 			return
 		}
-		boot, _ := s.getBootAndDevice(mac)
-		if boot == nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "device has no boot configured"})
+
+		script, err := s.RenderScript(mac)
+		if err != nil {
+			slog.Error(err.Error())
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to render boot script."})
 			return
 		}
-		s.nextBoots[mac] = *boot
+
+		s.nextBoots[mac] = script
 	}
 }
 
