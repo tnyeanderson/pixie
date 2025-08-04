@@ -1,6 +1,8 @@
 #!/bin/bash
 
-read -rd '' USAGE <<EOF
+set -e
+
+read -rd '' USAGE <<EOF || true
 
 Generate a chainloaded iPXE BIOS image to boot by default.
 Sends clients to pixie to retrieve their boot script.
@@ -18,7 +20,7 @@ usage() {
 
 output_dir=$1
 pixie_domain=$2
-pixie_port=$2
+pixie_port=$3
 
 for var in output_dir pixie_domain pixie_port; do
 	if [[ -z "${!var}" ]]; then
@@ -29,10 +31,14 @@ for var in output_dir pixie_domain pixie_port; do
 done
 
 if [[ -z "$PIXIE_CERT_PATH" ]]; then
-	openssl req -x509 -newkey rsa:4096 \
-		-keyout "$output_dir/server.key" -out "$output_dir/server.crt" \
-		-days 3650 -nodes -batch \
-		-subj "/CN=$pixie_domain"
+	if [[ -f "$output_dir/server.key" ]] && [[ -f "$output_dir/server.crt" ]]; then
+		echo "warning: TLS certificate already exists, skipping"
+	else
+		openssl req -x509 -newkey rsa:4096 \
+			-keyout "$output_dir/server.key" -out "$output_dir/server.crt" \
+			-days 3650 -nodes -batch \
+			-subj "/CN=$pixie_domain"
+	fi
 	PIXIE_CERT_PATH="$output_dir/server.crt"
 fi
 
@@ -47,13 +53,16 @@ echo '========================='
 
 tee chain.ipxe <<EOF
 #!ipxe
-  
+
 dhcp
-chain https://${pixie_domain}:${pixie_port}/boot/\${net0/mac}
+chain --replace https://${pixie_domain}:${pixie_port}/boot/\${net0/mac}
 EOF
 
 echo '========================='
 echo
+
+# Enable HTTPS
+sed -i 's/.*DOWNLOAD_PROTO_HTTPS.*/#define DOWNLOAD_PROTO_HTTPS/g' config/general.h
 
 echo "Starting build... this could take a while!"
 echo

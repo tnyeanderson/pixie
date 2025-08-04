@@ -3,7 +3,7 @@
 set -e
 
 pixie_domain=$1
-pixie_port="${2:-8880}"
+pixie_port="${2:-443}"
 
 read -rd '' usage <<EOF || true
 Generate boot artifacts (and TLS certificates) which will

@@ -21,7 +21,7 @@ import (
 var defaultScript string
 
 const (
-	DefaultHTTPListener = ":8880"
+	DefaultHTTPListener = ":443"
 	DefaultTFTPListener = ":69"
 )
 
@@ -237,10 +237,14 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 
 		if s.PassthroughMode {
 			if script, ok := s.nextBoots[mac]; ok {
+				slog.Info("next boot activated", "mac", mac, "script", script)
 				c.String(http.StatusOK, "%s", script)
 				delete(s.nextBoots, mac)
 				return
 			}
+			slog.Info("passing through to next boot device", "mac", mac)
+			c.String(http.StatusOK, "#!ipxe\n\nexit\n")
+			return
 		}
 
 		script, err := s.RenderScript(mac)
@@ -319,6 +323,9 @@ func (s *Server) nextBootHandler() gin.HandlerFunc {
 			return
 		}
 
+		if s.nextBoots == nil {
+			s.nextBoots = map[string]string{}
+		}
 		s.nextBoots[mac] = script
 	}
 }
@@ -331,6 +338,7 @@ func (s *Server) auth() gin.HandlerFunc {
 		token := strings.TrimPrefix(c.Request.Header.Get("Authorization"), "Bearer ")
 		if token != s.AdminAPIKey {
 			c.JSON(http.StatusUnauthorized, gin.H{})
+			c.Abort()
 			return
 		}
 	}
