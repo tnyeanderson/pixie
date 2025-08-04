@@ -28,14 +28,16 @@ const (
 // Server is a pixie server configuration.
 type Server struct {
 	AdminAPIKey     string
-	Boots           []Boot
-	Vars            map[string]string
-	StaticRoot      string
-	HTTPListener    string
-	TFTPListener    string
 	PassthroughMode bool
-	TLSCertPath     string
-	TLSKeyPath      string
+	StaticRoot      string
+
+	HTTPListener string
+	TFTPListener string
+	TLSCertPath  string
+	TLSKeyPath   string
+
+	Boots []Boot
+	Vars  map[string]string
 
 	// nextBoots is a map of MAC addresses and rendered boot scripts.
 	nextBoots map[string]string
@@ -132,8 +134,12 @@ func (s *Server) listenHTTP() error {
 	// Render the boot script for a device
 	r.GET("/boot/:mac", s.bootHandler())
 
+	// Subpath /admin is always authenticated
+	admin := r.Group("/admin")
+	admin.Use(s.auth())
+
 	// Set a device to skip passthrough on next boot
-	r.POST("/admin/device/:mac/nextboot", s.auth(), s.nextBootHandler())
+	admin.POST("/device/:mac/nextboot", s.nextBootHandler())
 
 	listener := s.HTTPListener
 	if listener == "" {
@@ -232,6 +238,7 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 		if s.PassthroughMode {
 			if script, ok := s.nextBoots[mac]; ok {
 				c.String(http.StatusOK, "%s", script)
+				delete(s.nextBoots, mac)
 				return
 			}
 		}
