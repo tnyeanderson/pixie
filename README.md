@@ -18,39 +18,35 @@ resolves to the configured boot script for the device with the provided MAC
 address.
 
 Generating the `pixie.kpxe` file requires building iPXE, which requires a fair
-amount of dependencies. A docker image is defined here for convenience:
+amount of dependencies. A docker-based tool is provided here:
 
 ```bash
-# Build the docker image used to generate the kpxe file
-docker build -t pixie-kpxe-generator tools/generate-chainload-kpxe
+./tools/setup <pixie_domain> [<pixie_port>]
 ```
 
-The generated file will be placed inside the container at `/output/pixie.kpxe`,
-and it needs to be placed in the TFTP root directory using volume mounts.
+The generated artifacts will be placed in the `./data/files` directory, which
+is automatically created. These artifacts include:
 
-As an example, `data/files` can be used as the `staticroot` path of the
-webserver. In this case, bind mount that directory to the `/output` directory
-of the container:
-
-```bash
-# Create the local directory that the generated file will be copied into
-mkdir -p data/files
-# Change the pixiehost address below your pixie server!
-docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://pixiehost:8880'
-```
+- A TLS certificate/key pair named `server.crt` and `server.key`. If
+  `PIXIE_CERT_PATH` is set, certificate generation is skipped and the provided
+  certificate is used).
+- A `pixie.kpxe` file which is used for BIOS boot, and trusts the pixie TLS
+  certificate.
 
 Then, set up your DHCP server (see `man dhcpd.conf`):
 
 - Set `next-server` to the IP to your pixie server
 - Set `filename` to the `pixie.kpxe`
 
-Set up your router or DHCP server to boot hosts from `pixie.kpxe`.
-
 Create a YAML config, for example:
 
 ```yaml
 ---
 staticroot: "data/files"
+
+# TLS is required
+tlscertpath: data/files/server.crt
+tlskeypath: data/files/server.key
 
 # These are the default values
 #httplistener: ":8880"
@@ -93,6 +89,8 @@ your config:
 data/
 ├── files
 │   ├── pixie.kpxe
+│   ├── server.crt
+│   ├── server.key
 │   ├── boots
 │   │   └── ubuntu
 │   │       ├── boot.ipxe
