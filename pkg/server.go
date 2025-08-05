@@ -135,7 +135,7 @@ func (s *Server) listenAPI() error {
 	r.GET("/render/:mac/*path", sanitizeMacParam, s.renderHandler())
 
 	// Render the boot script for a device
-	r.GET("/boot/:mac", sanitizeMacParam, s.bootHandler())
+	r.GET("/boot/:mac", sanitizeMacParam, s.passthroughBootHandler(), s.bootHandler())
 
 	// Subpath /admin is always authenticated
 	admin := r.Group("/admin")
@@ -225,28 +225,34 @@ func (s *Server) getBootAndDevice(mac string) (*Boot, *Device) {
 	return nil, nil
 }
 
-func (s *Server) bootHandler() gin.HandlerFunc {
+func (s *Server) passthroughBootHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		mac := c.GetString("mac")
-		if s.PassthroughMode {
-			if script, ok := s.nextBoots[mac]; ok {
-				slog.Info("next boot activated", "mac", mac, "script", script)
-				c.String(http.StatusOK, "%s", script)
-				delete(s.nextBoots, mac)
-				return
-			}
-			slog.Info("passing through to next boot device", "mac", mac)
-			c.String(http.StatusOK, passthroughScript)
+		if !s.PassthroughMode {
 			return
 		}
 
+		mac := c.GetString("mac")
+		if script, ok := s.nextBoots[mac]; ok {
+			slog.Info("next boot activated", "mac", mac, "script", script)
+			c.String(http.StatusOK, "%s", script)
+			delete(s.nextBoots, mac)
+			return
+		}
+
+		slog.Info("passing through to next boot device", "mac", mac)
+		c.String(http.StatusOK, passthroughScript)
+	}
+}
+
+func (s *Server) bootHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		mac := c.GetString("mac")
 		script, err := s.RenderScript(mac)
 		if err != nil {
 			slog.Error(err.Error())
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to render boot script."})
 			return
 		}
-
 		c.String(http.StatusOK, "%s", script)
 	}
 }
