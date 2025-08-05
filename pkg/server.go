@@ -20,6 +20,9 @@ import (
 //go:embed defaults/shell.ipxe
 var defaultScript string
 
+//go:embed defaults/passthrough.ipxe
+var passthroughScript string
+
 const (
 	DefaultHTTPListener = ":443"
 	DefaultTFTPListener = ":69"
@@ -243,7 +246,7 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 				return
 			}
 			slog.Info("passing through to next boot device", "mac", mac)
-			c.String(http.StatusOK, "#!ipxe\n\nexit\n")
+			c.String(http.StatusOK, passthroughScript)
 			return
 		}
 

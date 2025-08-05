@@ -7,6 +7,8 @@ import (
 	_ "embed"
 )
 
+// TODO: Use goreleaser
+
 //go:embed VERSION
 var versionTag string
 
