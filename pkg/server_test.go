@@ -32,31 +32,27 @@ func TestUnmarshalServer(t *testing.T) {
 			"basevar": "baseval",
 		},
 		Boots: []Boot{
-			Boot{
+			{
 				Script:     "inline test {{ .Device.Mac }}\n",
 				ScriptPath: "/this/will/be/ignored",
 				Devices: []Device{
-					Device{
-						Mac: "33:33:33:33:33:33",
-					},
+					{Mac: "33:33:33:33:33:33"},
 				},
 			},
-			Boot{
+			{
 				ScriptPath: "testscript.ipxe",
 				Devices: []Device{
-					Device{
-						Mac: "99:88:77:66:55:44",
-					},
+					{Mac: "99:88:77:66:55:44"},
 				},
 			},
-			Boot{
+			{
 				ScriptPath: "testscript.ipxe",
 				Vars: Vars{
 					"myvar1": "hello",
 					"myvar2": "earth",
 				},
 				Devices: []Device{
-					Device{
+					{
 						Mac: "11:22:33:44:55:66",
 						Vars: Vars{
 							"myvar2":  "mars",
@@ -73,7 +69,7 @@ func TestUnmarshalServer(t *testing.T) {
 	}
 }
 
-func ExampleRenderScript() {
+func ExampleServer_RenderScript() {
 	s := &Server{}
 	// tested above
 	yaml.Unmarshal(serverYAML, s)

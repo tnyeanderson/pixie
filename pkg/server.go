@@ -132,10 +132,10 @@ func (s *Server) listenAPI() error {
 	r.GET("/static/*path", s.staticHandler())
 
 	// Render template file
-	r.GET("/render/:mac/*path", s.staticHandler())
+	r.GET("/render/:mac/*path", sanitizeMacParam, s.renderHandler())
 
 	// Render the boot script for a device
-	r.GET("/boot/:mac", s.bootHandler())
+	r.GET("/boot/:mac", sanitizeMacParam, s.bootHandler())
 
 	// Subpath /admin is always authenticated
 	admin := r.Group("/admin")
@@ -153,16 +153,13 @@ func (s *Server) listenAPI() error {
 	return r.RunTLS(listener, s.TLSCertPath, s.TLSKeyPath)
 }
 
-func (s *Server) getTFTPListener() string {
-	if s.TFTPListener == "" {
-		return DefaultTFTPListener
-	}
-	return s.TFTPListener
-}
-
 func (s *Server) listenTFTP() error {
+	listener := s.TFTPListener
+	if listener == "" {
+		listener = DefaultTFTPListener
+	}
 	t := tftp.NewServer(s.tftpReadHandler(), s.tftpWriteHandler())
-	return t.ListenAndServe(s.getTFTPListener()) // blocks until s.Shutdown() is called
+	return t.ListenAndServe(listener)
 }
 
 func (s *Server) tftpReadHandler() func(filename string, rf io.ReaderFrom) error {
@@ -230,14 +227,7 @@ func (s *Server) getBootAndDevice(mac string) (*Boot, *Device) {
 
 func (s *Server) bootHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		mac := c.Param("mac")
-
-		mac, err := sanitizeMac(mac)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
-			return
-		}
-
+		mac := c.GetString("mac")
 		if s.PassthroughMode {
 			if script, ok := s.nextBoots[mac]; ok {
 				slog.Info("next boot activated", "mac", mac, "script", script)
@@ -263,24 +253,15 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 
 func (s *Server) staticHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		mac := c.Param("mac")
 		subpath := c.Param("path")
-
 		fullpath := path.Join(s.StaticRoot, subpath)
+		c.File(fullpath)
+	}
+}
 
-		if mac == "" {
-			// Render the file normally
-			c.File(fullpath)
-			return
-		}
-
-		// Render the file as a template
-
-		mac, err := sanitizeMac(mac)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
-			return
-		}
+func (s *Server) renderHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		mac := c.GetString("mac")
 
 		rc, err := s.NewRenderConfig(mac)
 		if err != nil {
@@ -288,6 +269,8 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 			return
 		}
 
+		subpath := c.Param("path")
+		fullpath := path.Join(s.StaticRoot, subpath)
 		b, err := os.ReadFile(fullpath)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("file not found: %s", fullpath)})
@@ -312,13 +295,7 @@ func (s *Server) nextBootHandler() gin.HandlerFunc {
 			return
 		}
 
-		mac := c.Param("mac")
-		mac, err := sanitizeMac(mac)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
-			return
-		}
-
+		mac := c.GetString("mac")
 		script, err := s.RenderScript(mac)
 		if err != nil {
 			slog.Error(err.Error())
@@ -345,4 +322,14 @@ func (s *Server) auth() gin.HandlerFunc {
 			return
 		}
 	}
+}
+
+func sanitizeMacParam(c *gin.Context) {
+	mac, err := sanitizeMac(c.Param("mac"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
+		c.Abort()
+		return
+	}
+	c.Set("mac", mac)
 }
