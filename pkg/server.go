@@ -42,8 +42,11 @@ type Server struct {
 	Boots []Boot
 	Vars  map[string]string
 
-	// nextBoots is a map of MAC addresses and rendered boot scripts.
-	nextBoots map[string]string
+	// skipPassthrough is a map of MAC addresses which will not passthrough on
+	// next boot. Only considered when passthroughmode=true. Key existence is all
+	// that matters (for efficiency reasons), the boolean value is a no-op. Key
+	// will be deleted on next boot.
+	skipPassthrough map[string]bool
 }
 
 // Listen starts an API server and a TFTP server, and blocks until either of
@@ -142,7 +145,7 @@ func (s *Server) listenAPI() error {
 	admin.Use(s.auth())
 
 	// Set a device to skip passthrough on next boot
-	admin.POST("/device/:mac/nextboot", s.nextBootHandler())
+	admin.POST("/device/:mac/passthrough/skip", s.skipPassthroughHandler())
 
 	listener := s.APIListener
 	if listener == "" {
@@ -232,15 +235,15 @@ func (s *Server) passthroughBootHandler() gin.HandlerFunc {
 		}
 
 		mac := c.GetString("mac")
-		if script, ok := s.nextBoots[mac]; ok {
-			slog.Info("next boot activated", "mac", mac, "script", script)
-			c.String(http.StatusOK, "%s", script)
-			delete(s.nextBoots, mac)
+		if _, ok := s.skipPassthrough[mac]; !ok {
+			slog.Info("passing through to next boot device", "mac", mac)
+			c.String(http.StatusOK, passthroughScript)
+			c.Abort()
 			return
 		}
 
-		slog.Info("passing through to next boot device", "mac", mac)
-		c.String(http.StatusOK, passthroughScript)
+		slog.Info("next boot activated", "mac", mac)
+		delete(s.skipPassthrough, mac)
 	}
 }
 
@@ -294,7 +297,7 @@ func (s *Server) renderHandler() gin.HandlerFunc {
 	}
 }
 
-func (s *Server) nextBootHandler() gin.HandlerFunc {
+func (s *Server) skipPassthroughHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if !s.PassthroughMode {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "passthrough mode not enabled"})
@@ -302,17 +305,10 @@ func (s *Server) nextBootHandler() gin.HandlerFunc {
 		}
 
 		mac := c.GetString("mac")
-		script, err := s.RenderScript(mac)
-		if err != nil {
-			slog.Error(err.Error())
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to render boot script."})
-			return
+		if s.skipPassthrough == nil {
+			s.skipPassthrough = map[string]bool{}
 		}
-
-		if s.nextBoots == nil {
-			s.nextBoots = map[string]string{}
-		}
-		s.nextBoots[mac] = script
+		s.skipPassthrough[mac] = true
 	}
 }
 
