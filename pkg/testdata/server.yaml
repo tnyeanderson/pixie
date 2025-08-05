@@ -1,6 +1,6 @@
 ---
 staticroot: testdata
-httplistener: ":1234"
+apilistener: ":1234"
 tftplistener: ":6969"
 vars:
   basevar: baseval

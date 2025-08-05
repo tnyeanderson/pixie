@@ -24,7 +24,7 @@ var defaultScript string
 var passthroughScript string
 
 const (
-	DefaultHTTPListener = ":443"
+	APIListener         = ":443"
 	DefaultTFTPListener = ":69"
 )
 
@@ -34,7 +34,7 @@ type Server struct {
 	PassthroughMode bool
 	StaticRoot      string
 
-	HTTPListener string
+	APIListener  string
 	TFTPListener string
 	TLSCertPath  string
 	TLSKeyPath   string
@@ -46,8 +46,8 @@ type Server struct {
 	nextBoots map[string]string
 }
 
-// Listen starts an HTTP server (for the API) and a TFTP server, and blocks
-// until either of them exit.
+// Listen starts an API server and a TFTP server, and blocks until either of
+// them exit.
 func (s *Server) Listen() error {
 	// If any exits, end the program
 	wg := sync.WaitGroup{}
@@ -56,8 +56,8 @@ func (s *Server) Listen() error {
 	var out error
 
 	go func() {
-		slog.Info("starting HTTP server")
-		if err := s.listenHTTP(); err != nil {
+		slog.Info("starting API server")
+		if err := s.listenAPI(); err != nil {
 			out = err
 		}
 		wg.Done()
@@ -116,7 +116,7 @@ func (s *Server) NewRenderConfig(mac string) (*RenderConfig, error) {
 	return NewRenderConfig(s.Vars, b, d), nil
 }
 
-func (s *Server) listenHTTP() error {
+func (s *Server) listenAPI() error {
 	if s.TLSCertPath == "" || s.TLSKeyPath == "" {
 		return fmt.Errorf("must provide a TLS certificate")
 	}
@@ -144,9 +144,9 @@ func (s *Server) listenHTTP() error {
 	// Set a device to skip passthrough on next boot
 	admin.POST("/device/:mac/nextboot", s.nextBootHandler())
 
-	listener := s.HTTPListener
+	listener := s.APIListener
 	if listener == "" {
-		listener = DefaultHTTPListener
+		listener = APIListener
 	}
 
 	// Start the server

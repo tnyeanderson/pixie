@@ -26,7 +26,7 @@ func TestUnmarshalServer(t *testing.T) {
 	}
 	expected := &Server{
 		StaticRoot:   "testdata",
-		HTTPListener: ":1234",
+		APIListener:  ":1234",
 		TFTPListener: ":6969",
 		Vars: Vars{
 			"basevar": "baseval",
