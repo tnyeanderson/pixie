@@ -24,7 +24,7 @@ var defaultScript string
 var passthroughScript string
 
 const (
-	APIListener         = ":443"
+	DefaultAPIListener  = ":443"
 	DefaultTFTPListener = ":69"
 )
 
@@ -146,7 +146,7 @@ func (s *Server) listenAPI() error {
 
 	listener := s.APIListener
 	if listener == "" {
-		listener = APIListener
+		listener = DefaultAPIListener
 	}
 
 	// Start the server
