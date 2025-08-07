@@ -144,8 +144,11 @@ func (s *Server) listenAPI() error {
 	admin := r.Group("/admin")
 	admin.Use(s.auth())
 
+	// Set a device to passthrough on next boot
+	admin.POST("/device/:mac/passthrough", s.skipPassthroughHandler(false))
+
 	// Set a device to skip passthrough on next boot
-	admin.POST("/device/:mac/passthrough/skip", s.skipPassthroughHandler())
+	admin.POST("/device/:mac/passthrough/skip", s.skipPassthroughHandler(true))
 
 	listener := s.APIListener
 	if listener == "" {
@@ -297,7 +300,7 @@ func (s *Server) renderHandler() gin.HandlerFunc {
 	}
 }
 
-func (s *Server) skipPassthroughHandler() gin.HandlerFunc {
+func (s *Server) skipPassthroughHandler(skipPassthrough bool) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if !s.PassthroughMode {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "passthrough mode not enabled"})
@@ -305,6 +308,11 @@ func (s *Server) skipPassthroughHandler() gin.HandlerFunc {
 		}
 
 		mac := c.GetString("mac")
+
+		if !skipPassthrough {
+			delete(s.skipPassthrough, mac)
+		}
+
 		if s.skipPassthrough == nil {
 			s.skipPassthrough = map[string]bool{}
 		}

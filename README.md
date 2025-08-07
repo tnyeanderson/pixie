@@ -187,7 +187,14 @@ node boots, make an API call:
 
 ```sh
 curl -X POST -H "Authorization: Bearer $token" \
-  "http://$pixiehost:8880/admin/device/$mac/nextboot"
+  "http://$pixiehost:8880/admin/device/$mac/passthrough"
+```
+
+If you did this by accident, add `/skip` to force it back to the normal state:
+
+```sh
+curl -X POST -H "Authorization: Bearer $token" \
+  "http://$pixiehost:8880/admin/device/$mac/passthrough/skip"
 ```
 
 This allows you to configure your nodes to always network boot first, and they
