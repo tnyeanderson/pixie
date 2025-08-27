@@ -144,12 +144,16 @@ func (s *Server) listenTFTP() error {
 	return t.ListenAndServe(s.getTFTPListener()) // blocks until s.Shutdown() is called
 }
 
+// TODO: Error logging
 func (s *Server) tftpReadHandler() func(filename string, rf io.ReaderFrom) error {
 	return func(filename string, rf io.ReaderFrom) error {
 		slog.Info("getting file with TFTP", "name", filename)
 		staticRoot := s.StaticRoot
-		if filename == "pixie.kpxe" {
-			// For compatibility reasons, allow loading pixie.kpxe from the root path
+		if filename == "pixie.kpxe" || filename == "pixie.efi" {
+			// For compatibility reasons, allow loading pixie.kpxe and pixie.efi from
+			// StaticRoot when requested from the root path. DHCP servers, or
+			// netbooting clients, may not support sending a path along with the
+			// name.
 			filename = path.Join(staticRoot, filename)
 		}
 		if !strings.HasPrefix(filename, staticRoot) {

@@ -11,22 +11,22 @@ Please feel free to open an issue or pull request!
 
 > NOTE: By default, pixie listens on ports 8880 (HTTP) and 69 (TFTP).
 
-pixie works by creating a static initial boot image for all PXE booted clients.
-This `pixie.kpxe` file [chainloads](https://ipxe.org/howto/chainloading) the
-script located at `<PIXIEHOST>/boot/<MACADDRESS>`, which
-resolves to the configured boot script for the device with the provided MAC
-address.
+pixie works by creating a static initial boot file for all PXE booted clients.
+This boot file [chainloads](https://ipxe.org/howto/chainloading) the script
+located at `<PIXIEHOST>/boot/<MACADDRESS>`, which resolves to the configured
+boot script for the device with the provided MAC address.
 
-Generating the `pixie.kpxe` file requires building iPXE, which requires a fair
+Generating the initial boot files requires building iPXE, which requires a fair
 amount of dependencies. A docker image is defined here for convenience:
 
 ```bash
-# Build the docker image used to generate the kpxe file
-docker build -t pixie-kpxe-generator tools/generate-chainload-kpxe
+# Build the docker image used to generate the initial boot files
+docker build -t pixie-boot-files-generator tools/generate-boot-files
 ```
 
-The generated file will be placed inside the container at `/output/pixie.kpxe`,
-and it needs to be placed in the TFTP root directory using volume mounts.
+This will generate two files inside the container: `/output/pixie.kpxe` (used
+for legacy boot) and `/output/pixie.efi` (used for UEFI boot). These need to be
+placed in the TFTP root directory using volume mounts.
 
 As an example, `data/files` can be used as the `staticroot` path of the
 webserver. In this case, bind mount that directory to the `/output` directory
@@ -36,15 +36,17 @@ of the container:
 # Create the local directory that the generated file will be copied into
 mkdir -p data/files
 # Change the pixiehost address below your pixie server!
-docker run -it -v "$(pwd)/data/files:/output" pixie-kpxe-generator 'http://pixiehost:8880'
+docker run -it -v "$(pwd)/data/files:/output" pixie-boot-files-generator 'http://pixiehost:8880'
 ```
 
 Then, set up your DHCP server (see `man dhcpd.conf`):
 
 - Set `next-server` to the IP to your pixie server
-- Set `filename` to the `pixie.kpxe`
-
-Set up your router or DHCP server to boot hosts from `pixie.kpxe`.
+- Set `filename` to the `pixie.kpxe` or `pixie.efi` depending on the firmware
+  type of the nodes you plan to boot
+    - If both firmware types are needed, you'll need to create a `class` in
+      `dhcpd.conf`, or configure the appropriate fields (for example, OPNsense
+      allows setting different files for different firmware types)
 
 Create a YAML config, for example:
 
@@ -93,6 +95,7 @@ your config:
 data/
 ├── files
 │   ├── pixie.kpxe
+│   ├── pixie.efi
 │   ├── boots
 │   │   └── ubuntu
 │   │       ├── boot.ipxe
