@@ -28,7 +28,8 @@ const (
 // Server is a pixie server configuration.
 type Server struct {
 	Boots        []Boot
-	Vars         map[string]string
+	Vars         Vars
+	Secrets      Secrets
 	StaticRoot   string
 	HTTPListener string
 	TFTPListener string
@@ -101,7 +102,7 @@ func (s *Server) NewRenderConfig(mac string) (*RenderConfig, error) {
 	if b == nil {
 		return nil, fmt.Errorf("no boot defined for mac: %s", mac)
 	}
-	return NewRenderConfig(s.Vars, b, d), nil
+	return NewRenderConfig(s.Vars, s.Secrets, b, d)
 }
 
 func (s *Server) listenHTTP() error {

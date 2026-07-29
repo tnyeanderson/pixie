@@ -29,38 +29,60 @@ func TestUnmarshalServer(t *testing.T) {
 		HTTPListener: ":1234",
 		TFTPListener: ":6969",
 		Vars: Vars{
-			"basevar": "baseval",
+			"basevar1": "baseval1",
+			"basevar2": "baseval2",
+		},
+		Secrets: Secrets{
+			"basesecret1": Secret{Value: "baseval1"},
+			"basesecret2": Secret{Value: "baseval2"},
 		},
 		Boots: []Boot{
-			Boot{
+			{
 				Script:     "inline test {{ .Device.Mac }}\n",
 				ScriptPath: "/this/will/be/ignored",
 				Devices: []Device{
-					Device{
-						Mac: "33:33:33:33:33:33",
-					},
+					{Mac: "33:33:33:33:33:33"},
 				},
 			},
-			Boot{
+			{
 				ScriptPath: "testscript.ipxe",
 				Devices: []Device{
-					Device{
-						Mac: "99:88:77:66:55:44",
-					},
+					{Mac: "44:44:44:44:44:44"},
 				},
 			},
-			Boot{
+			{
 				ScriptPath: "testscript.ipxe",
 				Vars: Vars{
-					"myvar1": "hello",
-					"myvar2": "earth",
+					"basevar2": "bootval2",
+				},
+				Secrets: Secrets{
+					"basesecret2": Secret{Value: "bootval2"},
 				},
 				Devices: []Device{
-					Device{
+					{Mac: "99:88:77:66:55:44"},
+				},
+			},
+			{
+				ScriptPath: "testscript.ipxe",
+				Vars: Vars{
+					"myvar1":   "hello",
+					"myvar2":   "earth",
+					"basevar1": "bootval1",
+					"basevar2": "bootval2",
+				},
+				Secrets: Secrets{
+					"basesecret1": Secret{Value: "bootval1"},
+					"basesecret2": Secret{Value: "bootval2"},
+				},
+				Devices: []Device{
+					{
 						Mac: "11:22:33:44:55:66",
 						Vars: Vars{
-							"myvar2":  "mars",
-							"basevar": "newval",
+							"myvar2":   "mars",
+							"basevar1": "newval1",
+						},
+						Secrets: Secrets{
+							"basesecret1": Secret{Value: "newval1"},
 						},
 					},
 				},
@@ -73,12 +95,13 @@ func TestUnmarshalServer(t *testing.T) {
 	}
 }
 
-func ExampleRenderScript() {
+func ExampleRenderConfig_Render() {
 	s := &Server{}
 	// tested above
 	yaml.Unmarshal(serverYAML, s)
 	macs := []string{
 		"33:33:33:33:33:33",
+		"44:44:44:44:44:44",
 		"99:88:77:66:55:44",
 		"11:22:33:44:55:66",
 	}
@@ -94,17 +117,32 @@ func ExampleRenderScript() {
 	// inline test 33:33:33:33:33:33
 	//
 	// non-working ipxe test script
-	// mac     = 99:88:77:66:55:44
-	// basevar = "baseval"
-	// myvar1  = ""
-	// myvar2  = ""
+	// mac         = 44:44:44:44:44:44
+	// basevar1    = "baseval1"
+	// basevar2    = "baseval2"
+	// basesecret1 = "baseval1"
+	// basesecret2 = "baseval2"
+	// myvar1      = ""
+	// myvar2      = ""
 	// end of script
 	//
 	// non-working ipxe test script
-	// mac     = 11:22:33:44:55:66
-	// basevar = "newval"
-	// myvar1  = "hello"
-	// myvar2  = "mars"
+	// mac         = 99:88:77:66:55:44
+	// basevar1    = "baseval1"
+	// basevar2    = "bootval2"
+	// basesecret1 = "baseval1"
+	// basesecret2 = "bootval2"
+	// myvar1      = ""
+	// myvar2      = ""
 	// end of script
 	//
+	// non-working ipxe test script
+	// mac         = 11:22:33:44:55:66
+	// basevar1    = "newval1"
+	// basevar2    = "bootval2"
+	// basesecret1 = "newval1"
+	// basesecret2 = "bootval2"
+	// myvar1      = "hello"
+	// myvar2      = "mars"
+	// end of script
 }

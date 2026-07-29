@@ -3,7 +3,13 @@ staticroot: testdata
 httplistener: ":1234"
 tftplistener: ":6969"
 vars:
-  basevar: baseval
+  basevar1: baseval1
+  basevar2: baseval2
+secrets:
+  basesecret1:
+    value: baseval1
+  basesecret2:
+    value: baseval2
 boots:
 - script: |
     inline test {{ .Device.Mac }}
@@ -12,13 +18,31 @@ boots:
   - mac: 33:33:33:33:33:33
 - scriptpath: testscript.ipxe
   devices:
+  - mac: 44:44:44:44:44:44
+- scriptpath: testscript.ipxe
+  vars:
+    basevar2: bootval2
+  secrets:
+    basesecret2:
+      value: bootval2
+  devices:
   - mac: 99:88:77:66:55:44
 - scriptpath: testscript.ipxe
   vars:
     myvar1: hello
     myvar2: earth
+    basevar1: bootval1
+    basevar2: bootval2
+  secrets:
+    basesecret1:
+      value: bootval1
+    basesecret2:
+      value: bootval2
   devices:
   - mac: 11:22:33:44:55:66
     vars:
       myvar2: mars
-      basevar: newval
+      basevar1: newval1
+    secrets:
+      basesecret1:
+        value: newval1

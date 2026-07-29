@@ -1,6 +1,9 @@
 non-working ipxe test script
-mac     = {{ .Device.Mac }}
-basevar = "{{ index .Vars "basevar" }}"
-myvar1  = "{{ index .Vars "myvar1" }}"
-myvar2  = "{{ index .Vars "myvar2" }}"
+mac         = {{ .Device.Mac }}
+basevar1    = "{{ index .Vars "basevar1" }}"
+basevar2    = "{{ index .Vars "basevar2" }}"
+basesecret1 = "{{ index .Secrets "basesecret1" }}"
+basesecret2 = "{{ index .Secrets "basesecret2" }}"
+myvar1      = "{{ index .Vars "myvar1" }}"
+myvar2      = "{{ index .Vars "myvar2" }}"
 end of script
