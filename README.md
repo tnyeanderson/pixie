@@ -190,6 +190,14 @@ can easily add it to your config.
 
 ## Secrets
 
+**VERY IMPORTANT:** Secrets allow you to store secret values outside of your
+pixie configuration file. However, the *unauthenticated* `/render` endpoint
+will still render the secret value and return it in the HTTP response, if the
+caller provides a valid MAC address and a template path which includes the
+secret reference! Therefore, unless you *completely* trust the network that
+pixie runs on, you should either implement authentication for pixie (this is
+yet to be designed) or store/retrieve your secrets in a different way.
+
 Secrets can be included at the server, boot, and device levels, and have
 similar precedent rules as variables.
 
