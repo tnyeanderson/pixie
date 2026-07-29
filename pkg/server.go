@@ -70,7 +70,7 @@ func (s *Server) Listen() error {
 func (s *Server) RenderScript(mac string) (string, error) {
 	rc, err := s.NewRenderConfig(mac)
 	if err != nil {
-		slog.Error(fmt.Sprintf("device not configured in pixie, using default script: %s", mac))
+		slog.Warn(fmt.Sprintf("device not configured in pixie, using default script: %s", mac))
 		return defaultScript, nil
 	}
 
@@ -82,7 +82,7 @@ func (s *Server) RenderScript(mac string) (string, error) {
 	// Boot from ScriptPath
 	subpath := rc.Boot.ScriptPath
 	if subpath == "" {
-		slog.Error(fmt.Sprintf("script not set for mac, using default script: %s", mac))
+		slog.Warn(fmt.Sprintf("script not set for mac, using default script: %s", mac))
 		return defaultScript, nil
 	}
 	fullpath := path.Join(s.StaticRoot, subpath)
@@ -117,7 +117,7 @@ func (s *Server) listenHTTP() error {
 	r.GET("/static/*path", s.staticHandler())
 
 	// Render template file
-	r.GET("/render/:mac/*path", s.staticHandler())
+	r.GET("/render/:mac/*path", s.renderHandler())
 
 	// Render the boot script for a device
 	r.GET("/boot/:mac", s.bootHandler())
@@ -214,6 +214,7 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 
 		mac, err := sanitizeMac(mac)
 		if err != nil {
+			slog.Error(err.Error())
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
 			return
 		}
@@ -231,33 +232,36 @@ func (s *Server) bootHandler() gin.HandlerFunc {
 
 func (s *Server) staticHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		subpath := c.Param("path")
+		fullpath := path.Join(s.StaticRoot, subpath)
+		c.File(fullpath)
+	}
+}
+
+func (s *Server) renderHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		mac := c.Param("mac")
 		subpath := c.Param("path")
 
 		fullpath := path.Join(s.StaticRoot, subpath)
 
-		if mac == "" {
-			// Render the file normally
-			c.File(fullpath)
-			return
-		}
-
-		// Render the file as a template
-
 		mac, err := sanitizeMac(mac)
 		if err != nil {
+			slog.Error(err.Error())
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid MAC address"})
 			return
 		}
 
 		rc, err := s.NewRenderConfig(mac)
 		if err != nil {
+			slog.Error(err.Error())
 			c.JSON(http.StatusBadRequest, gin.H{"error": "device not found"})
 			return
 		}
 
 		b, err := os.ReadFile(fullpath)
 		if err != nil {
+			slog.Error(err.Error())
 			c.JSON(http.StatusNotFound, gin.H{"error": fmt.Sprintf("file not found: %s", fullpath)})
 			return
 		}
@@ -270,6 +274,5 @@ func (s *Server) staticHandler() gin.HandlerFunc {
 		}
 
 		c.String(http.StatusOK, "%s", out)
-		return
 	}
 }
