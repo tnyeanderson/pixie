@@ -56,6 +56,13 @@ staticroot: "data/files"
 #httplistener: ":8880"
 #tftplistener: ":69"
 
+# Server level secrets
+secrets:
+  mysecret:
+    env: MY_SECRET
+  myothersecret:
+    file: /path/to/secret.txt
+
 # Server level variables
 vars:
   pixiehost: pixiehost:8880
@@ -64,6 +71,11 @@ vars:
 boots:
 - name: ubuntu-22-static
   scriptpath: boots/ubuntu/boot.ipxe
+
+  # Boot level secrets
+  secrets:
+    mybootsecret:
+      env: MY_BOOT_SECRET
 
   # Boot level variables
   vars:
@@ -84,6 +96,10 @@ boots:
       hostname: h2
       # Overrides the boot level variable
       eth_interface: ens18
+    secrets:
+      # Override mysecret value for this device
+      mysecret:
+        env: MY_DEVICE_SECRET
 ```
 
 Then set up your artifacts using whatever structure you prefer, according to
@@ -171,3 +187,23 @@ rendered using Go templates and provided to the machine for initialization.
 If the MAC address isn't configured in pixie, the default iPXE script will be
 sent, which simply opens a shell. The request will appear in the logs so you
 can easily add it to your config.
+
+## Secrets
+
+Secrets can be included at the server, boot, and device levels, and have
+similar precedent rules as variables.
+
+You can provide one of the following for each secret (checked in this order,
+first wins):
+
+- `value`: Raw string
+- `env`: Name of environment variable containing the secret (no leading `$`)
+- `file`: Path to a file which contains the value
+
+Failing to provide one of these properties will result in an error at rendering
+time.
+
+When a template is rendered, the secret values are fetched from their sources
+and merged into a `Secrets` map, exactly like `Vars`. In other words, use
+`{{.Secrets.password}}` to render the value for the `password` secret in your
+template.
