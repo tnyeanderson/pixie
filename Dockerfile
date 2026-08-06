@@ -11,8 +11,8 @@ RUN CGO_ENABLED=0 go build .
 FROM golang
 RUN mkdir -p /app
 WORKDIR /app
-COPY --from=build-go /src/pixie ./pixie
+COPY --from=build-go /src/pixie /usr/local/bin/pixie
 
 ENV PIXIE_CONFIG_FILE="/app/data/pixie.yaml"
 
-ENTRYPOINT [ "/app/pixie", "server" ]
+ENTRYPOINT [ "/usr/local/bin/pixie", "server" ]

@@ -44,8 +44,6 @@ Then, set up your DHCP server (see `man dhcpd.conf`):
 - Set `next-server` to the IP to your pixie server
 - Set `filename` to the `pixie.kpxe`
 
-Set up your router or DHCP server to boot hosts from `pixie.kpxe`.
-
 Create a YAML config, for example:
 
 ```yaml
@@ -119,7 +117,6 @@ data/
 │   └── ubuntu-22.04
 │       ├── initrd
 │       ├── ubuntu-22.04.1-live-server-amd64.iso
-│       ├── user-data
 │       └── vmlinuz
 └── pixie.yaml
 ```
